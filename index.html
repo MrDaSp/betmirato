@@ -104,12 +104,30 @@
     <!-- HEADER -->
     <header id="appHeader" class="header">
         <div class="logo">⚽ BetMirato</div>
-        <div>
+        <div style="display:flex; align-items:center;">
             <span id="userInfo" style="margin-right:1rem; font-size:0.9rem;"></span>
+            <button id="btnAdmin" class="hidden" style="background:var(--accent-yellow); color:black; font-weight:bold; border:none; padding:0.5rem 1rem; border-radius:6px; cursor:pointer; margin-right:1rem;" onclick="toggleAdminPanel()">👑 Admin Panel</button>
             <button class="btn-logout" onclick="handleLogout()">Esci</button>
         </div>
     </header>    <!-- MAIN DASHBOARD AUTOMATICA -->
     <main class="main" id="mainDash">
+        <!-- PANNELLO ADMIN (NASCOSTO DI DEFAULT) -->
+        <div id="adminPanel" class="card hidden" style="border: 2px solid var(--accent-yellow); background: rgba(241, 196, 15, 0.05); margin-bottom: 2rem;">
+            <h2 style="color:var(--accent-yellow); margin-bottom:1rem;">👑 Crono-Spazio SuperAdmin</h2>
+            <div class="grid-2">
+                <div style="background:var(--bg-primary); padding:1rem; border-radius:6px; border:1px solid var(--border);">
+                    <h4 style="margin-bottom:0.5rem; color:var(--text-primary);">Forza Aggiornamento Scanner (GitHub Actions)</h4>
+                    <p style="font-size:0.8rem; color:var(--text-secondary); margin-bottom:1rem;">Invia un segnale a GitHub per ignorare il timer di 6 ore e scaricare ORA le ultime quote mondiali per tutti gli utenti.</p>
+                    <button onclick="triggerScanner()" style="background:var(--accent-red); color:white; font-weight:bold; border:none; padding:0.8rem 1rem; border-radius:6px; cursor:pointer; width:100%; transition:opacity 0.2s;">🚀 Lancia Scansione Immediata</button>
+                </div>
+                <div style="background:var(--bg-primary); padding:1rem; border-radius:6px; border:1px solid var(--border);">
+                    <h4 style="margin-bottom:0.5rem; color:var(--text-primary);">Database Iscritti (Supabase)</h4>
+                    <p style="font-size:0.8rem; color:var(--text-secondary); margin-bottom:1rem;">Per ragioni di massima sicurezza contro i furti di dati, la chiave Master del database non è inclusa nell'App Pubblica. Clicca per vedere le anagrafiche sul cruscotto server.</p>
+                    <a href="https://supabase.com/dashboard/projects" target="_blank" style="display:inline-block; text-align:center; background:var(--accent-green); color:black; font-weight:bold; padding:0.8rem 1rem; border-radius:6px; text-decoration:none; width:100%;">Apri Cruscotto Supabase</a>
+                </div>
+            </div>
+        </div>
+
         <div class="card" style="text-align:center; padding: 1.5rem;">
             <h2>Cruscotto Scanner Value Bet 🤖</h2>
             <p style="color:var(--text-secondary); margin-top:0.5rem;" id="lastUpdate">Ultimo aggiornamento: Caricamento in corso...</p>
@@ -157,6 +175,8 @@
     </main>/main>
 
     <script>
+        const SUPER_ADMIN_EMAIL = "dani3d.drone@gmail.com";
+
         // Init Auth base
         document.addEventListener('DOMContentLoaded', async () => {
             initSupabase();
@@ -165,6 +185,7 @@
                 document.getElementById('authOverlay').classList.remove('hidden');
             } else {
                 document.getElementById('userInfo').textContent = getDisplayName();
+                checkAdminRights();
                 caricaDashboard(); // Auto-load se già loggato
                 initBankroll();
             }
@@ -177,6 +198,7 @@
                 await sbSignIn(e, p);
                 document.getElementById('authOverlay').classList.add('hidden');
                 document.getElementById('userInfo').textContent = getDisplayName();
+                checkAdminRights();
                 caricaDashboard();
                 initBankroll();
             } catch(err) {
@@ -199,13 +221,67 @@
         function handleGuest() {
             document.getElementById('authOverlay').classList.add('hidden');
             document.getElementById('userInfo').textContent = 'Ospite';
+            checkAdminRights();
             caricaDashboard();
             initBankroll();
         }
 
         async function handleLogout() {
             await sbSignOut();
-            location.reload();
+            document.getElementById('authOverlay').classList.remove('hidden');
+            checkAdminRights();
+        }
+
+        // ====== SUPER ADMIN PANEL ======
+        function checkAdminRights() {
+            const userEmail = currentUser?.email || '';
+            if (userEmail.toLowerCase() === SUPER_ADMIN_EMAIL.toLowerCase()) {
+                document.getElementById('btnAdmin').classList.remove('hidden');
+            } else {
+                document.getElementById('btnAdmin').classList.add('hidden');
+                document.getElementById('adminPanel').classList.add('hidden');
+            }
+        }
+
+        function toggleAdminPanel() {
+            document.getElementById('adminPanel').classList.toggle('hidden');
+        }
+
+        async function triggerScanner() {
+            let token = localStorage.getItem('github_pat');
+            if (!token) {
+                token = prompt("🔐 INSERISCI LA CHIAVE GITHUB (Personal Access Token):\n(Richiede il permesso 'repo'). Verrà ricordata in memoria per i futuri avvii.");
+                if (!token) return;
+                localStorage.setItem('github_pat', token);
+            }
+            
+            const repo = "MrDaSp/betmirato";
+            const workflow_id = "auto-scanner.yml";
+            const url = `https://api.github.com/repos/${repo}/actions/workflows/${workflow_id}/dispatches`;
+            
+            try {
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/vnd.github.v3+json',
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ "ref": "main" })
+                });
+                
+                if (response.ok || response.status === 204) {
+                    alert("🚀 Fatto! Segnale GitHub inviato con successo.\nLe nuove quote appariranno sulla Dashboard tra 2-3 minuti (ricarica la pagina).");
+                } else {
+                    const err = await response.text();
+                    alert(`❌ Errore API GitHub:\n${err}\nLa chiave è sbagliata o non ha permessi. Riprova.`);
+                    if (response.status === 401 || response.status === 403 || response.status === 404) {
+                        localStorage.removeItem('github_pat'); // Azzera su errore
+                    }
+                }
+            } catch(e) {
+                alert("❌ Eccezione di Connessione: " + e.message);
+            }
         }
 
         // ====== MOTORE DASHBOARD AUTOMATICO ======
