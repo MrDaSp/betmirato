@@ -1,0 +1,607 @@
+﻿<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LottoMirato â€“ Dashboard Strategica</title>
+    <meta name="description" content="Analisi ritardi del Lotto italiano. Strategia disciplinata basata sui dati storici.">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0e1a;
+            --bg-secondary: #111827;
+            --bg-card: #1a2235;
+            --bg-card-hover: #1f293d;
+            --border: #2a3550;
+            --text-primary: #e8ecf4;
+            --text-secondary: #8b98b8;
+            --text-muted: #5a6785;
+            --accent-blue: #3b82f6;
+            --accent-cyan: #06b6d4;
+            --accent-green: #10b981;
+            --accent-yellow: #f59e0b;
+            --accent-orange: #f97316;
+            --accent-red: #ef4444;
+            --accent-purple: #8b5cf6;
+            --accent-pink: #ec4899;
+            --glow-blue: rgba(59, 130, 246, 0.15);
+            --glow-green: rgba(16, 185, 129, 0.15);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+        }
+        body::before {
+            content: '';
+            position: fixed; top: -50%; left: -50%; width: 200%; height: 200%;
+            background: radial-gradient(ellipse at 20% 20%, rgba(59,130,246,0.06) 0%, transparent 50%),
+                        radial-gradient(ellipse at 80% 80%, rgba(139,92,246,0.04) 0%, transparent 50%);
+            z-index: -1; animation: bgFloat 20s ease-in-out infinite;
+        }
+        @keyframes bgFloat { 0%,100%{transform:translate(0,0)} 50%{transform:translate(2%,1%)} }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        @keyframes pulse { 0%,100%{box-shadow:0 0 0 0 rgba(239,68,68,.3)} 50%{box-shadow:0 0 12px 4px rgba(239,68,68,.15)} }
+        @keyframes barPulse { 0%,100%{opacity:1} 50%{opacity:.7} }
+        @keyframes fadeIn { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:none} }
+        @keyframes slideUp { from{opacity:0;transform:translateY(40px)} to{opacity:1;transform:none} }
+
+        /* ===== AUTH SCREEN ===== */
+        .auth-overlay {
+            position: fixed; inset: 0; z-index: 200;
+            display: flex; align-items: center; justify-content: center;
+            background: var(--bg-primary);
+        }
+        .auth-overlay.hidden { display: none; }
+        .auth-box {
+            background: linear-gradient(145deg, var(--bg-card), var(--bg-secondary));
+            border: 1px solid var(--border); border-radius: 20px;
+            padding: 2.5rem; width: 400px; max-width: 90vw;
+            animation: fadeIn .5s ease;
+        }
+        .auth-logo { text-align: center; margin-bottom: 1.5rem; }
+        .auth-logo h1 {
+            font-size: 2rem; font-weight: 800;
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-blue), var(--accent-purple));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+        .auth-logo p { color: var(--text-muted); font-size: .85rem; margin-top: .3rem; }
+        .form-group { margin-bottom: 1rem; }
+        .form-group label { display: block; font-size: .75rem; color: var(--text-secondary); margin-bottom: .4rem; text-transform: uppercase; letter-spacing: 1px; }
+        .form-input {
+            width: 100%; padding: .75rem 1rem; border-radius: 10px;
+            border: 1px solid var(--border); background: var(--bg-secondary);
+            color: var(--text-primary); font-family: 'Inter', sans-serif; font-size: .9rem;
+            transition: border-color .3s;
+        }
+        .form-input:focus { outline: none; border-color: var(--accent-blue); }
+        .auth-error { color: var(--accent-red); font-size: .8rem; margin-bottom: .8rem; display: none; }
+        .auth-tabs { display: flex; gap: .5rem; margin-bottom: 1.5rem; }
+        .auth-tab {
+            flex: 1; padding: .6rem; border-radius: 8px; text-align: center;
+            font-size: .85rem; font-weight: 600; cursor: pointer;
+            background: transparent; border: 1px solid var(--border); color: var(--text-secondary);
+            transition: all .3s;
+        }
+        .auth-tab.active { background: var(--accent-blue); border-color: var(--accent-blue); color: white; }
+
+        /* ===== WIZARD ===== */
+        .wizard-overlay {
+            position: fixed; inset: 0; z-index: 190;
+            background: var(--bg-primary); overflow-y: auto;
+        }
+        .wizard-overlay.hidden { display: none; }
+        .wizard-container { max-width: 900px; margin: 0 auto; padding: 2rem; }
+        .wizard-header { text-align: center; margin-bottom: 2rem; animation: fadeIn .5s ease; }
+        .wizard-header h1 { font-size: 1.8rem; font-weight: 800; margin-bottom: .5rem; }
+        .wizard-header p { color: var(--text-secondary); font-size: .95rem; max-width: 600px; margin: 0 auto; }
+        .wizard-step { margin-bottom: .5rem; font-size: .75rem; color: var(--accent-cyan); text-transform: uppercase; letter-spacing: 2px; }
+        .wizard-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; margin-bottom: 2rem; }
+        .wizard-card {
+            background: linear-gradient(145deg, var(--bg-card), var(--bg-secondary));
+            border: 2px solid var(--border); border-radius: 16px; padding: 1.5rem;
+            cursor: pointer; transition: all .3s; animation: slideUp .5s ease backwards;
+        }
+        .wizard-card:nth-child(1) { animation-delay: .1s; }
+        .wizard-card:nth-child(2) { animation-delay: .2s; }
+        .wizard-card:nth-child(3) { animation-delay: .3s; }
+        .wizard-card:nth-child(4) { animation-delay: .4s; }
+        .wizard-card:nth-child(5) { animation-delay: .5s; }
+        .wizard-card:nth-child(6) { animation-delay: .6s; }
+        .wizard-card:hover { border-color: var(--accent-blue); transform: translateY(-2px); }
+        .wizard-card.selected { border-color: var(--accent-green); box-shadow: 0 0 25px var(--glow-green); }
+        .wizard-card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
+        .wizard-card-title { font-size: 1.1rem; font-weight: 700; }
+        .wizard-forza {
+            font-size: .7rem; padding: .2rem .6rem; border-radius: 20px;
+            font-weight: 700; text-transform: uppercase; letter-spacing: .5px;
+        }
+        .forza-alta { background: rgba(239,68,68,.15); color: var(--accent-red); border: 1px solid rgba(239,68,68,.3); }
+        .forza-media { background: rgba(245,158,11,.15); color: var(--accent-yellow); border: 1px solid rgba(245,158,11,.3); }
+        .wizard-num-row { display: flex; align-items: center; gap: .8rem; margin-bottom: .6rem; }
+        .wizard-num {
+            width: 42px; height: 42px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 1rem;
+        }
+        .wizard-num.leader { background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple)); }
+        .wizard-num.secondary { background: var(--bg-secondary); border: 2px solid var(--border); }
+        .wizard-num-info { flex: 1; }
+        .wizard-num-label { font-size: .7rem; color: var(--text-muted); }
+        .wizard-num-stat { font-family: 'JetBrains Mono', monospace; font-size: .85rem; }
+        .wizard-bar { height: 6px; background: rgba(42,53,80,.6); border-radius: 3px; overflow: hidden; margin-top: .3rem; }
+        .wizard-bar-fill { height: 100%; border-radius: 3px; }
+        .wizard-check { position: absolute; top: 1rem; right: 1rem; font-size: 1.5rem; display: none; }
+        .wizard-card.selected .wizard-check { display: block; }
+        .wizard-card { position: relative; }
+        .wizard-confirm-area { text-align: center; margin-top: 1.5rem; }
+        .wizard-settings { display: flex; gap: 1rem; justify-content: center; margin-bottom: 1.5rem; flex-wrap: wrap; }
+        .wizard-settings .form-group { margin-bottom: 0; text-align: left; min-width: 150px; }
+        .wizard-settings .form-input { width: 100%; }
+
+        /* ===== HEADER ===== */
+        .header {
+            background: linear-gradient(135deg, rgba(26,34,53,.95), rgba(17,24,39,.95));
+            border-bottom: 1px solid var(--border); padding: 1rem 2rem;
+            display: flex; justify-content: space-between; align-items: center;
+            backdrop-filter: blur(20px); position: sticky; top: 0; z-index: 100;
+        }
+        .header-left { display: flex; align-items: center; gap: 1rem; }
+        .logo { font-size: 1.5rem; font-weight: 800; background: linear-gradient(135deg, var(--accent-cyan), var(--accent-blue), var(--accent-purple)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .logo-sub { font-size: .7rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 2px; }
+        .header-actions { display: flex; gap: .6rem; align-items: center; }
+        .user-info { font-size: .8rem; color: var(--text-secondary); margin-right: .5rem; }
+        .btn {
+            padding: .55rem 1rem; border-radius: 10px; border: 1px solid var(--border);
+            background: var(--bg-card); color: var(--text-primary);
+            font-family: 'Inter', sans-serif; font-weight: 500; font-size: .8rem;
+            cursor: pointer; transition: all .3s; display: flex; align-items: center; gap: .4rem;
+        }
+        .btn:hover { border-color: var(--accent-blue); background: var(--bg-card-hover); transform: translateY(-1px); }
+        .btn-primary { background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple)); border-color: transparent; }
+        .btn-sm { padding: .4rem .7rem; font-size: .75rem; }
+        .btn-danger { border-color: rgba(239,68,68,.3); color: var(--accent-red); }
+        .btn.loading { opacity: .7; pointer-events: none; }
+        .btn .spinner { display: none; width: 14px; height: 14px; border: 2px solid rgba(255,255,255,.3); border-top-color: white; border-radius: 50%; animation: spin .8s linear infinite; }
+        .btn.loading .spinner { display: inline-block; }
+        .btn.loading .btn-text { display: none; }
+        .last-update { font-size: .72rem; color: var(--text-muted); }
+
+        /* ===== MAIN ===== */
+        .main { max-width: 1440px; margin: 0 auto; padding: 1.2rem 2rem 3rem; }
+        .main.hidden { display: none; }
+        .stats-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: .8rem; margin-bottom: 1.2rem; }
+        .stat-card {
+            background: linear-gradient(145deg, var(--bg-card), var(--bg-secondary));
+            border: 1px solid var(--border); border-radius: 14px; padding: 1rem 1.2rem;
+            position: relative; overflow: hidden;
+        }
+        .stat-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; border-radius: 14px 14px 0 0; }
+        .stat-card.blue::before { background: linear-gradient(90deg, var(--accent-blue), var(--accent-cyan)); }
+        .stat-card.green::before { background: linear-gradient(90deg, var(--accent-green), var(--accent-cyan)); }
+        .stat-card.orange::before { background: linear-gradient(90deg, var(--accent-orange), var(--accent-yellow)); }
+        .stat-card.red::before { background: linear-gradient(90deg, var(--accent-red), var(--accent-orange)); }
+        .stat-card.purple::before { background: linear-gradient(90deg, var(--accent-purple), var(--accent-pink)); }
+        .stat-label { font-size: .68rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: .4rem; }
+        .stat-value { font-size: 1.6rem; font-weight: 800; font-family: 'JetBrains Mono', monospace; }
+        .stat-card.blue .stat-value { color: var(--accent-cyan); }
+        .stat-card.green .stat-value { color: var(--accent-green); }
+        .stat-card.orange .stat-value { color: var(--accent-orange); }
+        .stat-card.red .stat-value { color: var(--accent-red); }
+        .stat-card.purple .stat-value { color: var(--accent-purple); }
+        .stat-detail { font-size: .72rem; color: var(--text-secondary); margin-top: .2rem; }
+
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; margin-bottom: 1.2rem; }
+        .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.2rem; margin-bottom: 1.2rem; }
+        @media (max-width: 1024px) { .grid-2, .grid-3 { grid-template-columns: 1fr; } .stats-row { grid-template-columns: repeat(2, 1fr); } }
+
+        /* ===== CARDS ===== */
+        .card { background: linear-gradient(145deg, var(--bg-card), var(--bg-secondary)); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; }
+        .card-header { padding: .9rem 1.2rem; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+        .card-title { font-size: .9rem; font-weight: 700; display: flex; align-items: center; gap: .4rem; }
+        .card-body { padding: 1rem 1.2rem; }
+        .card-body-scroll { padding: .8rem 1.2rem; max-height: 420px; overflow-y: auto; }
+        .card-body-scroll::-webkit-scrollbar { width: 5px; }
+        .card-body-scroll::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+        .card-badge { font-size: .6rem; padding: .15rem .5rem; border-radius: 20px; font-weight: 600; text-transform: uppercase; letter-spacing: .5px; }
+        .badge-anomalo { background: rgba(239,68,68,.15); color: var(--accent-red); border: 1px solid rgba(239,68,68,.3); }
+        .badge-record { background: rgba(239,68,68,.25); color: #ff6b6b; border: 1px solid rgba(239,68,68,.5); animation: pulse 2s ease-in-out infinite; }
+        .badge-alto { background: rgba(245,158,11,.15); color: var(--accent-yellow); border: 1px solid rgba(245,158,11,.3); }
+        .badge-ok { background: rgba(16,185,129,.15); color: var(--accent-green); border: 1px solid rgba(16,185,129,.3); }
+
+        /* Numero rows */
+        .numero-row { display: flex; align-items: center; gap: .8rem; padding: .7rem 0; }
+        .numero-row+.numero-row { border-top: 1px solid rgba(42,53,80,.5); }
+        .numero-circle { width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 1rem; flex-shrink: 0; }
+        .numero-circle.leader { background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple)); box-shadow: 0 0 15px var(--glow-blue); }
+        .numero-circle.secondary { background: var(--bg-secondary); border: 2px solid var(--border); }
+        .numero-info { flex: 1; }
+        .numero-label { font-size: .68rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
+        .ritardo-bar-container { margin-top: .3rem; display: flex; align-items: center; gap: .6rem; }
+        .ritardo-bar { flex: 1; height: 7px; background: rgba(42,53,80,.6); border-radius: 4px; overflow: hidden; }
+        .ritardo-bar-fill { height: 100%; border-radius: 4px; transition: width 1s ease; }
+        .ritardo-bar-fill.anomalo { background: linear-gradient(90deg, var(--accent-orange), var(--accent-red)); }
+        .ritardo-bar-fill.record { background: linear-gradient(90deg, var(--accent-red), var(--accent-pink)); animation: barPulse 2s ease-in-out infinite; }
+        .ritardo-bar-fill.alto { background: linear-gradient(90deg, var(--accent-yellow), var(--accent-orange)); }
+        .ritardo-bar-fill.normale { background: linear-gradient(90deg, var(--accent-green), var(--accent-cyan)); }
+        .ritardo-values { display: flex; gap: 1rem; margin-top: .3rem; flex-wrap: wrap; }
+        .ritardo-val { font-size: .68rem; color: var(--text-secondary); }
+        .ritardo-val strong { font-family: 'JetBrains Mono', monospace; font-size: .8rem; }
+        .ritardo-big { font-family: 'JetBrains Mono', monospace; font-size: 1.2rem; font-weight: 700; min-width: 40px; text-align: right; }
+
+        /* Table */
+        .extraction-table { width: 100%; border-collapse: separate; border-spacing: 0; }
+        .extraction-table th { text-align: left; font-size: .65rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1.5px; padding: .5rem .6rem; border-bottom: 1px solid var(--border); }
+        .extraction-table td { padding: .5rem .6rem; font-size: .82rem; border-bottom: 1px solid rgba(42,53,80,.3); vertical-align: middle; }
+        .numeri-estratti { font-family: 'JetBrains Mono', monospace; font-size: .75rem; display: flex; gap: .25rem; }
+        .num-ball { width: 26px; height: 26px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: .68rem; font-weight: 600; background: var(--bg-secondary); border: 1px solid var(--border); }
+        .num-ball.match { background: linear-gradient(135deg, var(--accent-green), var(--accent-cyan)); border-color: transparent; color: white; }
+
+        /* Toggle */
+        .toggle { position: relative; width: 38px; height: 20px; cursor: pointer; display: inline-block; }
+        .toggle input { opacity: 0; width: 0; height: 0; }
+        .toggle-slider { position: absolute; inset: 0; background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 10px; transition: .3s; }
+        .toggle-slider::before { content: ''; position: absolute; height: 14px; width: 14px; left: 2px; bottom: 2px; background: var(--text-muted); border-radius: 50%; transition: .3s; }
+        .toggle input:checked+.toggle-slider { background: var(--accent-green); border-color: var(--accent-green); }
+        .toggle input:checked+.toggle-slider::before { transform: translateX(18px); background: white; }
+
+        /* Top ritardatari */
+        .top-list { list-style: none; }
+        .top-item { display: flex; align-items: center; gap: .5rem; padding: .35rem 0; font-size: .78rem; }
+        .top-item+.top-item { border-top: 1px solid rgba(42,53,80,.3); }
+        .top-pos { font-family: 'JetBrains Mono', monospace; font-size: .65rem; color: var(--text-muted); width: 18px; text-align: right; }
+        .top-num { font-family: 'JetBrains Mono', monospace; font-weight: 700; width: 26px; text-align: center; }
+        .top-bar { flex: 1; height: 5px; background: rgba(42,53,80,.6); border-radius: 3px; overflow: hidden; }
+        .top-bar-fill { height: 100%; border-radius: 3px; }
+        .top-rit { font-family: 'JetBrains Mono', monospace; font-size: .75rem; width: 32px; text-align: right; color: var(--text-secondary); }
+        .top-item.in-giocata .top-num { color: var(--accent-cyan); }
+        .top-item.in-giocata .top-bar-fill { background: linear-gradient(90deg, var(--accent-cyan), var(--accent-blue)); }
+        .top-item:not(.in-giocata) .top-bar-fill { background: rgba(90,103,133,.4); }
+
+        /* Budget */
+        .budget-bar { height: 22px; background: rgba(42,53,80,.6); border-radius: 11px; overflow: hidden; position: relative; margin: .8rem 0; }
+        .budget-bar-fill { height: 100%; border-radius: 11px; background: linear-gradient(90deg, var(--accent-red), var(--accent-orange)); transition: width 1s; display: flex; align-items: center; justify-content: flex-end; padding-right: 8px; font-size: .65rem; font-weight: 600; }
+        .budget-labels { display: flex; justify-content: space-between; font-size: .7rem; color: var(--text-muted); }
+
+        .new-extraction { background: rgba(59,130,246,.08) !important; border-left: 3px solid var(--accent-blue); }
+
+        /* ===== GIOCATA CONSIGLIATA ===== */
+        .giocata-card {
+            background: linear-gradient(145deg, var(--bg-card), var(--bg-secondary));
+            border: 1px solid var(--border); border-radius: 16px;
+            margin-bottom: 1.2rem; overflow: hidden;
+            animation: fadeIn .6s ease;
+        }
+        .giocata-card .card-header {
+            padding: .9rem 1.2rem;
+            border-bottom: 1px solid var(--border);
+            display: flex; justify-content: space-between; align-items: center;
+            background: linear-gradient(135deg, rgba(59,130,246,.06), rgba(139,92,246,.06));
+        }
+        .giocata-card .card-header .card-title { font-size: 1rem; font-weight: 700; }
+        .giocata-inner {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr auto 1fr;
+            padding: 0;
+        }
+        @media (max-width: 900px) {
+            .giocata-inner { grid-template-columns: 1fr; }
+            .giocata-divider { display: none; }
+        }
+        .giocata-section { padding: 1.2rem 1.5rem; }
+        .giocata-section-title {
+            font-size: .7rem; color: var(--text-muted); text-transform: uppercase;
+            letter-spacing: 1.5px; margin-bottom: .8rem;
+            display: flex; align-items: center; gap: .4rem;
+        }
+        .giocata-divider {
+            width: 1px; background: var(--border); margin: .8rem 0;
+        }
+        .giocata-ruota {
+            display: flex; align-items: center; gap: .6rem;
+            padding: .45rem 0;
+        }
+        .giocata-ruota + .giocata-ruota { border-top: 1px solid rgba(42,53,80,.4); }
+        .giocata-ruota-dot {
+            width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0;
+        }
+        .giocata-ruota-nome { font-size: .82rem; font-weight: 600; width: 60px; }
+        .giocata-numeri {
+            display: flex; gap: .3rem; align-items: center;
+        }
+        .giocata-num {
+            width: 32px; height: 32px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: .8rem;
+        }
+        .giocata-num.gn-leader { background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple)); font-size: .85rem; }
+        .giocata-num.gn-second { background: var(--bg-secondary); border: 1.5px solid var(--border); font-size: .8rem; }
+        .giocata-sep { color: var(--text-muted); font-size: .7rem; margin: 0 .1rem; }
+        .giocata-tipo { font-size: .6rem; padding: .1rem .4rem; border-radius: 8px; margin-left: .5rem; }
+        .giocata-tipo.ambo-tag { background: rgba(139,92,246,.15); color: var(--accent-purple); }
+        .giocata-tipo.estr-tag { background: rgba(6,182,212,.15); color: var(--accent-cyan); }
+
+        .piano-row { display: flex; justify-content: space-between; padding: .35rem 0; font-size: .82rem; }
+        .piano-row + .piano-row { border-top: 1px solid rgba(42,53,80,.3); }
+        .piano-label { color: var(--text-secondary); }
+        .piano-val { font-family: 'JetBrains Mono', monospace; font-weight: 600; }
+
+        .stato-estr {
+            display: flex; align-items: center; gap: .5rem;
+            padding: .35rem 0; font-size: .8rem;
+        }
+        .stato-estr + .stato-estr { border-top: 1px solid rgba(42,53,80,.3); }
+        .stato-icon { font-size: 1rem; }
+        .stato-step-bar { display: flex; gap: 3px; margin-top: .6rem; }
+        .stato-step {
+            flex: 1; height: 6px; border-radius: 3px;
+            background: rgba(42,53,80,.6); transition: background .5s;
+        }
+        .stato-step.played { background: linear-gradient(90deg, var(--accent-blue), var(--accent-purple)); }
+        .stato-step.skipped { background: rgba(245,158,11,.3); }
+        .stato-step.current { background: var(--accent-cyan); animation: barPulse 1.5s ease-in-out infinite; }
+
+        /* Toast */
+        .toast { position: fixed; bottom: 2rem; right: 2rem; padding: .8rem 1.2rem; border-radius: 12px; font-size: .82rem; font-weight: 500; z-index: 1000; transform: translateY(100px); opacity: 0; transition: all .4s ease; border: 1px solid; }
+        .toast.show { transform: translateY(0); opacity: 1; }
+        .toast.success { background: rgba(16,185,129,.15); color: var(--accent-green); border-color: rgba(16,185,129,.3); }
+        .toast.error { background: rgba(239,68,68,.15); color: var(--accent-red); border-color: rgba(239,68,68,.3); }
+        .toast.info { background: rgba(59,130,246,.15); color: var(--accent-blue); border-color: rgba(59,130,246,.3); }
+    </style>
+</head>
+<body>
+
+<!-- ===== AUTH ===== -->
+<div class="auth-overlay" id="authOverlay">
+    <div class="auth-box">
+        <div class="auth-logo">
+            <h1>ðŸŽ¯ LottoMirato</h1>
+            <p>Analisi strategica basata sui ritardi</p>
+        </div>
+        <div class="auth-tabs">
+            <div class="auth-tab active" onclick="switchAuthTab('login')">Accedi</div>
+            <div class="auth-tab" onclick="switchAuthTab('register')">Registrati</div>
+        </div>
+        <div class="auth-error" id="authError"></div>
+
+        <!-- Login -->
+        <form id="loginForm" onsubmit="doLogin(event)">
+            <div class="form-group">
+                <label>Email</label>
+                <input class="form-input" id="loginUser" type="email" placeholder="La tua email" required>
+            </div>
+            <div class="form-group">
+                <label>Password</label>
+                <input class="form-input" id="loginPass" type="password" placeholder="Password" required>
+            </div>
+            <button class="btn btn-primary" type="submit" style="width:100%;justify-content:center;padding:.8rem">
+                <span class="spinner"></span><span class="btn-text">Accedi</span>
+            </button>
+        </form>
+
+        <!-- Register -->
+        <form id="registerForm" style="display:none" onsubmit="doRegister(event)">
+            <div class="form-group">
+                <label>Email</label>
+                <input class="form-input" id="regUser" type="email" placeholder="La tua email" required>
+            </div>
+            <div class="form-group">
+                <label>Nome visualizzato</label>
+                <input class="form-input" id="regName" placeholder="Come vuoi essere chiamato?">
+            </div>
+            <div class="form-group">
+                <label>Password</label>
+                <input class="form-input" id="regPass" type="password" placeholder="Min 6 caratteri" required minlength="6">
+            </div>
+            <button class="btn btn-primary" type="submit" style="width:100%;justify-content:center;padding:.8rem">
+                <span class="spinner"></span><span class="btn-text">Crea Account</span>
+            </button>
+        </form>
+    </div>
+</div>
+
+<!-- ===== WIZARD ===== -->
+<div class="wizard-overlay hidden" id="wizardOverlay">
+    <div class="wizard-container">
+        <div class="wizard-header">
+            <div class="wizard-step">Passo 1 di 2 â€“ Configurazione Strategia</div>
+            <h1>ðŸ§  Analizziamo i ritardi per te</h1>
+            <p>Abbiamo analizzato <strong id="wizTotEstr">â€“</strong> estrazioni dal 2001 ad oggi. Ecco i numeri con le situazioni piu' anomale sulle ruote. <strong>Seleziona da 1 a 3 ruote</strong> per la tua strategia.</p>
+        </div>
+        <div class="wizard-cards" id="wizardCards"></div>
+
+        <div class="wizard-step" style="text-align:center">Passo 2 di 2 â€“ Imposta il piano</div>
+        <div class="wizard-settings">
+            <div class="form-group">
+                <label>â‚¬ per estrazione</label>
+                <input class="form-input" id="wizBudget" type="number" value="6" min="1" max="100">
+            </div>
+            <div class="form-group">
+                <label>Estrazioni pianificate</label>
+                <input class="form-input" id="wizEstrazioni" type="number" value="10" min="1" max="50">
+            </div>
+        </div>
+        <div class="wizard-confirm-area">
+            <button class="btn btn-primary" onclick="confirmWizard()" style="padding:.8rem 2rem;font-size:1rem">
+                âœ… Conferma e inizia
+            </button>
+            <p style="color:var(--text-muted);font-size:.75rem;margin-top:.8rem;">Potrai sempre modificare la strategia dopo</p>
+        </div>
+    </div>
+</div>
+
+<!-- ===== HEADER ===== -->
+<header class="header" id="appHeader" style="display:none">
+    <div class="header-left">
+        <div><div class="logo">ðŸŽ¯ LottoMirato</div><div class="logo-sub">Dashboard Strategica</div></div>
+    </div>
+    <div class="header-actions">
+        <span class="last-update" id="lastUpdate">â€“</span>
+        <span class="user-info" id="userInfo">â€“</span>
+        <button class="btn btn-sm" id="btnRefresh" onclick="caricaDati()"><span class="spinner"></span><span class="btn-text">ðŸ”„ Aggiorna</span></button>
+        <button class="btn btn-primary btn-sm" id="btnDownload" onclick="scaricaEAnalizza()"><span class="spinner"></span><span class="btn-text">ðŸ“¥ Scarica + Analizza</span></button>
+        <button class="btn btn-sm" onclick="openWizardEdit()">âš™ï¸</button>
+        <button class="btn btn-sm btn-danger" onclick="doLogout()">Esci</button>
+    </div>
+</header>
+
+<!-- ===== MAIN DASHBOARD ===== -->
+<main class="main hidden" id="mainDash">
+    <div class="stats-row" id="statsRow">
+        <div class="stat-card blue"><div class="stat-label">Dati storici</div><div class="stat-value" id="statPeriodo">â€“</div><div class="stat-detail" id="statEstrazioni">â€“</div></div>
+        <div class="stat-card green"><div class="stat-label">Estrazioni Giocate</div><div class="stat-value" id="statGiocate">â€“</div><div class="stat-detail" id="statRimaste">â€“</div></div>
+        <div class="stat-card red"><div class="stat-label">Budget</div><div class="stat-value" id="statBudget">â€“</div><div class="stat-detail" id="statBudgetDetail">â€“</div></div>
+        <div class="stat-card orange"><div class="stat-label">Ritardo max giocata</div><div class="stat-value" id="statMaxRitardo">â€“</div><div class="stat-detail" id="statMaxRitardoDetail">â€“</div></div>
+        <div class="stat-card purple"><div class="stat-label">Segnali Record</div><div class="stat-value" id="statRecord">â€“</div><div class="stat-detail" id="statRecordDetail">â€“</div></div>
+    </div>
+    <div class="giocata-card" id="giocataCard"></div>
+    <div class="grid-3" id="ruoteGrid"></div>
+    <div class="grid-2">
+        <div class="card"><div class="card-header"><div class="card-title">ðŸ’° Piano Economico</div></div><div class="card-body" id="budgetBody">
+            <div class="budget-bar"><div class="budget-bar-fill" id="budgetBarFill" style="width:10%"></div></div>
+            <div class="budget-labels"><span id="budgetSpeso">â€“</span><span id="budgetTotale">â€“</span></div>
+            <div style="margin-top:1rem"><table class="extraction-table"><thead><tr><th>#</th><th>Data</th><th>Giocata?</th><th>Esito</th></tr></thead><tbody id="pianoBody"></tbody></table></div>
+        </div></div>
+        <div class="card"><div class="card-header"><div class="card-title">ðŸ“‹ Ultime Estrazioni</div></div><div class="card-body-scroll" style="max-height:420px">
+            <table class="extraction-table"><thead><tr><th>Data</th><th>Ruota</th><th>Numeri</th><th></th></tr></thead><tbody id="estrazioniTbody"></tbody></table>
+        </div></div>
+    </div>
+    <div class="grid-3" id="topGrid"></div>
+</main>
+
+<div class="toast" id="toast"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="analisi.js"></script>
+<script src="storage.js"></script>
+<script>
+let wizardData = null, selectedWizard = new Set(), estrazioniCache = null;
+
+function showToast(m,t='info'){const e=document.getElementById('toast');e.textContent=m;e.className=`toast ${t}`;setTimeout(()=>e.classList.add('show'),10);setTimeout(()=>e.classList.remove('show'),3500)}
+
+// Auth
+function switchAuthTab(tab){document.querySelectorAll('.auth-tab').forEach((t,i)=>{t.classList.toggle('active',(tab==='login'?i===0:i===1))});document.getElementById('loginForm').style.display=tab==='login'?'block':'none';document.getElementById('registerForm').style.display=tab==='register'?'block':'none';document.getElementById('authError').style.display='none'}
+function showAuthError(msg){const e=document.getElementById('authError');e.textContent=msg;e.style.display='block'}
+
+async function doLogin(e){e.preventDefault();try{await sbSignIn(document.getElementById('loginUser').value,document.getElementById('loginPass').value);document.getElementById('authOverlay').classList.add('hidden');const s=await sbGetStrategies();if(!s.length)loadWizard();else showDashboard()}catch(err){showAuthError(err.message||'Email o password errati')}}
+
+async function doRegister(e){e.preventDefault();try{await sbSignUp(document.getElementById('regUser').value,document.getElementById('regPass').value,document.getElementById('regName').value);document.getElementById('authOverlay').classList.add('hidden');showToast('Controlla la tua email per confermare!','info');loadWizard()}catch(err){showAuthError(err.message||'Errore registrazione')}}
+
+function doLogout(){sbSignOut();location.reload()}
+
+// Storico
+async function getEstrazioni(){
+    if(estrazioniCache)return estrazioniCache;
+    showToast('Caricamento storico...','info');
+    const txt=await downloadStorico();
+    estrazioniCache=caricaStorico(txt);
+    return estrazioniCache;
+}
+
+// Wizard
+async function loadWizard(){
+    document.getElementById('wizardOverlay').classList.remove('hidden');
+    document.getElementById('appHeader').style.display='none';
+    document.getElementById('mainDash').classList.add('hidden');
+    try{
+        const estrazioni=await getEstrazioni();
+        const date=ottieniDateUniche(estrazioni);
+        const suggerimenti=generaSuggerimenti(estrazioni);
+        wizardData={suggerimenti,top_3_consigliati:suggerimenti.slice(0,3),totale_estrazioni:date.length};
+        document.getElementById('wizTotEstr').textContent=date.length.toLocaleString();
+        renderWizardCards(suggerimenti.slice(0,6));
+        selectedWizard.clear();
+        suggerimenti.slice(0,3).forEach(s=>selectedWizard.add(s.ruota));
+        updateWizardSelection();
+    }catch(err){showToast('Errore: '+err.message,'error')}
+}
+
+function renderWizardCards(suggerimenti){const c=document.getElementById('wizardCards');c.innerHTML='';suggerimenti.forEach(s=>{const forzaCls=s.forza>=4?'forza-alta':'forza-media';const lPct=Math.min(s.leader.pct_vs_max,100);const sPct=Math.min(s.secondario.pct_vs_max,100);const lBarColor=lPct>=90?'var(--accent-red)':lPct>=70?'var(--accent-orange)':'var(--accent-yellow)';const sBarColor=sPct>=90?'var(--accent-red)':sPct>=70?'var(--accent-orange)':'var(--accent-yellow)';c.innerHTML+=`<div class="wizard-card" data-ruota="${s.ruota}" onclick="toggleWizardCard('${s.ruota}')"><div class="wizard-check">âœ…</div><div class="wizard-card-header"><div class="wizard-card-title">${s.ruota_nome}</div><span class="wizard-forza ${forzaCls}">Forza ${s.forza}</span></div><div class="wizard-num-row"><div class="wizard-num leader">${s.leader.numero}</div><div class="wizard-num-info"><div class="wizard-num-label">â­ Leader â€“ Ritardo <strong>${s.leader.ritardo}</strong> (${s.leader.rapporto}x media)</div><div class="wizard-bar"><div class="wizard-bar-fill" style="width:${lPct}%;background:${lBarColor}"></div></div><div class="wizard-num-stat" style="font-size:.68rem;color:var(--text-muted);margin-top:.2rem">Max storico: ${s.leader.max_storico} (${s.leader.pct_vs_max}%)</div></div></div><div class="wizard-num-row"><div class="wizard-num secondary">${s.secondario.numero}</div><div class="wizard-num-info"><div class="wizard-num-label">Secondario â€“ Ritardo <strong>${s.secondario.ritardo}</strong> (${s.secondario.rapporto}x media)</div><div class="wizard-bar"><div class="wizard-bar-fill" style="width:${sPct}%;background:${sBarColor}"></div></div></div></div></div>`})}
+function toggleWizardCard(ruota){if(selectedWizard.has(ruota))selectedWizard.delete(ruota);else if(selectedWizard.size<5)selectedWizard.add(ruota);else{showToast('Massimo 5 ruote','info');return}updateWizardSelection()}
+function updateWizardSelection(){document.querySelectorAll('.wizard-card').forEach(c=>{c.classList.toggle('selected',selectedWizard.has(c.dataset.ruota))})}
+
+async function confirmWizard(){
+    if(!selectedWizard.size){showToast('Seleziona almeno 1 ruota','error');return}
+    const strategies=[];
+    wizardData.suggerimenti.forEach(s=>{if(selectedWizard.has(s.ruota))strategies.push({ruota:s.ruota,ambo:s.ambo,estratto:s.estratto})});
+    const budget=parseFloat(document.getElementById('wizBudget').value)||6;
+    const estr=parseInt(document.getElementById('wizEstrazioni').value)||10;
+    try{await sbSaveStrategies(strategies);await sbSavePlan(budget,estr);document.getElementById('wizardOverlay').classList.add('hidden');showToast('Strategia salvata! ðŸŽ¯','success');showDashboard()}catch(err){showToast('Errore: '+err.message,'error')}
+}
+function openWizardEdit(){loadWizard()}
+
+// Dashboard
+async function showDashboard(){
+    document.getElementById('appHeader').style.display='flex';
+    document.getElementById('mainDash').classList.remove('hidden');
+    document.getElementById('wizardOverlay').classList.add('hidden');
+    document.getElementById('userInfo').textContent='ðŸ‘¤ '+getDisplayName();
+    await caricaDati();
+}
+
+async function caricaDati(){
+    const btn=document.getElementById('btnRefresh');btn.classList.add('loading');
+    try{
+        const strategies=await sbGetStrategies();
+        if(!strategies.length){loadWizard();return}
+        const giocata=strategiesToGiocata(strategies);
+        const estrazioni=await getEstrazioni();
+        const date=ottieniDateUniche(estrazioni);
+        const plan=await sbGetPlan();
+        const played=await sbGetPlayed();
+        const spent=await sbGetBudgetSpent();
+        // Build analysis data
+        const d={meta:{totale_righe:estrazioni.length,periodo_inizio:date[0],periodo_fine:date[date.length-1],totale_date:date.length,ultimo_aggiornamento:new Date().toLocaleString('it-IT')},giocata:{},top_ritardatari:{},ultime_estrazioni:[],stato_piano:{estrazioni_giocate:played.map((p,i)=>({numero:i+1,data:p.data_estrazione,giocata:p.giocata,speso:p.speso}))},budget:{speso:spent,budget_totale:plan.budget_per_estrazione*plan.estrazioni_pianificate,rimanente:plan.budget_per_estrazione*plan.estrazioni_pianificate-spent,estrazioni_giocate:played.filter(p=>p.giocata).length,estrazioni_totali:plan.estrazioni_pianificate,estrazioni_rimaste:plan.estrazioni_pianificate-played.filter(p=>p.giocata).length}};
+        // Per-ruota analysis
+        for(const[rc,g]of Object.entries(giocata)){
+            const rn=RUOTE_NOMI[rc]||rc;const rit=calcolaRitardi(estrazioni,rc);const numInfo=[];
+            for(const num of g.ambo){const ritardo=rit[rc].ritardi[num];const m=calcolaRitardoMedio(estrazioni,rc,num);const maxR=calcolaRitardoMaxStorico(estrazioni,rc,num);const rapporto=m.media>0?Math.round(ritardo/m.media*100)/100:0;const stato=ritardo>=maxR?'RECORD':rapporto>=3?'ANOMALO':rapporto>=2?'ALTO':'NORMALE';
+                numInfo.push({numero:num,is_leader:num===g.estratto,ritardo,media:Math.round(m.media*10)/10,rapporto,max_storico:maxR,uscite:m.uscite,totale_estrazioni:m.totale,stato,percentuale_vs_max:maxR>0?Math.round(ritardo/maxR*1000)/10:0})}
+            d.giocata[rc]={ruota_nome:rn,ruota_code:rc,ambo:g.ambo,estratto:g.estratto,numeri:numInfo};
+        }
+        // Top ritardatari
+        for(const rc of Object.keys(giocata)){const top=topRitardi(estrazioni,rc,15);d.top_ritardatari[rc]=top.map(t=>({numero:t.numero,ritardo:t.ritardo,in_giocata:giocata[rc].ambo.includes(t.numero)}))}
+        // Ultime estrazioni
+        for(const data of date.slice(-15)){const v=verificaVincita(data,estrazioni,giocata);const ei={data,ruote:{}};for(const[rc,res]of Object.entries(v)){if(!res.trovata)continue;ei.ruote[rc]={ruota_nome:res.ruota_nome,numeri:res.numeri_usciti,estratto_presente:res.estratto_presente,ambo_vinto:res.ambo_vinto,singoli:res.singoli_presenti}}d.ultime_estrazioni.push(ei)}
+        renderDashboard(d);showToast('Dati aggiornati','success');
+    }catch(e){showToast('Errore: '+e.message,'error');console.error(e)}
+    finally{btn.classList.remove('loading')}
+}
+
+async function scaricaEAnalizza(){const btn=document.getElementById('btnDownload');btn.classList.add('loading');try{estrazioniCache=null;await caricaDati();showToast('Storico aggiornato!','success')}catch(e){showToast('Errore','error')}finally{btn.classList.remove('loading')}}
+
+async function toggleGiocata(data,cb){try{const plan=await sbGetPlan();await sbToggleExtraction(data,cb.checked,plan.budget_per_estrazione);showToast(cb.checked?'Segnata come giocata':'Rimossa','success');await caricaDati()}catch(e){showToast('Errore','error');cb.checked=!cb.checked}}
+
+// Render (unchanged from original)
+function renderDashboard(d){document.getElementById('lastUpdate').textContent='Agg: '+d.meta.ultimo_aggiornamento;document.getElementById('statPeriodo').textContent=d.meta.totale_date.toLocaleString();document.getElementById('statEstrazioni').textContent=d.meta.periodo_inizio+' â†’ '+d.meta.periodo_fine;const b=d.budget;document.getElementById('statGiocate').textContent=b.estrazioni_giocate+' / '+b.estrazioni_totali;document.getElementById('statRimaste').textContent=b.estrazioni_rimaste+' rimaste';document.getElementById('statBudget').textContent='-'+b.speso+'â‚¬';document.getElementById('statBudgetDetail').textContent=b.rimanente+'â‚¬ rimasti su '+b.budget_totale+'â‚¬';let mR=0,mI='',rC=0,rL=[];for(const[rc,g]of Object.entries(d.giocata)){for(const n of g.numeri){if(n.ritardo>mR){mR=n.ritardo;mI=n.numero+' su '+g.ruota_nome}if(n.stato==='RECORD'){rC++;rL.push(n.numero+'/'+g.ruota_nome)}}}document.getElementById('statMaxRitardo').textContent=mR;document.getElementById('statMaxRitardoDetail').textContent=mI;document.getElementById('statRecord').textContent=rC;document.getElementById('statRecordDetail').textContent=rC>0?rL.join(', '):'Nessuno ai massimi';renderGiocataConsigliata(d);renderRuote(d);renderBudget(d);renderEstrazioni(d);renderTop(d)}
+function sc(s){return{RECORD:'record',ANOMALO:'anomalo',ALTO:'alto',NORMALE:'normale'}[s]||'normale'}
+function sb(s){const c={RECORD:'badge-record',ANOMALO:'badge-anomalo',ALTO:'badge-alto',NORMALE:'badge-ok'}[s]||'badge-ok';return`<span class="card-badge ${c}">${s}</span>`}
+const RE={'BA':'ðŸŸ¢','MI':'ðŸ”µ','FI':'ðŸŸ¡','CA':'ðŸ”´','GE':'âšª','NA':'ðŸŸ ','PA':'ðŸŸ£','RM':'ðŸ”¶','TO':'ðŸŸ¤','VE':'ðŸ”·'};
+const RC={'BA':'var(--accent-green)','MI':'var(--accent-blue)','FI':'var(--accent-yellow)','CA':'var(--accent-red)','NA':'var(--accent-orange)','default':'var(--accent-cyan)'};
+const RDC={'BA':'#10b981','MI':'#3b82f6','FI':'#f59e0b','CA':'#ef4444','GE':'#8b98b8','NA':'#f97316','PA':'#8b5cf6','RM':'#f97316','TO':'#92400e','VE':'#3b82f6'};
+
+function renderGiocataConsigliata(d){const card=document.getElementById('giocataCard');const b=d.budget;const entries=Object.entries(d.giocata);const played=d.stato_piano.estrazioni_giocate||[];let ruoteHtml='';entries.forEach(([code,g])=>{ruoteHtml+=`<div class="giocata-ruota"><div class="giocata-ruota-dot" style="background:${RDC[code]||'#8b98b8'}"></div><div class="giocata-ruota-nome">${g.ruota_nome}</div><div class="giocata-numeri"><div class="giocata-num gn-leader">${g.ambo[0]}</div><span class="giocata-sep">â€“</span><div class="giocata-num gn-second">${g.ambo[1]}</div><span class="giocata-tipo ambo-tag">Ambo</span><span class="giocata-tipo estr-tag">Estr: ${g.estratto}</span></div></div>`});const costPerEstr=b.budget_totale/b.estrazioni_totali;let pianoHtml=`<div class="piano-row"><span class="piano-label">${(costPerEstr/entries.length).toFixed(0)}â‚¬ per ruota</span><span class="piano-val">${entries.length} ruote</span></div><div class="piano-row"><span class="piano-label">${entries.length} ruote =</span><span class="piano-val" style="color:var(--accent-cyan)">${costPerEstr.toFixed(0)}â‚¬ a estrazione</span></div><div class="piano-row"><span class="piano-label">Durata:</span><span class="piano-val">${b.estrazioni_totali} estrazioni</span></div><div class="piano-row"><span class="piano-label">Budget totale:</span><span class="piano-val" style="color:var(--accent-green);font-size:.95rem">${b.budget_totale}â‚¬</span></div>`;let statoHtml='';const maxShow=Math.min(played.length,5);const latestPlayed=played.slice(-maxShow);if(!latestPlayed.length){statoHtml+='<div class="stato-estr"><span class="stato-icon">â³</span><span style="color:var(--text-secondary)">In attesa della prima estrazione</span></div>'}else{latestPlayed.forEach(e=>{let esito='âŒ Nessuna vincita';if(d.ultime_estrazioni){const match=d.ultime_estrazioni.find(x=>x.data===e.data);if(match&&e.giocata){let won=false;for(const[,r]of Object.entries(match.ruote)){if(r.ambo_vinto){esito='ðŸ† AMBO!';won=true;break}if(r.estratto_presente){esito='âœ… Estratto';won=true}if(!won&&r.singoli?.length>0)esito='ðŸ”¸ Parziale'};}else if(!e.giocata)esito='â­ï¸ Saltata'}statoHtml+=`<div class="stato-estr"><span class="stato-icon">${e.giocata?'âœ…':'â­ï¸'}</span><span style="font-family:'JetBrains Mono',monospace;font-size:.75rem;color:var(--text-secondary);width:72px">${e.data}</span><span style="font-size:.78rem">${esito}</span></div>`})}let stepHtml='';for(let i=0;i<b.estrazioni_totali;i++){let cls='';if(i<played.length)cls=played[i].giocata?'played':'skipped';else if(i===played.length)cls='current';stepHtml+=`<div class="stato-step ${cls}"></div>`}card.innerHTML=`<div class="card-header"><div class="card-title">ðŸŽ¯ Giocata Consigliata</div><span style="font-size:.72rem;color:var(--text-muted)">Estrazione ${b.estrazioni_giocate}/${b.estrazioni_totali} Â· Speso ${b.speso}â‚¬</span></div><div class="giocata-inner"><div class="giocata-section"><div class="giocata-section-title">ðŸŽ¯ Giocata Attuale</div>${ruoteHtml}</div><div class="giocata-divider"></div><div class="giocata-section"><div class="giocata-section-title">ðŸ’¸ Piano Economico</div>${pianoHtml}</div><div class="giocata-divider"></div><div class="giocata-section"><div class="giocata-section-title">ðŸ“… Stato Attuale</div>${statoHtml}<div class="stato-step-bar">${stepHtml}</div><div style="display:flex;justify-content:space-between;margin-top:.3rem;font-size:.6rem;color:var(--text-muted)"><span>Estrazione 1</span><span>Estrazione ${b.estrazioni_totali}</span></div></div></div>`}
+
+function renderRuote(d){const g=document.getElementById('ruoteGrid');g.innerHTML='';const count=Object.keys(d.giocata).length;g.style.gridTemplateColumns=`repeat(${Math.min(count,3)}, 1fr)`;for(const[code,gd]of Object.entries(d.giocata)){const ws=gd.numeri.reduce((w,n)=>{const o=['NORMALE','ALTO','ANOMALO','RECORD'];return o.indexOf(n.stato)>o.indexOf(w)?n.stato:w},'NORMALE');let h=`<div class="card"><div class="card-header"><div class="card-title">${RE[code]||'âšª'} ${gd.ruota_nome}</div>${sb(ws)}</div><div class="card-body"><div style="font-size:.72rem;color:var(--text-muted);margin-bottom:.6rem">Ambo: <strong style="color:var(--text-primary)">${gd.ambo[0]} â€“ ${gd.ambo[1]}</strong> | Estratto: <strong style="color:var(--text-primary)">${gd.estratto}</strong></div>`;for(const n of gd.numeri){const p=Math.min(n.percentuale_vs_max,100),s=sc(n.stato),cl=s==='record'?'var(--accent-red)':s==='anomalo'?'var(--accent-orange)':'var(--text-primary)';h+=`<div class="numero-row"><div class="numero-circle ${n.is_leader?'leader':'secondary'}">${n.numero}</div><div class="numero-info"><div class="numero-label">${n.is_leader?'â­ Leader':'Secondario'}</div><div class="ritardo-bar-container"><div class="ritardo-bar"><div class="ritardo-bar-fill ${s}" style="width:${p}%"></div></div><div class="ritardo-big" style="color:${cl}">${n.ritardo}</div></div><div class="ritardo-values"><div class="ritardo-val">Media: <strong>${n.media}</strong></div><div class="ritardo-val">Rapporto: <strong>${n.rapporto}x</strong></div><div class="ritardo-val">Max: <strong>${n.max_storico}</strong></div><div class="ritardo-val">Uscite: <strong>${n.uscite}</strong></div></div></div></div>`}h+='</div></div>';g.innerHTML+=h}}
+
+function renderBudget(d){const b=d.budget,p=b.speso/b.budget_totale*100;document.getElementById('budgetBarFill').style.width=p+'%';document.getElementById('budgetBarFill').textContent='-'+b.speso+'â‚¬';document.getElementById('budgetSpeso').textContent='Speso: '+b.speso+'â‚¬';document.getElementById('budgetTotale').textContent='Budget: '+b.budget_totale+'â‚¬';const tb=document.getElementById('pianoBody');tb.innerHTML='';const ex=d.stato_piano.estrazioni_giocate||[];for(const e of ex){let es='â€“';if(d.ultime_estrazioni){const m=d.ultime_estrazioni.find(x=>x.data===e.data);if(m&&e.giocata){let w=false;for(const[,r]of Object.entries(m.ruote)){if(r.ambo_vinto){es='ðŸ† AMBO!';w=true;break}if(r.estratto_presente){es='âœ… Estratto';w=true}if(!w&&r.singoli?.length>0)es='ðŸ”¸ Parziale'}if(!w&&es==='â€“')es='âŒ'}else if(!e.giocata)es='â­ï¸ Saltata'}tb.innerHTML+=`<tr><td><strong>${e.numero}</strong></td><td style="font-family:'JetBrains Mono',monospace;font-size:.78rem">${e.data}</td><td><label class="toggle"><input type="checkbox" ${e.giocata?'checked':''} onchange="toggleGiocata('${e.data}',this)"><span class="toggle-slider"></span></label></td><td>${es}</td></tr>`}for(let i=ex.length+1;i<=d.budget.estrazioni_totali;i++)tb.innerHTML+=`<tr style="opacity:.35"><td>${i}</td><td>â€“</td><td>â€“</td><td>â€“</td></tr>`}
+
+function renderEstrazioni(d){const tb=document.getElementById('estrazioniTbody');tb.innerHTML='';const ex=[...d.ultime_estrazioni].reverse().slice(0,12);const dg=(d.stato_piano.estrazioni_giocate||[]).map(e=>e.data);for(const e of ex){for(const[code,g]of Object.entries(d.giocata)){const r=e.ruote[code];if(!r)continue;const ig=dg.includes(e.data);let nh='';for(const n of r.numeri)nh+=`<span class="num-ball ${g.ambo.includes(n)?'match':''}">${n}</span>`;let es='';if(r.ambo_vinto)es='ðŸ†';else if(r.estratto_presente)es='âœ…';else if(r.singoli?.length>0)es='ðŸ”¸';else es='<span style="opacity:.4">âŒ</span>';tb.innerHTML+=`<tr class="${ig?'new-extraction':''}"><td style="font-family:'JetBrains Mono',monospace;font-size:.78rem">${e.data}</td><td><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:${RC[code]||RC.default};margin-right:.3rem"></span>${r.ruota_nome}</td><td><div class="numeri-estratti">${nh}</div></td><td>${es}</td></tr>`}}}
+
+function renderTop(d){const g=document.getElementById('topGrid');g.innerHTML='';const count=Object.keys(d.top_ritardatari).length;g.style.gridTemplateColumns=`repeat(${Math.min(count,3)}, 1fr)`;for(const[code,items]of Object.entries(d.top_ritardatari)){const nome=d.giocata[code]?.ruota_nome||code,mx=items[0]?.ritardo||1;let lh='';for(let i=0;i<Math.min(items.length,10);i++){const it=items[i],p=it.ritardo/mx*100;lh+=`<li class="top-item ${it.in_giocata?'in-giocata':''}"><span class="top-pos">${i+1}</span><span class="top-num">${it.numero}</span><div class="top-bar"><div class="top-bar-fill" style="width:${p}%"></div></div><span class="top-rit">${it.ritardo}</span></li>`}g.innerHTML+=`<div class="card"><div class="card-header"><div class="card-title">${RE[code]||'âšª'} Top ${nome}</div></div><div class="card-body"><ul class="top-list">${lh}</ul></div></div>`}}
+
+// Init
+document.addEventListener('DOMContentLoaded',async()=>{
+    initSupabase();
+    const session=await sbGetSession();
+    if(session){
+        document.getElementById('authOverlay').classList.add('hidden');
+        const s=await sbGetStrategies();
+        if(!s.length)loadWizard();else showDashboard();
+    }
+});
+</script>
+</body>
+</html>
