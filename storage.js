@@ -16,8 +16,12 @@ function initSupabase() {
 // --- Auth ---
 async function sbSignUp(email, password, displayName) {
     const { data, error } = await sbClient.auth.signUp({
-        email, password,
-        options: { data: { display_name: displayName || email.split('@')[0] } }
+        email, 
+        password,
+        options: { 
+            data: { display_name: displayName || email.split('@')[0] },
+            emailRedirectTo: 'https://mrdasp.github.io/betmirato/index.html'
+        }
     });
     if (error) throw error;
     return data;
