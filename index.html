@@ -180,6 +180,13 @@
         // Init Auth base
         document.addEventListener('DOMContentLoaded', async () => {
             initSupabase();
+            
+            // Abilita Login premendo INVIO sulla password
+            document.getElementById('password').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    handleLogin();
+                }
+            });
             const session = await sbGetSession();
             if(!session) {
                 document.getElementById('authOverlay').classList.remove('hidden');
