@@ -89,7 +89,10 @@
     <!-- AUTH OVERLAY -->
     <div id="authOverlay" class="auth-overlay hidden">
         <div class="auth-box">
-            <h1>BetMirato</h1>
+            <div style="display:flex; justify-content:center; align-items:center; margin-bottom:1.5rem;">
+                <h1>BetMirato</h1>
+                <svg onclick="document.getElementById('infoOverlay').classList.remove('hidden')" style="width:20px; height:20px; margin-left:10px; cursor:pointer; fill:var(--accent-blue);" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+            </div>
             <p class="text-center" style="color:var(--text-secondary); margin-bottom:1.5rem; font-size:0.9rem;">Sport Analytics Platform</p>
             <div id="authError" class="auth-error"></div>
             <input type="email" id="email" class="form-input" placeholder="Email">
@@ -104,8 +107,9 @@
     </div>
 
     <!-- INFO OVERLAY -->
-    <div id="infoOverlay" class="auth-overlay hidden" style="z-index: 999; padding: 1rem;">
-        <div class="auth-box" style="max-width: 600px; max-height: 90vh; overflow-y: auto;">
+    <div id="infoOverlay" class="auth-overlay hidden" style="z-index: 999; padding: 1rem; background: rgba(10, 14, 26, 0.9);">
+        <div class="auth-box" style="max-width: 600px; max-height: 90vh; overflow-y: auto; position: relative;">
+            <button onclick="document.getElementById('infoOverlay').classList.add('hidden')" style="position: absolute; top: 1rem; right: 1rem; background: none; border: none; color: var(--text-secondary); cursor: pointer; font-size: 1.2rem;">✕</button>
             <h2 style="color:var(--accent-blue); margin-bottom:1rem; text-align:center;">ℹ️ Guida a BetMirato</h2>
             
             <p style="font-size:0.9rem; color:var(--text-secondary); margin-bottom:1rem; line-height: 1.5;">
@@ -220,15 +224,20 @@
                 </div>
             </div>
         </div>
-    </main>/main>
+    </main>
 
     <script>
         const SUPER_ADMIN_EMAIL = "dani3d.drone@gmail.com";
 
-        // Init Auth base
+        // Inizializzazione
         document.addEventListener('DOMContentLoaded', async () => {
             initSupabase();
             
+            // Auto-open info if requested via URL
+            if(window.location.search.includes('showInfo=true')) {
+                document.getElementById('infoOverlay').classList.remove('hidden');
+            }
+
             // Abilita Login premendo INVIO sulla password
             document.getElementById('password').addEventListener('keypress', function(e) {
                 if (e.key === 'Enter') {
