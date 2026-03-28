@@ -416,3 +416,104 @@ La regola 6 del diario ("Monitorare i ritardi con lo script `analisi_ritardi.py`
 - **Prima**: Eseguire manualmente `python analisi_ritardi.py`
 - **Ora**: I ritardi si aggiornano automaticamente aprendo la dashboard web. Basta cliccare "🔄 Aggiorna" o "📥 Scarica + Analizza"
 
+### 🐛 Debugging Post-Deploy (28 Marzo)
+
+Nel corso del primo test live del nuovo sistema serverless su GitHub Pages, abbiamo riscontrato e risolto due bug critici che bloccavano l'accesso e la corretta visualizzazione dell'interfaccia:
+
+#### 1. Corruzione Encoding UTF-8 (UI)
+- **Problema:** Sulla pagina pubblica, le emoji (es. `🎯`) e alcuni caratteri speciali (es. il trattino lungo `–`) apparivano come "mojibake" incomprensibile (es. `ðŸŽ¯`). Causa: problemi di codifica e manipolazione con PowerShell che aveva alterato il BOM.
+- **Soluzione:** Abbiamo effettuato un check manuale dell'encoding, forzando sostituzioni pulite lato `UTF-8` puro. Analizzando anche bit a bit con Python, abbiamo validato e deployato i caratteri intatti garantendo che il look premium venisse mantenuto.
+
+#### 2. Errore Login/Registrazione ("sbSignUp is not defined")
+- **Problema:** L'interfaccia mostrava un errore rosso "sbSignUp is not defined" al click sul tasto di registrazione. Le chiamate non partivano.
+- **Analisi e Scoperta:** Analizzando la console, il client API di Supabase e lo script `storage.js` risultavano scaricati correttamente. Il vero "mostro da debuggare" è stato un conflitto di nomi in Javascript (*Variable Shadowing*). Il CDN di Supabase crea globalmente l'oggetto tramite `var supabase`, ma nel nostro file `storage.js` avevamo usato un dichiarativo `let supabase;`. Questo cortocircuitava l'assegnazione, impedendo l'inizializzazione dell'app e non rendendo mai disponibili le funzioni Auth (`sbSignUp`, `sbSignIn`). Altro dettaglio: la funzione di load non veniva triggerata in tempo.
+- **Soluzione:** Abbiamo aggiornato `storage.js` rinominando la nostra istanza sicura in `sbClient`, e integrato la chiamata esplicita `initSupabase()` ad inizio ciclo vita della pagina HTML. Ora il parsing del modulo Auth è istantaneo e sicuro.
+
+#### 🚀 Cosa Dobbiamo Ancora Fare (Next Steps)
+1. **Conferma Email:** Tu (come primo utente) devi confermare l'email dal link che ti ha inviato Supabase per abilitare il tuo profilo.
+2. **Ripristino Strategia Passata:** La tua giocata precedente (Bari 41-11, Milano 45-85, ecc.) è ancora sui vecchi database SQLite. Va inserita nel nuovo cloud Supabase dal Wizard al primo avvio.
+3. **Tracking Budget Live:** Dobbiamo testare che al procedere delle estrazioni reali, il check "Giocata?" nella UI aggiorni correttamente lo storico spese di Supabase e alimenti correttamente la "ProgressBar" del budget.
+4. **Verifica GitHub Action:** Aspettare la prossima chiusura serale del Lotto per assicurarci che la *"Worker Action"* integrata su GitHub inietti validamente le nuove estrazioni nel file statico.
+
+---
+
+### 🔬 Backtest V1 e Rivelazione "Ranking Globale" (28 Marzo)
+
+Ho sviluppato uno script Python per simulare cronologicamente l'efficacia della nostra prima strategia strutturata (**Strategia A: fissa su 3 ruote migliori con "Flat Bet" / massa pari**). 
+Testandola su tutto lo storico dal 2001 ad oggi (oltre 3700 estrazioni), abbiamo provato l'esistenza del fisiologico margine matematico del banco: le puntate statiche sui vecchi leader fissi portano a una perdita quasi strutturale (ca -40% ROI). 
+
+**🔴 La Rivelazione:** Come discusso, la Strategia A *blocca il capitale* su singole ruote mentre nel mondo del tabellone nascono anomalie più urgenti e statisticamente succulente. "I numeri anomali si muovono tra le ruote".
+
+#### 🚀 La Soluzione Esatta: Modello V2 (Ranking Decisionale Cross-Ruota)
+Passiamo dallo "scegliere ruote" allo "scegliere anomalie assolute".
+
+Le basi del nuovo **Modello V2 Dinamico**:
+1. **Analisi Globale:** Si valutano tutti i ritardi diviso le medie su TUTTI i 990 candidati d'Italia.
+2. **Ranking Unico (Cross-Ruota):** Si stipula una sola classifica dal più alto rapporto "ritardo/media" in giù, a prescindere dalla ruota.
+3. **Selezione TOP 6:** Si prendono i primi 6 assoluti d'Italia. Se due cadono sulla stessa ruota compongono un potenziale ambo.
+4. Si chiudono sistematicamente non appena vengono sorteggiati.
+
+Ho completato i test per comparare l'efficacia bruta del Modello V1 vs V2, prima di innestarvi il definitivo Filtro di "Qualità". 
+
+### 📊 Risultato Test Ufficiale V1 vs V2 (28 Marzo)
+Entrambi partono ovviamente svantaggiati dalle quote del lotto a massa pari, ma misuriamo l'efficacia del "target":
+
+**[ STRATEGIA A (3 Ruote Fisse) ]**
+- ROI: -45.52%📉 (Loss strutturale fisiologico)
+- Estratti presi: 611 in 23 anni. Ambi presi: 25.
+
+**[ STRATEGIA B (TOP 6 Globali, re-ranking per estrazione) ]**
+- ROI: -42.95%🔥 (Migliorativo del +2.5%)
+- Estratti presi: ben **968**! (Incremento enorme di tiri a bersaglio). Ambi presi: 11 (fisiologicamente meno perché le anomalie top spesso si allargano su ruote diverse).
+
+**🟢 Conclusione Ufficiale:** Il motore decisionale incrociato V2.0 si dimostra nettamente superiore nella capacità di individuare il target nel brevissimo termine (quasi 1000 colpi a segno contro i 600 statitici). Seguire i segnali e non le ruote "perde meno e cattura molto prima".
+
+### 🚨 Test Progressione & Limiti Bankroll (Esito Negativo)
+Ho eseguito i test combinando il Ranking Globale con un **Sistema a Progressione di 6 Slot Paralleli** (cercando di rincorrere le 6 anomalie principali, aumentando la puntata di 1€ iniziale per coprire le perdite) e imponendo uno "Stop Loss" (Bancarotta) a 500€ di esposizione singola giocata.
+
+**Risultato Escluso:** Entrambi i tentativi (senza e con filtri "leggeri" sul massimale storico) sono falliti rovinosamente. Il sistema ha bruciato la cassa (toccato il muro dei 500€) **27 volte in vent'anni**. 
+**Lezione Appresa:** *Rincorrere 6 progressioni di perdite contemporaneamente drena l'intero budget*. Al primo numero anomalo "trappola" che tarda 40 o 50 estrazioni, la matematica esponenziale brucia tutto il capitale nonostante l'aiuto del filtro.
+
+### 🎯 Test V6: Modello Sniper "Mordi e Fuggi" (Stop-Loss Temporale)
+La soluzione matematica definitiva al problema del capitale esplosivo. Il sistema gioca **solo l'Anomalia Top 1 italiana**, applicando un limite rigido di colpi (es. massimo 9 o massimo 18). Se non esce, si taglia la piccola perdita e si riparte dal nuovo leader, resettando lo "scoperto" senza portarsi dietro debiti giganteschi.
+
+### 📜 Test V8: Inseguimento Centenari (Flat 10 Colpi)
+Come richiesto, abbiamo testato la regola rigorosa del centenario: iniziare a puntare 1€ a estrazione *solo* allo scoccare delle 99 estrazioni di ritardo, per un massimo di 10 estrazioni successive (fino al ritardo 109). 
+- **Ipotesi testata:** Essendo il costo massimo 10€ (1€*10 colpi) e la vincita netta 10.33€, se il numero centenario esce, il singolo ciclo va in positivo (+0.33€ a +9.33€). 
+- **Risultato reale 2003-Oggi:** I numeri centenari "pescati" nel periodo sono stati **670**. Di questi, **299** soo usciti centrando la finestra dei 10 colpi (Win Rate 44.6%). Ma ben **371** centenari NON sono usciti entro quelle 10 estrazioni (diventando "super-centenari" a ritardo oltre 110). 
+- **Verdetto Matematico:** Le *micro-vincite* dei 299 cicli vinti (+1.600€ circa di utile) non sono bastate a coprire le *perdite totali* accumulate sulle 371 volte in cui si sono bruciati i 10€ interi a vuoto (-3.710€). Il test conferma che la quota del banco del Lotto divora l'illusione ottica della vincita fissa a prescindere dal ritardo scoperchiato (-40% ROI Netto).
+
+### ☄️ Test V9: Inseguimento Super-Centenari (Da 110 a 119)
+Hai ipotizzato di spostare la riga di partenza ancora più in là, scommettendo 1€ a colpo (max 10 colpi) iniziando solo alla centodecima estrazione di ritardo.
+- **Risultato reale:** I 373 numeri arrivati a 110 di ritardo nella storia, sono poi effettivamente usciti entro la 119esima volta solo in **160** casi. Nei restanti **213** casi hanno continuato la loro corsa nel vuoto (sfondando quota 120).
+- **Verdetto Matematico:** Il Win Rate (42.90%) e il Ritorno Netto (-44.28% ROI) sono rimasti praticamente identici alla scommessa sui centenari classici. La macchina conferma la ferrea legge probabilistica: l'urna non ha memoria. Un numero ritardatario da 110 estrazioni ha la stessa, identica probabilità matematica di uscire di un numero ritardatario da 1 estrazione (1 su 18).
+
+### 📸 Test V10: Progressione Centenari da 21 Colpi (Test da Immagine)
+Abbiamo riprodotto fedelmente la progressione presente nello screenshot (1,1,1...2,2...3,3... fino a 5€ per 21 estrazioni totali e costo max 46€), partendo dai Centenari esatti (ritardo 100).
+- **Esito Positivo:** Come previsto intuendo, allargando a 21 giocate il Win Rate si alza vertiginosamente al **70.30%** (su 670 centenari ne abbiamo beccati ben 471 incassando piccole vincite nette tra +2 e +9€).
+- **L'Illusione (Esito Negativo):** Nonostante il tasso di vittoria sembri altissimo, le restanti **199 volte** in cui il numero non è uscito entro le 21 estrazioni comportavano una perdita fissa massimale di 46€. La somma di queste 199 perdite "occulte" (-9.150€) ha letteralmente polverizzato i piccoli utili generati dalle 471 vittorie, portando il bilancio ventennale a **-6.231€ (-41% ROI).**
+
+### 💣 Test V11: Esposizione Massima Finanziaria (Progressione Infinita)
+Ultimo e definitivo test estremo: abbiamo ricalcolato cosa sarebbe successo matematicamente (senza applicare alcuno Stop-Loss) se un giocatore avesse inseguito a oltranza coprendo il capitale, con l'obiettivo di "vincere per forza" su tutti i 670 centenari della storia, come ipotizzato.
+- **Risultato reale:** Per supportare l'infinita caccia, il conto in banca sarebbe collassato decine di volte. 
+- **Verdetto Matematico:** Il peggior numero della storia dal 2003 (il famigerato *53 sulla Nazionale* nel 2016) ha ritardato talmente tanto che, per recuperare le minuscole puntate da 1€ di partenza innalzando via via il tiro a 10.33, la scommessa totale necessaria affrontata dal giocatore puro per vincere in quell'unico ciclo sarebbe stata di **52.262.803 Euro** (Più di Cinquantadue Milioni di Euro).
+
+**🔴 Verdetto Definitivo per lo Sviluppo dell'App (Logic Core):**
+Il Wizard non baserà le promesse su un bilancio positivo matematico inesistente. Quello offerto dalla tabella immagine è il classico *Schema Illusorio* che fa vincere spesso pochi spiccioli nascondendo la mannaia della grande perdita infallibile (o del rischio di bancarotte milionarie se inseguite all'infinito).
+
+---
+
+# 🛑 PIVOT UFFICIALE: DAL LOTTO AL CALCIO SCOMMESSE ("BETMIRATO")
+**Data Decisione:** 28 Marzo 2026
+
+Al termine della massiccia campagna di test statistici V1-V11, il progetto "LottoMirato" viene formalmente chiuso come strumento di lucro. La matematica ha decretato l'impossibilità di sconfiggere l'aggio statale del 42% nel lungo periodo su eventi puramente casuali (i numeri del lotto NON hanno memoria e la teoria dei "Centenari" è stata sbugiardata empiricamente dalle simulazioni sui 20 anni di dati). 
+
+Il progetto rinasce istantaneamente sotto il nome di **"BetMirato"** (Sport Analytics). 
+Ci immergiamo in un settore governato dalla statistica imperfetta: il Calcio Scommesse (riferimento a quote reali, es. *Sisal Matchpoint*).
+- **Nuovo Obiettivo:** Identificare il vero **"Value Bet"**. Il bookmaker assegna quote basate sul mercato della folla. L'App calcolerà oggettivamente le probabilità (tramite Distribuzione Poisson, xG, infortuni) e, quando il banco offre una quota più alta del reale, accenderà un **Semaforo Verde**.
+
+**Prima Azione:**
+1. Raso al suolo l'ambiente Python obsoleto del Lotto.
+2. Inizio programmazione interfaccia `Match Analyzer` basata su variabili esatte: Quota Inserita ↔️ Probabilità Calcolata ↔️ Esito Modificatori (es. "Manca il Bomber! Dimentica questa scommessa, è un trappolone!").
+La caccia al banco inizia qui.
+---
