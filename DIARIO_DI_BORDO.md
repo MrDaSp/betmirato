@@ -739,16 +739,33 @@ Sostituito il calcolo in € (troppo variabile) con il sistema a **Unità Fisse 
 - Il grafico "Andamento Profitto" ora mostra l'asse in € invece che in Unità.
 - Nello storico, ogni giocata mostra l'importo puntato accanto alla quota.
 
-#### ⚠️ Migrazione Database Necessaria (Supabase)
-Per supportare l'importo personalizzato, è necessario aggiungere la colonna `stake` alla tabella `user_bets`:
+#### ✅ Migrazioni Database Completate (Supabase)
+Eseguite con successo sulla dashboard SQL Editor:
 ```sql
+-- 1. Colonna importo scommessa
 ALTER TABLE user_bets ADD COLUMN stake REAL DEFAULT 1;
+
+-- 2. Policy RLS per eliminazione (mancava, bloccava la X)
+CREATE POLICY "Users can delete own bets" ON user_bets FOR DELETE USING (auth.uid() = user_id);
 ```
 Il codice gestisce il fallback: se `stake` è `null` (vecchie giocate), usa 1€ come default.
 
+**Status Deploy:** Push `347f8a0` su GitHub Pages — tutte le modifiche v3.1 sono LIVE.
+
 ---
 
-### 🚀 Prossimo Step (FASE 4 - IN CORSO):
+### ⏳ CHECKPOINT: Monitoraggio Risultati Reali (dopo il 5 Aprile 2026)
+Le prime giocate reali sono state piazzate il 29 Marzo 2026. Attendiamo che le partite si giochino e che l'Auto-Referee (`results_scanner.py`) aggiorni automaticamente lo stato delle scommesse (Vinta/Persa).
+
+**Cosa verificare dopo il 5 Aprile:**
+1. ✅ L'Auto-Referee ha marcato correttamente vittorie e sconfitte?
+2. ✅ Il grafico "Andamento Profitto" riflette i risultati reali in €?
+3. ✅ Lo storico scommesse mostra i profitti/perdite corretti basati sullo stake?
+4. ✅ Il sistema è affidabile per un uso continuativo?
+
+---
+
+### 🚀 Prossimo Step (FASE 4 - IN ATTESA):
 #### 🤖 Telegram Alert Bot "Segugio di Quote"
 L'obiettivo è ricevere notifiche push istantanee per non perdere mai una Value Bet.
 - **Trigger:** Solo scommesse con Edge > 10-12% (Semaforo Verde).
