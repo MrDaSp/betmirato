@@ -109,7 +109,7 @@
     <!-- INFO OVERLAY -->
     <div id="infoOverlay" class="auth-overlay hidden" style="z-index: 999; padding: 1rem; background: rgba(10, 14, 26, 0.9);">
         <div class="auth-box" style="max-width: 600px; max-height: 90vh; overflow-y: auto; position: relative;">
-            <button onclick="document.getElementById('infoOverlay').classList.add('hidden')" style="position: absolute; top: 1rem; right: 1rem; background: none; border: none; color: var(--text-secondary); cursor: pointer; font-size: 1.2rem;">✕</button>
+            <button onclick="chiudiInfo()" style="position: absolute; top: 1rem; right: 1rem; background: none; border: none; color: var(--text-secondary); cursor: pointer; font-size: 1.2rem;">✕</button>
             <h2 style="color:var(--accent-blue); margin-bottom:1rem; text-align:center;">ℹ️ Guida a BetMirato</h2>
             
             <p style="font-size:0.9rem; color:var(--text-secondary); margin-bottom:1rem; line-height: 1.5;">
@@ -146,7 +146,7 @@
                 </p>
             </div>
 
-            <button class="btn-auth" style="background:var(--bg-secondary); color:white; border: 1px solid var(--border);" onclick="document.getElementById('infoOverlay').classList.add('hidden')">Ho Capito, Iniziamo!</button>
+            <button class="btn-auth" style="background:var(--bg-secondary); color:white; border: 1px solid var(--border);" onclick="chiudiInfo()">Ho Capito, Iniziamo!</button>
         </div>
     </div>
 
@@ -233,8 +233,8 @@
         document.addEventListener('DOMContentLoaded', async () => {
             initSupabase();
             
-            // Auto-open info if requested via URL
-            if(window.location.search.includes('showInfo=true')) {
+            // Auto-show info al primo accesso in assoluto o se richiesto via URL
+            if(!localStorage.getItem('betmirato_info_seen') || window.location.search.includes('showInfo=true')) {
                 document.getElementById('infoOverlay').classList.remove('hidden');
             }
 
@@ -254,6 +254,11 @@
                 initBankroll();
             }
         });
+
+        function chiudiInfo() {
+            document.getElementById('infoOverlay').classList.add('hidden');
+            localStorage.setItem('betmirato_info_seen', 'true');
+        }
 
         async function handleLogin() {
             const e = document.getElementById('email').value;
@@ -372,9 +377,11 @@
                     document.getElementById('lastUpdate').innerHTML = "<span style='color:var(--accent-red); font-weight:bold;'>MODELLO DEMO (Dati Falsati)</span> - Registrati per sbloccare i dati mondiali reali di The-Odds-API.";
                 } else {
                     // Modalità Iscritto: Dati Reali
-                    const response = await fetch('valuebets.json?t=' + new Date().getTime()); // Evita cache
+                    const response = await fetch('valuebets.json?t=' + new Date().getTime());
                     data = await response.json();
-                    document.getElementById('lastUpdate').innerHTML = `Ultimo aggiornamento scanner reale: <span style="color:var(--accent-green);font-weight:bold;">${data.ultimo_aggiornamento}</span>`;
+                    let srcInfo = data.fonti_dati ? ` · Fonti: ${data.fonti_dati.statistiche || 'N/D'}` : '';
+                    let verInfo = data.versione_scanner ? ` (v${data.versione_scanner})` : '';
+                    document.getElementById('lastUpdate').innerHTML = `Scanner${verInfo}: <span style="color:var(--accent-green);font-weight:bold;">${data.ultimo_aggiornamento}</span>${srcInfo}`;
                 }
 
                 
@@ -392,27 +399,59 @@
                     if(c.semaforo === 'gialla') { displayColor = 'var(--accent-yellow)'; bg = 'rgba(241, 196, 15, 0.1)'; labelStatus = 'MARGINE LIEVE'; }
                     if(c.semaforo === 'rossa') { displayColor = 'var(--accent-red)'; labelStatus = 'TRAPPOLA'; }
                     
+                    // Badge modificatori
+                    let modsHtml = '';
+                    if (p.modificatori && p.modificatori.length > 0) {
+                        modsHtml = '<div style="display:flex; flex-wrap:wrap; gap:0.4rem; margin-bottom:0.8rem;">';
+                        p.modificatori.forEach(m => {
+                            let mColor = m.impatto_pct > 0 ? 'var(--accent-green)' : 'var(--accent-red)';
+                            let mBg = m.impatto_pct > 0 ? 'rgba(46,204,113,0.15)' : 'rgba(231,76,60,0.15)';
+                            modsHtml += `<div style="font-size:0.7rem; padding:3px 8px; border-radius:4px; background:${mBg}; border:1px solid ${mColor}; color:${mColor};">${m.testo}</div>`;
+                        });
+                        modsHtml += '</div>';
+                    }
+
+                    // Edge grezzo vs modificato
+                    let edgeCompare = '';
+                    if (c.edge_grezzo !== undefined && c.edge_grezzo !== c.edge && p.dati_verificati) {
+                        edgeCompare = `<div style="font-size:0.65rem; color:var(--text-secondary); margin-top:2px;">Poisson puro: ${c.edge_grezzo > 0 ? '+' : ''}${c.edge_grezzo}% → Con Filtro: ${c.edge > 0 ? '+' : ''}${c.edge}%</div>`;
+                    }
+
+                    // Indicatore dati verificati
+                    let verifiedBadge = p.dati_verificati
+                        ? '<span style="font-size:0.65rem; color:var(--accent-green);">✅ Dati Verificati</span>'
+                        : '<span style="font-size:0.65rem; color:var(--text-secondary);">⚠️ Stima da quote</span>';
+
+                    // xG info
+                    let xgInfo = '';
+                    if (p.stats && p.stats.xg_casa) {
+                        xgInfo = `<div style="font-size:0.7rem; color:var(--text-secondary); margin-top:0.3rem;">xG: ${p.squadra_casa} <strong style="color:white">${p.stats.xg_casa_mod}</strong> – ${p.squadra_ospite} <strong style="color:white">${p.stats.xg_ospite_mod}</strong></div>`;
+                    }
+
                     let cardHtml = `
                         <div class="card" style="border-top: 5px solid ${displayColor}; background: ${bg}; margin-bottom: 0; display:flex; flex-direction:column; justify-content:space-between;">
                             <div>
-                                <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border); padding-bottom:0.8rem; margin-bottom:1rem;">
+                                <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border); padding-bottom:0.8rem; margin-bottom:0.8rem;">
                                     <div>
-                                        <div style="font-size:0.7rem; color:var(--text-secondary)">${p.data_inizio}</div>
+                                        <div style="font-size:0.7rem; color:var(--text-secondary)">${p.data_inizio} · ${p.campionato || ''} ${verifiedBadge}</div>
                                         <div style="font-size:1.1rem; font-weight:800; margin-top:0.2rem">${p.squadra_casa} - ${p.squadra_ospite}</div>
                                     </div>
                                     <div style="text-align:right">
                                         <div style="font-size:0.75rem; font-weight:700; color:${displayColor}; text-transform:uppercase;">${labelStatus}</div>
                                         <div style="font-size:1.3rem; font-family:'JetBrains Mono', monospace; font-weight:900; color:${displayColor}">${c.edge > 0 ? '+' : ''}${c.edge}%</div>
+                                        ${edgeCompare}
                                     </div>
                                 </div>
-                                <div style="font-size:0.75rem; color:var(--text-secondary); margin-bottom: 1rem;">
-                                    <p>Probabilità Reale Algoritmo: <strong style="color:white">${c.prob_calcolata}%</strong></p>
-                                    <p>Probabilità Stimata Bookmaker: <strong>${c.prob_bookmaker}%</strong></p>
+                                ${modsHtml}
+                                <div style="font-size:0.75rem; color:var(--text-secondary); margin-bottom: 0.8rem;">
+                                    <p>Prob. Reale Algoritmo: <strong style="color:white">${c.prob_calcolata}%</strong></p>
+                                    <p>Prob. Stimata Bookmaker: <strong>${c.prob_bookmaker}%</strong></p>
+                                    ${xgInfo}
                                 </div>
                             </div>
                             
                             <div style="background:var(--bg-primary); padding:1rem; border-radius:6px; border:1px solid var(--border); text-align:center;">
-                                <div style="font-size:0.8rem; color:var(--text-secondary); margin-bottom:0.3rem">Offerta Sisal Migliore:</div>
+                                <div style="font-size:0.8rem; color:var(--text-secondary); margin-bottom:0.3rem">Offerta Migliore:</div>
                                 <div style="font-size:1.5rem; font-weight:900; color:white;">Esito ${c.segno} a <span style="color:var(--accent-blue)">${c.quota_bookmaker.toFixed(2)}</span></div>
                                 <button class="btn-bet" onclick="piazzaGiocata('${p.id}', '${p.squadra_casa} vs ${p.squadra_ospite}', '${c.segno}', ${c.quota_bookmaker})">🎯 Piazza Giocata</button>
                             </div>

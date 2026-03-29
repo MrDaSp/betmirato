@@ -1,266 +1,460 @@
+#!/usr/bin/env python3
+"""
+BetMirato Scanner v2 – Motore Predittivo con Dati Reali
+
+Fonti dati:
+- The-Odds-API: Quote reali dei bookmaker (mercato H2H)
+- API-Football v3: Statistiche squadra, infortuni, forma
+
+Eseguito 3x/giorno via GitHub Actions.
+Output: valuebets.json (consumato dal frontend)
+"""
+
 import os
 import json
 import math
+import requests
 from datetime import datetime, timedelta
-import random
 
-# THE ODDS API
-# Registrati gratuitamente su: https://the-odds-api.com/ (500 richieste mese incluse)
-API_KEY = os.environ.get('ODDS_API_KEY', 'a9bf7a15ce5ac0810b051d11d35dbc72')
+# ==========================================
+# CONFIGURAZIONE
+# ==========================================
 
-# Campionati supportati
-SPORT_KEYS = ['soccer_italy_serie_a', 'soccer_epl']
+ODDS_API_KEY = os.environ.get('ODDS_API_KEY', 'a9bf7a15ce5ac0810b051d11d35dbc72')
+FOOTBALL_API_KEY = os.environ.get('FOOTBALL_API_KEY', '')
 
-# ================================
-# Motore Poisson (Portato da JS)
-# ================================
+FOOTBALL_API_BASE = 'https://v3.football.api-sports.io'
+FOOTBALL_HEADERS = {'x-apisports-key': FOOTBALL_API_KEY}
+
+# Mapping campionati
+LEAGUES = {
+    'soccer_italy_serie_a': {'id': 135, 'name': 'Serie A', 'season': 2025},
+    'soccer_epl':           {'id': 39,  'name': 'Premier League', 'season': 2025}
+}
+SPORT_KEYS = list(LEAGUES.keys())
+
+# Aliases nomi squadre: odds-api (lower) → possibili nomi api-football (lower)
+TEAM_ALIASES = {
+    'wolverhampton wanderers': ['wolverhampton', 'wolves'],
+    'brighton and hove albion': ['brighton'],
+    'nottingham forest': ['nottingham forest'],
+    'leeds united': ['leeds'],
+    'west ham united': ['west ham'],
+    'tottenham hotspur': ['tottenham'],
+    'newcastle united': ['newcastle'],
+    'sheffield united': ['sheffield utd'],
+    'leicester city': ['leicester'],
+    'inter milan': ['inter'],
+    'ac milan': ['milan', 'ac milan'],
+    'atalanta bc': ['atalanta'],
+    'hellas verona': ['verona', 'hellas verona'],
+    'as roma': ['roma', 'as roma'],
+}
+
+CACHE_FILE = 'team_cache.json'
+CACHE_TTL_HOURS = 24
+
+# ==========================================
+# MOTORE POISSON
+# ==========================================
+
 def fattoriale(k):
-    if k == 0 or k == 1: return 1
-    res = 1
-    for i in range(2, k + 1): res *= i
-    return res
+    if k <= 1: return 1
+    r = 1
+    for i in range(2, k + 1): r *= i
+    return r
 
 def poisson(k, lam):
+    lam = max(lam, 0.05)
     return (math.exp(-lam) * math.pow(lam, k)) / fattoriale(k)
 
-def calcola_probabilita_1x2(lam_h, lam_a):
-    prob_1 = 0.0
-    prob_x = 0.0
-    prob_2 = 0.0
-    
-    for h in range(0, 6):
-        for a in range(0, 6):
-            p_matrix = poisson(h, lam_h) * poisson(a, lam_a)
-            if h > a:
-                prob_1 += p_matrix
-            elif h == a:
-                prob_x += p_matrix
-            else:
-                prob_2 += p_matrix
-                
-    return {
-        '1': round(prob_1 * 100, 2),
-        'X': round(prob_x * 100, 2),
-        '2': round(prob_2 * 100, 2)
-    }
+def calcola_prob_1x2(lam_h, lam_a):
+    p1, px, p2 = 0.0, 0.0, 0.0
+    for h in range(6):
+        for a in range(6):
+            p = poisson(h, lam_h) * poisson(a, lam_a)
+            if h > a:   p1 += p
+            elif h == a: px += p
+            else:        p2 += p
+    return {'1': round(p1*100, 2), 'X': round(px*100, 2), '2': round(p2*100, 2)}
 
-# ================================
-# Estrazione Dati e Calcolo Margine
-# ================================
-def analizza_value_bets(partite):
-    risultati = []
-    
-    for p in partite:
-        # Simuliamo o recuperiamo gli xG
-        # In una versione PRO qui faremmo una chiamata a FootyStats o FbRef
-        # Per ora usiamo le probabilità implicite del bookmaker per "ricavare" gli xG stimati,
-        # e poi vi aggiungiamo la nostra analisi (che in questa demo sbilanciamo a caso per creare le opportunità)
-        
-        try:
-            q1 = float(p.get('quote', {}).get('1', 2.0))
-            qX = float(p.get('quote', {}).get('X', 3.0))
-            q2 = float(p.get('quote', {}).get('2', 3.5))
-        except:
-            q1, qX, q2 = 2.0, 3.0, 3.5
-        
-        # xG fittizi calcolati dalle quote (più la quota è bassa, più l'xG è alto)
-        base_h = 2.5 / max(q1, 0.1)
-        base_a = 2.5 / max(q2, 0.1)
-        
-        # La nostra "Intelligenza Artificiale" (Oggi iniettiamo un rumore statistico MVP)
-        # Sconvolgiamo leggermente gli xG reali per simulare un "vantaggio" trovato dall'algoritmo (es. Infortunio che il book non sa)
-        lam_h = base_h * random.uniform(0.8, 1.4)
-        lam_a = base_a * random.uniform(0.8, 1.4)
-        
-        prob_vere = calcola_probabilita_1x2(lam_h, lam_a)
-        
-        # Troviamo la miglior giocata
-        best_edge = -100
-        best_segno = ""
-        best_quota = 0
-        best_prob_book = 0
-        best_prob_real = 0
-        
-        # Segno 1
-        if q1 > 1:
-            edge_1 = prob_vere['1'] - (100.0 / q1)
-            if edge_1 > best_edge:
-                best_edge = edge_1
-                best_segno = "1"
-                best_quota = q1
-                best_prob_book = 100.0 / q1
-                best_prob_real = prob_vere['1']
-                
-        # Segno X
-        if qX > 1:
-            edge_X = prob_vere['X'] - (100.0 / qX)
-            if edge_X > best_edge:
-                best_edge = edge_X
-                best_segno = "X"
-                best_quota = qX
-                best_prob_book = 100.0 / qX
-                best_prob_real = prob_vere['X']
-                
-        # Segno 2
-        if q2 > 1:
-            edge_2 = prob_vere['2'] - (100.0 / q2)
-            if edge_2 > best_edge:
-                best_edge = edge_2
-                best_segno = "2"
-                best_quota = q2
-                best_prob_book = 100.0 / q2
-                best_prob_real = prob_vere['2']
-        
-        # classifichiamo il segnale
-        colore = "rossa" # Trappola, non giocare
-        if best_edge >= 5.0:
-            colore = "verde" # Strong Buy
-        elif best_edge > 0.0:
-            colore = "gialla" # Light Buy
-            
-        p['consiglio'] = {
-            'segno': best_segno,
-            'quota_bookmaker': best_quota,
-            'prob_bookmaker': round(best_prob_book, 1),
-            'prob_calcolata': round(best_prob_real, 1),
-            'edge': round(best_edge, 1),
-            'semaforo': colore
+# ==========================================
+# CACHE
+# ==========================================
+
+def load_cache():
+    try:
+        with open(CACHE_FILE, 'r', encoding='utf-8') as f:
+            return json.load(f)
+    except:
+        return {'teams': {}, 'ts': {}}
+
+def save_cache(cache):
+    with open(CACHE_FILE, 'w', encoding='utf-8') as f:
+        json.dump(cache, f, indent=2, ensure_ascii=False)
+
+def cache_fresh(cache, key):
+    ts = cache.get('ts', {}).get(str(key))
+    if not ts: return False
+    try:
+        return (datetime.now() - datetime.fromisoformat(ts)).total_seconds() < CACHE_TTL_HOURS * 3600
+    except:
+        return False
+
+# ==========================================
+# API-FOOTBALL
+# ==========================================
+
+def apif_get(endpoint, params):
+    """Singola richiesta a API-Football con gestione errori"""
+    if not FOOTBALL_API_KEY:
+        return None
+    try:
+        r = requests.get(f"{FOOTBALL_API_BASE}/{endpoint}",
+                         headers=FOOTBALL_HEADERS, params=params, timeout=15)
+        if r.status_code == 200:
+            return r.json().get('response')
+        print(f"  ⚠️ API-Football {r.status_code} su /{endpoint}")
+        return None
+    except Exception as e:
+        print(f"  ❌ API-Football errore: {e}")
+        return None
+
+def get_fixtures(league_id, season):
+    """Prossime partite (non ancora iniziate)"""
+    today = datetime.now().strftime('%Y-%m-%d')
+    future = (datetime.now() + timedelta(days=21)).strftime('%Y-%m-%d')
+    return apif_get('fixtures', {
+        'league': league_id, 'season': season,
+        'from': today, 'to': future, 'status': 'NS'
+    }) or []
+
+def get_team_stats(team_id, league_id, season, cache):
+    """Statistiche squadra con caching 24h. Ritorna dict con gol/partita e forma."""
+    k = str(team_id)
+    if cache_fresh(cache, k):
+        return cache['teams'].get(k)
+
+    raw = apif_get('teams/statistics', {
+        'team': team_id, 'league': league_id, 'season': season
+    })
+    # /teams/statistics ritorna un dict, non una lista
+    if not raw or not isinstance(raw, dict):
+        return None
+
+    goals = raw.get('goals', {})
+    try:
+        stats = {
+            'gf_home': float(goals.get('for',{}).get('average',{}).get('home') or 0),
+            'gf_away': float(goals.get('for',{}).get('average',{}).get('away') or 0),
+            'ga_home': float(goals.get('against',{}).get('average',{}).get('home') or 0),
+            'ga_away': float(goals.get('against',{}).get('average',{}).get('away') or 0),
+            'form': raw.get('form', ''),
+            'name': raw.get('team',{}).get('name','')
         }
-        
-        risultati.append(p)
-        
-    # Ordiniamo dalla più profittevole alla meno
-    return sorted(risultati, key=lambda x: x['consiglio']['edge'], reverse=True)
+    except:
+        return None
 
+    cache['teams'][k] = stats
+    cache.setdefault('ts', {})[k] = datetime.now().isoformat()
+    return stats
 
-def genera_dati_mock():
-    # Se l'utente non ha ancora messo l'API Key nel repository Github, generiamo 10 partite demo verosimili
-    squadre_a = ["Inter", "Juventus", "Milan", "Roma", "Napoli", "Lazio", "Atalanta", "Fiorentina", "Torino", "Sassuolo"]
-    squadre_b = ["Lecce", "Empoli", "Verona", "Salernitana", "Cagliari", "Genoa", "Udinese", "Bologna", "Monza", "Frosinone"]
-    
-    partite = []
-    ora = datetime.now()
-    
-    # Generiamo almeno 2 giocate sicuramente "Verdi" iniettando quote pompate apposta
-    for i in range(2):
-        h = random.choice(squadre_a)
-        a = random.choice(squadre_b)
-        q1, qX, q2 = 1.80, 4.00, 6.00 # Quota pompata per la forte
-        partite.append({
-            'id': f"match_special_{i}",
-            'campionato': "Serie A",
-            'squadra_casa': h,
-            'squadra_ospite': a,
-            'data_inizio': (ora + timedelta(hours=random.randint(1, 48))).strftime("%Y-%m-%d %H:%M"),
-            'quote': {'1': q1, 'X': qX, '2': q2}
+def get_injuries(fixture_id):
+    """Infortuni e squalifiche per un fixture"""
+    return apif_get('injuries', {'fixture': fixture_id}) or []
+
+# ==========================================
+# MATCHING NOMI SQUADRE
+# ==========================================
+
+def norm(name):
+    n = name.lower().strip()
+    for s in [' fc', ' afc', ' sc', ' bc', ' cf']:
+        n = n.replace(s, '')
+    return n.strip()
+
+def teams_match(odds_name, football_name):
+    a, b = norm(odds_name), norm(football_name)
+    if a == b or a in b or b in a:
+        return True
+    for alias in TEAM_ALIASES.get(a, []):
+        if alias in b or b in alias:
+            return True
+    return False
+
+def find_fixture(match, fixtures):
+    h, a = match['squadra_casa'], match['squadra_ospite']
+    for f in fixtures:
+        t = f.get('teams', {})
+        fh = t.get('home',{}).get('name','')
+        fa = t.get('away',{}).get('name','')
+        if teams_match(h, fh) and teams_match(a, fa):
+            return f
+    return None
+
+# ==========================================
+# MODIFICATORI AUTOMATICI
+# ==========================================
+
+def mod_infortuni(injuries, home_team_id):
+    """Genera modificatori e penalità da infortuni"""
+    mods = []
+    h_count, a_count = 0, 0
+
+    for inj in injuries:
+        player = inj.get('player', {})
+        team = inj.get('team', {})
+        # Skip "Questionable"
+        if player.get('type','') == 'Questionable':
+            continue
+        is_home = team.get('id') == home_team_id
+        tag = 'casa' if is_home else 'ospite'
+        mods.append({
+            'tipo': 'infortunio', 'squadra': tag,
+            'testo': f"⚠️ {player.get('name','?')} OUT – {player.get('reason','N/D')}",
+            'impatto_pct': -4
         })
-        
-    for i in range(15):
-        h = random.choice(squadre_a + squadre_b)
-        a = random.choice(squadre_a + squadre_b)
-        if h == a: continue
-        
-        # Mettiamo quote casuali (1 forte, 2 debole o equilibrata)
-        if h in squadre_a and a in squadre_b:
-            q1, qX, q2 = random.uniform(1.2, 1.8), random.uniform(3.5, 4.5), random.uniform(5.0, 9.0)
-        elif h in squadre_b and a in squadre_a:
-            q1, qX, q2 = random.uniform(4.0, 7.0), random.uniform(3.2, 4.0), random.uniform(1.5, 2.2)
-        else:
-            q1, qX, q2 = random.uniform(2.2, 2.8), random.uniform(2.9, 3.4), random.uniform(2.5, 3.1)
-            
-        partite.append({
-            'id': f"match_{i}",
-            'campionato': "Serie A",
-            'squadra_casa': h,
-            'squadra_ospite': a,
-            'data_inizio': (ora + timedelta(hours=random.randint(1, 48))).strftime("%Y-%m-%d %H:%M"),
-            'quote': {
-                '1': round(q1, 2),
-                'X': round(qX, 2),
-                '2': round(q2, 2)
-            }
-        })
-    return partite
+        if is_home: h_count += 1
+        else:        a_count += 1
 
-def fetch_api_odds():
-    import requests
+    h_pen = min(h_count * -4, 0) + (-8 if h_count >= 4 else 0)
+    a_pen = min(a_count * -4, 0) + (-8 if a_count >= 4 else 0)
+    return mods, max(h_pen, -30), max(a_pen, -30)
+
+def mod_forma(form_str, tag):
+    """Modificatore basato sulla forma recente (ultimi 5 risultati)"""
+    if not form_str or len(form_str) < 3:
+        return None, 0
+    r = form_str[-5:]
+    score = sum(1 if c=='W' else (-1 if c=='L' else 0) for c in r)
+    w, l = r.count('W'), r.count('L')
+    if score >= 3:
+        return {'tipo':'forma','squadra':tag,
+                'testo':f"🔥 {w}V nelle ultime {len(r)} ({r})",'impatto_pct':5}, 5
+    elif score <= -3:
+        return {'tipo':'forma','squadra':tag,
+                'testo':f"❄️ {l}S nelle ultime {len(r)} ({r})",'impatto_pct':-8}, -8
+    return None, 0
+
+# ==========================================
+# FETCH QUOTE (THE-ODDS-API)
+# ==========================================
+
+def fetch_odds():
     partite = []
-    
     for sport in SPORT_KEYS:
-        url = f"https://api.the-odds-api.com/v4/sports/{sport}/odds/?apiKey={API_KEY}&regions=eu&markets=h2h"
+        url = f"https://api.the-odds-api.com/v4/sports/{sport}/odds/"
         try:
-            response = requests.get(url)
-            if response.status_code != 200:
-                print(f"Errore API per {sport}: {response.text}")
+            r = requests.get(url, params={
+                'apiKey': ODDS_API_KEY, 'regions': 'eu', 'markets': 'h2h'
+            }, timeout=15)
+            if r.status_code != 200:
+                print(f"  Errore Odds-API {sport}: {r.status_code}")
                 continue
-            
-            data = response.json()
-            for evento in data:
-                # Troviamo il primo bookmaker disponibile (es. unibet o betfair)
-                bookmakers = evento.get('bookmakers', [])
-                if not bookmakers: continue
-                
-                # Prendiamo le quote dal primo bookmaker disponibile per semplicità
-                mercati = bookmakers[0].get('markets', [])
-                h2h_market = next((m for m in mercati if m['key'] == 'h2h'), None)
-                if not h2h_market: continue
-                
-                outcomes = h2h_market.get('outcomes', [])
-                
-                home_team = evento.get('home_team')
-                away_team = evento.get('away_team')
-                
-                quote = {'1': 0.0, 'X': 0.0, '2': 0.0}
-                for out in outcomes:
-                    if out['name'] == home_team: quote['1'] = out['price']
-                    elif out['name'] == away_team: quote['2'] = out['price']
-                    elif out['name'].lower() == 'draw': quote['X'] = out['price']
-                
-                # Ignoriamo se mancano quote valide
-                if quote['1'] == 0.0 or quote['X'] == 0.0 or quote['2'] == 0.0: continue
-                
-                campionato_nome = "Serie A" if "serie_a" in sport else "Premier League"
-                
-                # Formattiamo la data
+            for ev in r.json():
+                bk = ev.get('bookmakers', [])
+                if not bk: continue
+                h2h = next((m for m in bk[0].get('markets',[]) if m['key']=='h2h'), None)
+                if not h2h: continue
+                ht, at = ev['home_team'], ev['away_team']
+                q = {'1':0,'X':0,'2':0}
+                for o in h2h['outcomes']:
+                    if o['name']==ht: q['1']=o['price']
+                    elif o['name']==at: q['2']=o['price']
+                    elif o['name'].lower()=='draw': q['X']=o['price']
+                if 0 in q.values(): continue
                 try:
-                    dt = datetime.strptime(evento['commence_time'], "%Y-%m-%dT%H:%M:%SZ")
-                    dt = dt + timedelta(hours=1) # Fuso orario ITA approssimativo
-                    data_str = dt.strftime("%Y-%m-%d %H:%M")
-                except:
-                    data_str = evento['commence_time']
-
+                    dt = datetime.strptime(ev['commence_time'],"%Y-%m-%dT%H:%M:%SZ")
+                    ds = (dt+timedelta(hours=2)).strftime("%Y-%m-%d %H:%M")
+                except: ds = ev['commence_time']
                 partite.append({
-                    'id': evento['id'],
-                    'campionato': campionato_nome,
-                    'squadra_casa': home_team,
-                    'squadra_ospite': away_team,
-                    'data_inizio': data_str,
-                    'quote': quote
+                    'id':ev['id'], 'campionato':LEAGUES[sport]['name'],
+                    'squadra_casa':ht, 'squadra_ospite':at,
+                    'data_inizio':ds, 'quote':q, '_sk':sport
                 })
         except Exception as e:
-            print(f"Eccezione The-Odds-API {sport}: {e}")
-            
-    # Se fallisce tutto, fallback
-    if len(partite) == 0:
-        return genera_dati_mock()
+            print(f"  Eccezione Odds-API {sport}: {e}")
     return partite
 
-def genera_dashboard():
-    print("Avvio Scanner BetMirato con The-Odds-API...")
-    partite = fetch_api_odds()
+# ==========================================
+# ANALISI PRINCIPALE
+# ==========================================
 
-    analizzate = analizza_value_bets(partite)
-    print(f"Analizzate {len(analizzate)} partite. Salvataggio in valuebets.json...")
-    
+def analizza(partite):
+    cache = load_cache()
+    risultati = []
+
+    # Scarica fixtures API-Football per ogni lega
+    all_fix = {}
+    for sk, li in LEAGUES.items():
+        if FOOTBALL_API_KEY:
+            print(f"  📡 Fixtures {li['name']}...")
+            fx = get_fixtures(li['id'], li['season'])
+            all_fix[sk] = fx
+            print(f"     → {len(fx)} trovate")
+        else:
+            all_fix[sk] = []
+
+    for p in partite:
+        sk = p.pop('_sk', '')
+        li = LEAGUES.get(sk, {})
+        lid, seas = li.get('id',0), li.get('season',2025)
+        q1 = float(p['quote'].get('1',2.0))
+        qX = float(p['quote'].get('X',3.0))
+        q2 = float(p['quote'].get('2',3.5))
+
+        fix = find_fixture(p, all_fix.get(sk, []))
+        mods, verified, stats_info = [], False, {}
+
+        if fix and FOOTBALL_API_KEY:
+            hid = fix['teams']['home']['id']
+            aid = fix['teams']['away']['id']
+            fid = fix['fixture']['id']
+
+            hs = get_team_stats(hid, lid, seas, cache)
+            aws = get_team_stats(aid, lid, seas, cache)
+
+            if hs and aws:
+                verified = True
+                # xG REALI (Dixon-Coles: media attacco casa + difesa trasferta avversaria)
+                lam_h = (hs['gf_home'] + aws['ga_away']) / 2
+                lam_a = (aws['gf_away'] + hs['ga_home']) / 2
+                lam_h, lam_a = max(lam_h, 0.3), max(lam_a, 0.3)
+                xg_raw_h, xg_raw_a = lam_h, lam_a
+
+                # Forma
+                fm_h, fp_h = mod_forma(hs.get('form',''), 'casa')
+                fm_a, fp_a = mod_forma(aws.get('form',''), 'ospite')
+                if fm_h: mods.append(fm_h); lam_h *= (1 + fp_h/100)
+                if fm_a: mods.append(fm_a); lam_a *= (1 + fp_a/100)
+
+                # Infortuni
+                injs = get_injuries(fid)
+                if injs:
+                    im, hp, ap = mod_infortuni(injs, hid)
+                    mods.extend(im)
+                    lam_h *= (1 + hp/100)
+                    lam_a *= (1 + ap/100)
+
+                stats_info = {
+                    'xg_casa': round(xg_raw_h,2), 'xg_ospite': round(xg_raw_a,2),
+                    'xg_casa_mod': round(lam_h,2), 'xg_ospite_mod': round(lam_a,2)
+                }
+            else:
+                lam_h = 2.5 / max(q1, 1.01)
+                lam_a = 2.5 / max(q2, 1.01)
+        else:
+            # Fallback: xG impliciti dalle quote (senza random!)
+            lam_h = 2.5 / max(q1, 1.01)
+            lam_a = 2.5 / max(q2, 1.01)
+
+        prob = calcola_prob_1x2(lam_h, lam_a)
+        prob_raw = calcola_prob_1x2(stats_info.get('xg_casa', lam_h),
+                                     stats_info.get('xg_ospite', lam_a)) if stats_info else prob
+
+        # Miglior scommessa
+        best = {'edge':-100,'segno':'','quota':0,'pb':0,'pr':0,'eg':0}
+        for segno, quota in [('1',q1),('X',qX),('2',q2)]:
+            if quota <= 1: continue
+            imp = 100.0 / quota
+            edge = float(prob[segno]) - imp
+            eg   = float(prob_raw[segno]) - imp
+            if edge > best['edge']:
+                best = {'edge':edge,'segno':segno,'quota':quota,
+                        'pb':imp,'pr':float(prob[segno]),'eg':eg}
+
+        sem = 'rossa'
+        if best['edge'] >= 5.0: sem = 'verde'
+        elif best['edge'] > 0: sem = 'gialla'
+
+        p['stats'] = stats_info
+        p['modificatori'] = mods
+        p['dati_verificati'] = verified
+        p['consiglio'] = {
+            'segno': best['segno'], 'quota_bookmaker': best['quota'],
+            'prob_bookmaker': round(best['pb'],1),
+            'prob_calcolata': round(best['pr'],1),
+            'edge': round(best['edge'],1),
+            'edge_grezzo': round(best['eg'],1),
+            'semaforo': sem
+        }
+        risultati.append(p)
+
+    save_cache(cache)
+    return sorted(risultati, key=lambda x: x['consiglio']['edge'], reverse=True)
+
+# ==========================================
+# MOCK DATA (fallback totale)
+# ==========================================
+
+def genera_mock():
+    import random
+    squA = ["Inter","Juventus","Milan","Roma","Napoli","Lazio","Atalanta","Fiorentina","Torino","Bologna"]
+    squB = ["Lecce","Empoli","Verona","Cagliari","Genoa","Udinese","Monza","Parma","Como","Pisa"]
+    ora = datetime.now()
+    partite = []
+    for i in range(12):
+        h = random.choice(squA if i<6 else squB)
+        a = random.choice(squB if i<6 else squA)
+        if h==a: continue
+        if i < 6:
+            q1,qX,q2 = round(random.uniform(1.3,2.0),2), round(random.uniform(3.2,4.5),2), round(random.uniform(4.0,8.0),2)
+        else:
+            q1,qX,q2 = round(random.uniform(2.2,3.0),2), round(random.uniform(2.9,3.4),2), round(random.uniform(2.5,3.2),2)
+        partite.append({
+            'id':f"mock_{i}", 'campionato':'Serie A',
+            'squadra_casa':h, 'squadra_ospite':a,
+            'data_inizio':(ora+timedelta(hours=random.randint(1,72))).strftime("%Y-%m-%d %H:%M"),
+            'quote':{'1':q1,'X':qX,'2':q2}, '_sk':'soccer_italy_serie_a'
+        })
+    return partite
+
+# ==========================================
+# MAIN
+# ==========================================
+
+def genera_dashboard():
+    print("=" * 60)
+    print("[BOT] BetMirato Scanner v2 - Motore con Dati Reali")
+    print("=" * 60)
+
+    print("\n[1/3] Quote da The-Odds-API...")
+    partite = fetch_odds()
+    print(f"   -> {len(partite)} partite trovate")
+
+    if not partite:
+        print("   [!] Nessuna partita, genero mock...")
+        partite = genera_mock()
+
+    print("\n[2/3] Arricchimento dati...")
+    if FOOTBALL_API_KEY:
+        print(f"   [OK] FOOTBALL_API_KEY presente ({FOOTBALL_API_KEY[:8]}...)")
+    else:
+        print("   [!] FOOTBALL_API_KEY assente - xG calcolati dalle quote (no modificatori)")
+
+    analizzate = analizza(partite)
+
+    v = sum(1 for p in analizzate if p['consiglio']['semaforo']=='verde')
+    g = sum(1 for p in analizzate if p['consiglio']['semaforo']=='gialla')
+    r = sum(1 for p in analizzate if p['consiglio']['semaforo']=='rossa')
+    ok = sum(1 for p in analizzate if p.get('dati_verificati'))
+
     output = {
         "ultimo_aggiornamento": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+        "versione_scanner": "2.0",
+        "fonti_dati": {
+            "quote": "The-Odds-API",
+            "statistiche": "API-Football v3" if FOOTBALL_API_KEY else "N/D",
+            "infortuni": "API-Football v3" if FOOTBALL_API_KEY else "N/D"
+        },
         "partite": analizzate
     }
-    
+
     with open('valuebets.json', 'w', encoding='utf-8') as f:
         json.dump(output, f, indent=4, ensure_ascii=False)
-        
-    print("Fatto! valuebets.json generato.")
+
+    print(f"\n[3/3] Riepilogo: VERDI={v} GIALLI={g} ROSSI={r} | Verificati: {ok}/{len(analizzate)}")
+    print("[DONE] valuebets.json generato!")
 
 if __name__ == "__main__":
     genera_dashboard()

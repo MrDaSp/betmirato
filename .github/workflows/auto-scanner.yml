@@ -1,10 +1,9 @@
-name: BetMirato Auto Scanner
+name: BetMirato Auto Scanner v2
 
 on:
   schedule:
-    # Esegue questo script alle 4:00, 10:00 e 16:00 UTC (ora italiana: 6:00, 12:00, 18:00)
+    # Esegue alle 6:00, 12:00, 18:00 ora italiana (4:00, 10:00, 16:00 UTC)
     - cron: '0 4,10,16 * * *'
-  # Consente anche l'esecuzione manuale del Workflow dalla linguetta Actions
   workflow_dispatch:
 
 jobs:
@@ -27,14 +26,15 @@ jobs:
           python -m pip install --upgrade pip
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
-      - name: Run Auto Scanner
+      - name: Run Scanner v2
         env:
           ODDS_API_KEY: ${{ secrets.ODDS_API_KEY }}
+          FOOTBALL_API_KEY: ${{ secrets.FOOTBALL_API_KEY }}
         run: python scanner.py
 
       - name: Commit and push changes
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
-          git add valuebets.json
-          git diff --quiet && git diff --staged --quiet || (git commit -m "Auto Scanner: aggiornamento Value Bets" && git push)
+          git add valuebets.json team_cache.json
+          git diff --quiet && git diff --staged --quiet || (git commit -m "Scanner v2: aggiornamento Value Bets + cache" && git push)

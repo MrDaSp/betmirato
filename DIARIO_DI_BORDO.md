@@ -547,3 +547,125 @@ L'app si è trasformata da "Calcolatrice Manuale" a "Cruscotto Finanziario Autom
 1. **Layout KANBAN:** L'interfaccia è stata scomposta in tre colonne esplicite (Verdi a sinistra, Gialli al centro, Rossi a destra) per garantire una leggibilità spietata e immediata dei segnali "Strong Buy" ed evitare le perdite di tempo sulle partite ordinarie.
 2. **Il Mio Bankroll (Tracker):** Sotto al cruscotto, abbiamo introdotto il primo strumento di Accounting. Gli utenti possono spingere "Piazza Giocata" simulandola direttamente con i loro capitali (Stake). L'app disegna un grafico in tempo reale (`Chart.js`) dei profitti netti, salvando momentaneamente i file del portafoglio in `localStorage` per permettere i test agli Ospiti.
 3. **The-Odds-API Live:** Mettendo in pensione i dummy data di prova, il modulo backend `scanner.py` (`requests`) è stato allacciato alla rete globale. Ora estrae quote empiriche, partite pre-match e mercati 1x2 reali (Serie A, Premier League) passandoli nel modello di Poisson. Il polmone del sistema respira da solo eseguendosi e aggiornando il sito 3 volte al giorno grazie alla schedulazione Cron in GitHub Actions.
+
+---
+
+### 🛡️ Rafforzamento Sicurezza & Trasparenza (29 Marzo 2026)
+L'app è stata blindata per il lancio verso utenti esterni, garantendo protezione dei dati e chiarezza d'uso.
+
+1. **Inibizione Dati Reali (Guest Protection):** La Modalità Ospite è stata trasformata in una sandbox pura. Gli utenti non loggati vedono ora esclusivamente un dataset "Mock" (squadre fittizie) generato localmente. Questo protegge il valore commerciale dell'output dello scanner, spingendo gli utenti reali alla registrazione gratuita per sbloccare i dati mondiali reali.
+2. **Scissione Flusso Auth (Register Page):** Per eliminare la confusione riscontrata dai primi tester, il pulsante di registrazione è stato rimosso dalla index e spostato in una pagina dedicata: `register.html`. Questo ha pulito l'interfaccia di login e reso il processo di iscrizione lineare e professionale.
+3. **Redirect Email Blindato:** Corretto il problema dei reindirizzamenti post-conferma email. Ora il sistema forza il browser dell'utente ad atterrare precisamente su `betmirato/index.html` tramite l'iniezione del parametro `emailRedirectTo` in `storage.js`, evitando "atterraggi di fortuna" su vecchie directory o domini base.
+4. **Guida & Disclaimer (Info Modal):** Introdotta l'icona **(i)** informativa nell'header e nelle maschere di login. Apre una modale completa che spiega:
+    - Funzionamento del modello Poisson e calcolo dell'Edge.
+    - Significato dei colori del Semaforo (Verde, Giallo, Rosso).
+    - **Disclaimer Legale:** Dichiarazione esplicita di non responsabilità dello sviluppatore e avviso sulla non garanzia di vincita, fondamentale per la tutela del progetto.
+5. **UI/UX Polish:** Implementata la chiusura rapida (X) nelle modali, sfondo con effetto `backdrop-blur` per un look premium e caricamento asincrono ottimizzato della sessione utente.
+
+**Status Attuale:** Piattaforma solida, sicura e pronta per essere condivisa con la cerchia ristretta di tester.
+
+---
+
+### ✅ Post-it Risolto: Edge Ingannevole → Automatizzato!
+Il problema dell'Edge "Ingannevole" sollevato nella sessione precedente è stato **risolto in modo automatico** — vedi la sezione successiva. Non serve più un modificatore manuale: il sistema scarica e applica automaticamente infortuni, forma e statistiche reali.
+
+---
+
+### 🧠 Scanner v2: Intelligenza Automatica con Dati Reali (29 Marzo 2026)
+
+#### ❌ Problema Critico Scoperto
+Analizzando lo `scanner.py` v1, è emerso che il cuore del motore predittivo usava **numeri casuali** per generare gli xG:
+```python
+# VECCHIO CODICE (v1) — RUMORE CASUALE!
+lam_h = base_h * random.uniform(0.8, 1.4)
+lam_a = base_a * random.uniform(0.8, 1.4)
+```
+Questo significava che l'Edge mostrato agli utenti era **inventato**. Un segnale Verde oggi poteva essere Rosso domani sulla stessa partita. Ogni consiglio era statisticamente inutile.
+
+#### ✅ Soluzione: Scanner v2 con API-Football
+
+Il random è stato **eliminato per sempre**. Lo scanner ora usa 2 fonti dati indipendenti:
+
+| Fonte | Cosa Fornisce | API |
+|-------|--------------|-----|
+| **The-Odds-API** | Quote reali dei bookmaker (H2H) | Già integrata (v1) |
+| **API-Football v3** | Statistiche squadra, infortuni, forma | **NUOVA** (v2) |
+
+##### Come Funziona il Nuovo Motore
+
+1. **xG Reali (Dixon-Coles):** Per ogni partita, lo scanner scarica le statistiche stagionali delle due squadre (gol fatti/subiti per partita, in casa e fuori). La lambda di Poisson viene calcolata come:
+   - `λ_casa = (gol_fatti_casa_H + gol_subiti_fuori_A) / 2`
+   - `λ_ospite = (gol_fatti_fuori_A + gol_subiti_casa_H) / 2`
+   Questo è il metodo Dixon-Coles, standard nell'industria delle scommesse sportive.
+
+2. **Modificatore Forma Automatico:** Lo scanner analizza gli ultimi 5 risultati di ogni squadra:
+   - 3+ vittorie → 🔥 Boost attacco +5%
+   - 3+ sconfitte → ❄️ Penalità attacco -8%
+   - Serie mista → Nessun modificatore
+
+3. **Modificatore Infortuni Automatico:** Per ogni partita, lo scanner scarica la lista di giocatori infortunati/squalificati:
+   - Ogni assenza confermata → -4% efficacia squadra
+   - 4+ assenze → Crisi: ulteriore -8%
+   - Tetto massimo penalità: -30%
+   - I "Questionable" (in dubbio) vengono ignorati per cautela
+
+4. **Edge Grezzo vs Edge Modificato:** Ogni card mostra due valori:
+   - `edge_grezzo`: Edge calcolato solo con le statistiche Poisson
+   - `edge`: Edge dopo l'applicazione di forma + infortuni
+   Se un segnale Verde diventa Giallo dopo i modificatori, è una "trappola" smascherata.
+
+##### Caching e Budget API
+- **API-Football Free Tier:** 100 richieste/giorno
+- **Statistiche squadra:** Cache 24h in `team_cache.json` (~20 req/giorno, non per scan)
+- **Infortuni:** Scaricati ad ogni scan (~20 req/scan)
+- **Budget giornaliero:** ~86 req/giorno con 3 scansioni → ampiamente sotto il limite
+- La cache viene committata su GitHub dal workflow Actions per persistere tra le esecuzioni
+
+##### Fallback Graceful
+Se la chiave API-Football non è configurata, lo scanner:
+- Usa gli xG impliciti dalle quote del bookmaker (senza random!)
+- Le card mostrano il badge "⚠️ Stima da quote" invece di "✅ Dati Verificati"
+- Non genera modificatori (nessun dato inventato)
+
+#### 📁 Struttura File Aggiornata (v2)
+```
+betmirato/
+├── index.html                    # Frontend con info modal auto + badge modificatori
+├── register.html                 # Pagina registrazione dedicata
+├── betEngine.js                  # Motore Poisson (browser-side)
+├── storage.js                    # Layer Supabase Auth
+├── scanner.py                    # Scanner v2 con API-Football (Python)
+├── valuebets.json                # Output scanner (dati reali + modificatori)
+├── team_cache.json               # Cache statistiche squadra (24h TTL)
+├── requirements.txt              # requests
+├── DIARIO_DI_BORDO.md            # Questo file
+├── .nojekyll
+├── .gitignore
+└── .github/
+    └── workflows/
+        └── auto-scanner.yml      # GitHub Action v2 (con FOOTBALL_API_KEY)
+```
+
+#### 🔑 Nuovi Secrets GitHub Necessari
+
+| Secret | Valore | Status |
+|--------|--------|--------|
+| `ODDS_API_KEY` | Chiave The-Odds-API | ✅ Già configurata |
+| `FOOTBALL_API_KEY` | Chiave API-Football v3 | ⏳ Da creare (registrazione su api-football.com) |
+
+---
+
+### 🖥️ Info Modal al Primo Accesso (29 Marzo 2026)
+Per garantire che ogni nuovo utente legga la guida completa (glossario, significato dei colori, disclaimer legale) **prima** di iniziare a usare l'app:
+- La modale informativa (ℹ️) si apre **automaticamente** al primo accesso in assoluto
+- Dopo aver cliccato "Ho Capito, Iniziamo!", il sistema salva un flag in `localStorage`
+- Alle visite successive la modale non si riapre automaticamente
+- L'icona (ℹ️) nell'header resta sempre disponibile per riaprirla manualmente
+
+---
+
+### 📝 Prossimi Passi (Da Fare)
+1. **Registrazione API-Football:** Creare account gratuito su https://www.api-football.com/ e salvare la chiave come GitHub Secret `FOOTBALL_API_KEY`
+2. **Test con Dati Reali:** Una volta configurata la chiave, eseguire lo scanner e verificare che i modificatori appaiano nelle card
+3. **Push su GitHub:** Committare tutto il codice v2 e verificare che il workflow Actions funzioni
+4. **Modificatore Manuale (Futuro):** Opzionalmente, aggiungere un campo per "Peso Notizie" manuale nelle card, per quando l'utente sa qualcosa che l'API non sa (es. allenatore esonerato stamattina)
