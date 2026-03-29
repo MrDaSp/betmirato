@@ -670,6 +670,39 @@ Per garantire che ogni nuovo utente legga la guida completa (glossario, signific
 3. **[X] Modifiche Fallback e Mock:** Risolto bug sul fallback della variabile `ODDS_API_KEY` che causava la generazione involontaria da parte di GitHub di falsi match (il famoso "Bologna-Como 14:17"). Adesso lo script gestisce dinamicamente sia `None` che stringhe vuote.
 4. **[X] Push su GitHub:** CI/CD attiva e stabile (GitHub Actions ruota *cron* alle 10 e alle 17 senza intoppi).
 
-### 🚀 Futuro: Espansioni
-- **Campionati Europei:** Estendere `LEAGUES` su Python (`scanner.py`) inserendo Premier League, LaLiga, e Bundesliga.
-- **Bot Telegram Intelligente:** Far inviare allo scanner V2 i match marcati come "Vantaggio Alto" (Semaforo Verde) direttamente via Telegram all'amministratore.
+### 🚀 Aggiornamento BetMirato v3.0 (29 Marzo 2026 - Evoluzione Cloud)
+È stata rilasciata la versione più ambiziosa di sempre, trasformando BetMirato in un vero e proprio gestionale multi-utente professionale.
+
+#### 🏗️ Nuova Architettura Cloud (Supabase)
+Dopo il successo del sistema di login, abbiamo migrato l'intero **Bankroll** (lo storico delle scommesse) su database.
+- **Sincronizzazione Totale:** Ogni utente può piazzare una giocata da mobile e trovarla aggiornata su desktop.
+- **Sicurezza RLS:** Implementate le *Row Level Security* su Supabase: ogni utente può accedere esclusivamente alle proprie scommesse private.
+
+#### 🤖 Auto-Referee (L'Arbitro Automatico)
+Accontentata la richiesta di automatizzare il controllo dei profitti.
+- Implementato lo script `results_scanner.py` che gira ogni sera su GitHub Actions.
+- Il sistema scarica i risultati reali (Gol e Segni 1X2) da **API-Football**.
+- Generazione automatica di `risultati.json`: il sito confronta le scommesse "Pending" e le marca come **Vinte** o **Perse** senza intervento umano.
+
+#### 🇮🇹 Filtro Campionati "Elite"
+Introdotto un menù a tendina (`leagueFilter`) sulla Dashboard.
+- Permette di isolare istantaneamente le partite di **Serie A & B** o i **Top 5 Campionati Europei**.
+- Ottimizzazione UI: Le card vengono filtrate e riordinate cronologicamente in millisecondi.
+
+#### 📈 Calcolo Performance in Unità (U)
+Sostituito il calcolo in € (troppo variabile) con il sistema a **Unità Fisse (U)**.
+- Ogni scommessa vale 1 Unità.
+- Il grafico del profitto ora mostra l'efficacia matematica dell'algoritmo depurata dal capitale scommesso.
+
+---
+
+### 📝 Note Tecniche Post-Rilascio
+1. **[X] Fix JS:** Sostituito `.lower()` con `.toLowerCase()` nelle funzioni di matching stringhe.
+2. **[X] Supabase Table:** Creata tabella `user_bets` con indici UUID e timestamp automatici.
+3. **[X] GitHub Action:** Aggiornato `auto-scanner.yml` per includere il doppio step (Valutazione Quote + Recupero Risultati).
+
+---
+
+### 🚀 Prossimo Step:
+- **Alert Telegram:** Notifiche push per le "Gemme" (>15% Edge).
+- **Filtro Statistico:** Possibilità di ordinare per probabilità di vittoria oltre che per Edge.
