@@ -185,8 +185,15 @@
             <p style="color:var(--text-secondary); margin-top:0.5rem;" id="lastUpdate">Ultimo aggiornamento: Caricamento in corso...</p>
         </div>
 
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
-            <h3>Opportunità del Giorno</h3>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; gap: 1rem;">
+            <div style="display: flex; align-items: center; gap: 1rem;">
+                <h3 style="margin:0;">Opportunità del Giorno</h3>
+                <select id="leagueFilter" onchange="filtraCampionati()" style="background:var(--bg-secondary); color:white; border:1px solid var(--border); padding:0.5rem; border-radius:6px; outline:none; cursor:pointer;">
+                    <option value="all">🌍 Tutti i Match</option>
+                    <option value="top">🥇 Top Europei (A, Premier, Liga...)</option>
+                    <option value="italy">🇮🇹 Solo Serie A & B</option>
+                </select>
+            </div>
             <button onclick="document.getElementById('bankrollSection').scrollIntoView({behavior:'smooth'})" style="background:transparent; border:1px solid var(--accent-blue); color:var(--accent-blue); padding:0.5rem 1rem; border-radius:6px; cursor:pointer;">Vai a Il Mio Bankroll 📈</button>
         </div>
 
@@ -367,32 +374,51 @@
             };
         }
 
+        let globalData = null; // Memorizziamo per i filtri veloci
+
         async function caricaDashboard() {
             try {
-                let data;
-                
                 if (!currentUser) {
-                    // Modalità Ospite: Dati finti
-                    data = getMockDataDemo();
+                    globalData = getMockDataDemo();
                     document.getElementById('lastUpdate').innerHTML = "<span style='color:var(--accent-red); font-weight:bold;'>MODELLO DEMO (Dati Falsati)</span> - Registrati per sbloccare i dati mondiali reali di The-Odds-API.";
                 } else {
-                    // Modalità Iscritto: Dati Reali
                     const response = await fetch('valuebets.json?t=' + new Date().getTime());
-                    data = await response.json();
-                    let srcInfo = data.fonti_dati ? ` · Fonti: ${data.fonti_dati.statistiche || 'N/D'}` : '';
-                    let verInfo = data.versione_scanner ? ` (v${data.versione_scanner})` : '';
-                    document.getElementById('lastUpdate').innerHTML = `Scanner${verInfo}: <span style="color:var(--accent-green);font-weight:bold;">${data.ultimo_aggiornamento}</span>${srcInfo}`;
+                    globalData = await response.json();
+                    let srcInfo = globalData.fonti_dati ? ` · Fonti: ${globalData.fonti_dati.statistiche || 'N/D'}` : '';
+                    let verInfo = globalData.versione_scanner ? ` (v${globalData.versione_scanner})` : '';
+                    document.getElementById('lastUpdate').innerHTML = `Scanner${verInfo}: <span style="color:var(--accent-green);font-weight:bold;">${globalData.ultimo_aggiornamento}</span>${srcInfo}`;
                 }
+                filtraCampionati();
+            } catch(e) {
+                console.error(e);
+                document.getElementById('matchesContainer').innerHTML = '<div class="card text-center" style="grid-column: 1 / -1; color:var(--accent-red)">Nessun dato scanner disponibile.</div>';
+            }
+        }
 
-                
+        function filtraCampionati() {
+            if(!globalData) return;
+            const filter = document.getElementById('leagueFilter').value;
+            
+            let filtered = [...globalData.partite];
+            if(filter === 'top') {
+                const topLeagues = ["Serie A", "Premier League", "La Liga", "Bundesliga", "Ligue 1"];
+                filtered = filtered.filter(p => topLeagues.some(l => p.campionato.includes(l)));
+            } else if(filter === 'italy') {
+                filtered = filtered.filter(p => p.campionato.includes("Serie A") || p.campionato.includes("Serie B"));
+            }
+
+            renderMatches(filtered);
+        }
+
+        function renderMatches(partite) {
                 let htmlVerdi = '<h4 style="text-align:center; color:var(--accent-green); border-bottom:2px solid var(--accent-green); padding-bottom:0.5rem; margin-bottom:0.5rem;">🟢 VANTAGGIO ALTO</h4>';
                 let htmlGialli = '<h4 style="text-align:center; color:var(--accent-yellow); border-bottom:2px solid var(--accent-yellow); padding-bottom:0.5rem; margin-bottom:0.5rem;">🟡 MARGINE LIEVE</h4>';
                 let htmlRossi = '<h4 style="text-align:center; color:var(--accent-red); border-bottom:2px solid var(--accent-red); padding-bottom:0.5rem; margin-bottom:0.5rem;">🔴 TRAPPOLE</h4>';
                 
                 // Ordina cronologicamente
-                data.partite.sort((a, b) => new Date(a.data_inizio.replace(' ', 'T')) - new Date(b.data_inizio.replace(' ', 'T')));
+                partite.sort((a, b) => new Date(a.data_inizio.replace(' ', 'T')) - new Date(b.data_inizio.replace(' ', 'T')));
                 
-                data.partite.forEach(p => {
+                partite.forEach(p => {
                     let c = p.consiglio;
                     let displayColor = 'gray';
                     let bg = 'var(--bg-card)';
@@ -478,70 +504,113 @@
 
         // ====== BANKROLL TRACKER (MVP LocalStorage) ======
         
+        // ====== BANKROLL TRACKER (CLOUD SUPABASE) ======
+        
         let bankrollChart;
 
-        function initBankroll() {
-            let scommesse = JSON.parse(localStorage.getItem('betmirato_bets') || '[]');
-            renderStorico(scommesse);
-            renderChart(scommesse);
+        async function initBankroll() {
+            if(!currentUser) {
+                document.getElementById('storicoScommesse').innerHTML = '<div style="color:var(--text-secondary); font-size:0.85rem">Accedi per attivare il Bankroll Cloud e gestire le tue scommesse.</div>';
+                return;
+            }
+
+            try {
+                // 1. Scarichiamo le scommesse dell'utente da Supabase
+                let { data: scommesse, error } = await sbClient
+                    .from('user_bets')
+                    .select('*')
+                    .order('created_at', { ascending: false });
+
+                if (error) throw error;
+
+                // 2. Proviamo a scaricare i risultati delle ultime partite
+                try {
+                    const res = await fetch('risultati.json?t=' + new Date().getTime());
+                    const resultsData = await res.json();
+                    const liveResults = resultsData.risultati;
+
+                    // 3. AUTO-REFERTO: Aggiorniamo le scommesse 'pending' se il risultato è presente
+                    for (let s of scommesse) {
+                        if (s.status === 'pending') {
+                            // Creiamo la chiave di ricerca (home-away pulita)
+                            const key = s.teams.replace(" vs ", "-").lower().replace(/ /g, "");
+                            if (liveResults[key]) {
+                                let matchResult = liveResults[key].result;
+                                let finalStatus = (matchResult === s.segno) ? 'win' : 'lose';
+                                
+                                // Aggiorniamo Supabase
+                                await sbClient.from('user_bets').update({ status: finalStatus }).eq('id', s.id);
+                                s.status = finalStatus; // Aggiornamento locale per UI
+                            }
+                        }
+                    }
+                } catch(e) { console.warn("Risultati.json non ancora disponibile."); }
+
+                renderStorico(scommesse);
+                renderChart(scommesse);
+            } catch(e) {
+                console.error("Errore Bankroll:", e);
+            }
         }
 
-        function piazzaGiocata(id, desc, suggerimento, quota) {
+        async function piazzaGiocata(id, desc, suggerimento, quota) {
+            if(!currentUser) { alert("Devi essere loggato per gestire il tuo Bankroll!"); return; }
+
             let bet = prompt(`💸 Stai piazzando una schedina su: ${desc}\nIl software consiglia Esito ${suggerimento} @ ${quota}.\n\nChe segno vuoi giocare realmente (1, X o 2)?`, suggerimento);
             if(!bet) return;
             
-            let importoStr = prompt(`Quant'è il tuo Stake (es. 10 per 10€)?`, "10");
-            let importo = parseFloat(importoStr);
-            if(isNaN(importo) || importo <= 0) return;
-
-            let scommesse = JSON.parse(localStorage.getItem('betmirato_bets') || '[]');
-            scommesse.push({
-                desc,
-                segno_giocato: bet,
-                quota: quota,
-                importo: importo,
-                data: new Date().toLocaleDateString(),
-                status: 'ATTESA' // 'ATTESA', 'VINTA', 'PERSA'
-            });
-
-            localStorage.setItem('betmirato_bets', JSON.stringify(scommesse));
-            initBankroll();
-            document.getElementById('bankrollSection').scrollIntoView({behavior:'smooth'});
-            alert("Giocata salvata nel portafoglio!");
+            try {
+                const { error } = await sbClient.from('user_bets').insert([
+                    {
+                        user_id: currentUser.id,
+                        match_id: id,
+                        teams: desc,
+                        match_date: 'Oggi',
+                        segno: bet,
+                        quota: parseFloat(quota),
+                        status: 'pending'
+                    }
+                ]);
+                if (error) throw error;
+                
+                initBankroll();
+                document.getElementById('bankrollSection').scrollIntoView({behavior:'smooth'});
+            } catch(e) {
+                alert("Errore salvataggio Cloud: " + e.message);
+            }
         }
 
-        function aggiornaStatoGiocata(index, nuovoStato) {
-            let scommesse = JSON.parse(localStorage.getItem('betmirato_bets') || '[]');
-            scommesse[index].status = nuovoStato;
-            localStorage.setItem('betmirato_bets', JSON.stringify(scommesse));
-            initBankroll();
+        async function aggiornaStatoGiocata(id, nuovoStato) {
+            try {
+                const { error } = await sbClient.from('user_bets').update({ status: nuovoStato }).eq('id', id);
+                if (error) throw error;
+                initBankroll();
+            } catch(e) { console.error(e); }
         }
 
         function renderStorico(scommesse) {
             let html = '';
-            if(scommesse.length === 0) {
-                html = '<div style="color:var(--text-secondary); font-size:0.85rem">Nessuna schedina in memoria. Piazza una scommessa dalle card sopra!</div>';
+            if(!scommesse || scommesse.length === 0) {
+                html = '<div style="color:var(--text-secondary); font-size:0.85rem">Nessuna schedina nel Cloud. Inizia a scommettere ora!</div>';
             } else {
-                [...scommesse].reverse().forEach((s, i) => {
-                    let trueIndex = scommesse.length - 1 - i;
-                    
+                scommesse.forEach((s) => {
                     let bg = 'var(--bg-primary)';
                     let displayStat = '';
-                    if(s.status === 'VINTA') { bg = 'rgba(46, 204, 113, 0.1)'; displayStat = '<span style="color:var(--accent-green);font-weight:bold">+ €'+((s.quota * s.importo) - s.importo).toFixed(2)+' Netto</span>'; }
-                    else if(s.status === 'PERSA') { bg = 'rgba(231, 76, 60, 0.1)'; displayStat = '<span style="color:var(--accent-red)">- €'+s.importo.toFixed(2)+'</span>'; }
+                    if(s.status === 'win') { bg = 'rgba(46, 204, 113, 0.1)'; displayStat = '<span style="color:var(--accent-green);font-weight:bold">+'+((s.quota - 1)).toFixed(2)+' U</span>'; }
+                    else if(s.status === 'lose') { bg = 'rgba(231, 76, 60, 0.1)'; displayStat = '<span style="color:var(--accent-red)">- 1.00 U</span>'; }
                     else {
                         displayStat = `
-                            <button onclick="aggiornaStatoGiocata(${trueIndex}, 'VINTA')" style="background:var(--accent-green);border:none;border-radius:4px;padding:3px 8px;cursor:pointer;font-size:0.7rem;font-weight:bold">Vinta</button>
-                            <button onclick="aggiornaStatoGiocata(${trueIndex}, 'PERSA')" style="background:var(--accent-red);color:white;border:none;border-radius:4px;padding:3px 8px;cursor:pointer;font-size:0.7rem;font-weight:bold">Persa</button>
+                            <button onclick="aggiornaStatoGiocata('${s.id}', 'win')" style="background:var(--accent-green);border:none;border-radius:4px;padding:3px 8px;cursor:pointer;font-size:0.7rem;font-weight:bold">Vinta</button>
+                            <button onclick="aggiornaStatoGiocata('${s.id}', 'lose')" style="background:var(--accent-red);color:white;border:none;border-radius:4px;padding:3px 8px;cursor:pointer;font-size:0.7rem;font-weight:bold">Persa</button>
                         `;
                     }
 
                     html += `
-                    <div style="background:${bg}; padding:0.8rem; border-radius:6px; font-size:0.85rem; border:1px solid var(--border); display:flex; justify-content:space-between; align-items:center;">
+                    <div style="background:${bg}; padding:0.8rem; border-radius:6px; font-size:0.8rem; border:1px solid var(--border); display:flex; justify-content:space-between; align-items:center;">
                         <div>
-                            <div style="color:var(--text-secondary); font-size:0.7rem">${s.data}</div>
-                            <div style="font-weight:bold;">${s.desc}</div>
-                            <div>Segno: <strong style="color:white">${s.segno_giocato}</strong> @ <strong style="color:var(--accent-blue)">${s.quota}</strong> (Puntata: €${s.importo})</div>
+                            <div style="color:var(--text-secondary); font-size:0.65rem">${new Date(s.created_at).toLocaleDateString()}</div>
+                            <div style="font-weight:bold;">${s.teams}</div>
+                            <div>Segno: <strong style="color:white">${s.segno}</strong> @ <strong style="color:var(--accent-blue)">${s.quota}</strong></div>
                         </div>
                         <div style="text-align:right;">
                             ${displayStat}
@@ -557,31 +626,26 @@
             let dataPoints = [0];
             let saldo = 0;
 
-            scommesse.forEach((s, idx) => {
-                if(s.status === 'VINTA') {
-                    saldo += ((s.quota * s.importo) - s.importo);
-                } else if(s.status === 'PERSA') {
-                    saldo -= s.importo;
-                }
+            // Mostriamo lo storico dal più vecchio al più nuovo per il grafico
+            [...scommesse].reverse().forEach((s, idx) => {
+                if(s.status === 'win') saldo += (s.quota - 1);
+                else if(s.status === 'lose') saldo -= 1;
                 
-                if(s.status !== 'ATTESA') {
+                if(s.status !== 'pending') {
                     labels.push('#' + (idx+1));
-                    dataPoints.push(saldo);
+                    dataPoints.push(saldo.toFixed(2));
                 }
             });
 
             const ctx = document.getElementById('profitChart').getContext('2d');
-            
-            if(bankrollChart) {
-                bankrollChart.destroy();
-            }
+            if(bankrollChart) bankrollChart.destroy();
 
             bankrollChart = new Chart(ctx, {
                 type: 'line',
                 data: {
                     labels: labels,
                     datasets: [{
-                        label: 'Profitto (€)',
+                        label: 'Profitto (Unità)',
                         data: dataPoints,
                         borderColor: '#2ecc71',
                         backgroundColor: 'rgba(46, 204, 113, 0.1)',
@@ -595,14 +659,8 @@
                     maintainAspectRatio: false,
                     plugins: { legend: { display: false } },
                     scales: {
-                        y: {
-                            grid: { color: 'rgba(255,255,255,0.05)' },
-                            ticks: { color: '#8b98b8' }
-                        },
-                        x: {
-                            grid: { display: false },
-                            ticks: { color: '#8b98b8' }
-                        }
+                        y: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#8b98b8' } },
+                        x: { grid: { display: false }, ticks: { color: '#8b98b8' } }
                     }
                 }
             });
