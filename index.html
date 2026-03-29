@@ -389,6 +389,9 @@
                 let htmlGialli = '<h4 style="text-align:center; color:var(--accent-yellow); border-bottom:2px solid var(--accent-yellow); padding-bottom:0.5rem; margin-bottom:0.5rem;">🟡 MARGINE LIEVE</h4>';
                 let htmlRossi = '<h4 style="text-align:center; color:var(--accent-red); border-bottom:2px solid var(--accent-red); padding-bottom:0.5rem; margin-bottom:0.5rem;">🔴 TRAPPOLE</h4>';
                 
+                // Ordina cronologicamente
+                data.partite.sort((a, b) => new Date(a.data_inizio.replace(' ', 'T')) - new Date(b.data_inizio.replace(' ', 'T')));
+                
                 data.partite.forEach(p => {
                     let c = p.consiglio;
                     let displayColor = 'gray';
