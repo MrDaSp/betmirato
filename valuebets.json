@@ -1,10 +1,10 @@
 {
-    "ultimo_aggiornamento": "2026-03-31 10:26:32",
+    "ultimo_aggiornamento": "2026-03-31 09:04:05",
     "versione_scanner": "2.0",
     "fonti_dati": {
         "quote": "The-Odds-API",
-        "statistiche": "N/D",
-        "infortuni": "N/D"
+        "statistiche": "API-Football v3",
+        "infortuni": "API-Football v3"
     },
     "partite": [
         {
@@ -358,6 +358,41 @@
             }
         },
         {
+            "id": "4026d1ba245b980683a63170645bcb00",
+            "campionato": "Serie A",
+            "squadra_casa": "Lazio",
+            "squadra_ospite": "Parma",
+            "data_inizio": "2026-04-04 20:45",
+            "quote": {
+                "1": 1.88,
+                "X": 3.56,
+                "2": 5.3
+            },
+            "bookies": {
+                "1": "1xBet",
+                "X": "1xBet",
+                "2": "Unibet (SE)"
+            },
+            "stats": {},
+            "modificatori": [],
+            "dati_verificati": false,
+            "prob_full": {
+                "1": 58.02,
+                "X": 28.6,
+                "2": 13.13
+            },
+            "consiglio": {
+                "segno": "1",
+                "quota_bookmaker": 1.88,
+                "prob_bookmaker": 53.2,
+                "prob_calcolata": 58.0,
+                "edge": 4.8,
+                "edge_grezzo": 4.8,
+                "semaforo": "gialla",
+                "bookmaker": "1xBet"
+            }
+        },
+        {
             "id": "8e3d1f62508116713ac4347706dc5b15",
             "campionato": "Serie A",
             "squadra_casa": "Atalanta BC",
@@ -388,41 +423,6 @@
                 "prob_calcolata": 32.6,
                 "edge": 4.8,
                 "edge_grezzo": 4.8,
-                "semaforo": "gialla",
-                "bookmaker": "1xBet"
-            }
-        },
-        {
-            "id": "4026d1ba245b980683a63170645bcb00",
-            "campionato": "Serie A",
-            "squadra_casa": "Lazio",
-            "squadra_ospite": "Parma",
-            "data_inizio": "2026-04-04 20:45",
-            "quote": {
-                "1": 1.87,
-                "X": 3.58,
-                "2": 5.3
-            },
-            "bookies": {
-                "1": "1xBet",
-                "X": "1xBet",
-                "2": "Unibet (SE)"
-            },
-            "stats": {},
-            "modificatori": [],
-            "dati_verificati": false,
-            "prob_full": {
-                "1": 58.22,
-                "X": 28.47,
-                "2": 13.05
-            },
-            "consiglio": {
-                "segno": "1",
-                "quota_bookmaker": 1.87,
-                "prob_bookmaker": 53.5,
-                "prob_calcolata": 58.2,
-                "edge": 4.7,
-                "edge_grezzo": 4.7,
                 "semaforo": "gialla",
                 "bookmaker": "1xBet"
             }
@@ -708,41 +708,6 @@
             }
         },
         {
-            "id": "b1b253402d511794ce9c1f2a5c9924bc",
-            "campionato": "Serie A",
-            "squadra_casa": "Inter Milan",
-            "squadra_ospite": "AS Roma",
-            "data_inizio": "2026-04-05 20:45",
-            "quote": {
-                "1": 1.69,
-                "X": 4.1,
-                "2": 5.9
-            },
-            "bookies": {
-                "1": "1xBet",
-                "X": "Winamax (DE)",
-                "2": "Matchbook"
-            },
-            "stats": {},
-            "modificatori": [],
-            "dati_verificati": false,
-            "prob_full": {
-                "1": 63.35,
-                "X": 25.83,
-                "2": 10.4
-            },
-            "consiglio": {
-                "segno": "1",
-                "quota_bookmaker": 1.69,
-                "prob_bookmaker": 59.2,
-                "prob_calcolata": 63.4,
-                "edge": 4.2,
-                "edge_grezzo": 4.2,
-                "semaforo": "gialla",
-                "bookmaker": "1xBet"
-            }
-        },
-        {
             "id": "3e7369c873aed1c62f4d76fd652d73c7",
             "campionato": "Premier League",
             "squadra_casa": "Everton",
@@ -983,6 +948,41 @@
                 "prob_calcolata": 27.8,
                 "edge": 3.8,
                 "edge_grezzo": 3.8,
+                "semaforo": "gialla",
+                "bookmaker": "1xBet"
+            }
+        },
+        {
+            "id": "b1b253402d511794ce9c1f2a5c9924bc",
+            "campionato": "Serie A",
+            "squadra_casa": "Inter Milan",
+            "squadra_ospite": "AS Roma",
+            "data_inizio": "2026-04-05 20:45",
+            "quote": {
+                "1": 1.69,
+                "X": 4.1,
+                "2": 5.7
+            },
+            "bookies": {
+                "1": "1xBet",
+                "X": "Winamax (DE)",
+                "2": "Betfair"
+            },
+            "stats": {},
+            "modificatori": [],
+            "dati_verificati": false,
+            "prob_full": {
+                "1": 62.91,
+                "X": 25.89,
+                "2": 10.79
+            },
+            "consiglio": {
+                "segno": "1",
+                "quota_bookmaker": 1.69,
+                "prob_bookmaker": 59.2,
+                "prob_calcolata": 62.9,
+                "edge": 3.7,
+                "edge_grezzo": 3.7,
                 "semaforo": "gialla",
                 "bookmaker": "1xBet"
             }
@@ -1311,7 +1311,7 @@
             "quote": {
                 "1": 2.7,
                 "X": 3.2,
-                "2": 3.15
+                "2": 3.2
             },
             "bookies": {
                 "1": "Coolbet",
@@ -1322,17 +1322,17 @@
             "modificatori": [],
             "dati_verificati": false,
             "prob_full": {
-                "1": 36.79,
-                "X": 33.7,
-                "2": 29.45
+                "1": 37.08,
+                "X": 33.83,
+                "2": 29.04
             },
             "consiglio": {
                 "segno": "X",
                 "quota_bookmaker": 3.2,
                 "prob_bookmaker": 31.2,
-                "prob_calcolata": 33.7,
-                "edge": 2.5,
-                "edge_grezzo": 2.5,
+                "prob_calcolata": 33.8,
+                "edge": 2.6,
+                "edge_grezzo": 2.6,
                 "semaforo": "gialla",
                 "bookmaker": "Unibet (SE)"
             }
@@ -1344,7 +1344,7 @@
             "squadra_ospite": "Cremonese",
             "data_inizio": "2026-04-11 15:00",
             "quote": {
-                "1": 2.26,
+                "1": 2.25,
                 "X": 3.35,
                 "2": 3.75
             },
@@ -1357,17 +1357,17 @@
             "modificatori": [],
             "dati_verificati": false,
             "prob_full": {
-                "1": 45.86,
-                "X": 32.02,
-                "2": 22.02
+                "1": 46.01,
+                "X": 31.94,
+                "2": 21.94
             },
             "consiglio": {
                 "segno": "X",
                 "quota_bookmaker": 3.35,
                 "prob_bookmaker": 29.9,
-                "prob_calcolata": 32.0,
-                "edge": 2.2,
-                "edge_grezzo": 2.2,
+                "prob_calcolata": 31.9,
+                "edge": 2.1,
+                "edge_grezzo": 2.1,
                 "semaforo": "gialla",
                 "bookmaker": "Unibet (NL)"
             }
@@ -1379,12 +1379,12 @@
             "squadra_ospite": "Torino",
             "data_inizio": "2026-04-05 18:00",
             "quote": {
-                "1": 3.3,
+                "1": 3.31,
                 "X": 3.1,
                 "2": 2.67
             },
             "bookies": {
-                "1": "Matchbook",
+                "1": "1xBet",
                 "X": "Betfair",
                 "2": "Coolbet"
             },
@@ -1392,9 +1392,9 @@
             "modificatori": [],
             "dati_verificati": false,
             "prob_full": {
-                "1": 28.03,
-                "X": 33.92,
-                "2": 37.99
+                "1": 27.95,
+                "X": 33.94,
+                "2": 38.05
             },
             "consiglio": {
                 "segno": "X",
