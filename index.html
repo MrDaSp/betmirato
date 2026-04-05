@@ -266,6 +266,11 @@
                 </div>
             </div>
         </div>
+
+        <!-- BOTTONE TORNA SU -->
+        <div style="text-align:center; margin-top: 2rem; margin-bottom: 2rem;">
+            <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" style="background:transparent; border:1px solid var(--accent-blue); color:var(--accent-blue); padding:0.6rem 1.5rem; border-radius:6px; cursor:pointer; font-size:0.9rem; transition: all 0.2s;" onmouseover="this.style.background='var(--accent-blue)'; this.style.color='white'" onmouseout="this.style.background='transparent'; this.style.color='var(--accent-blue)'">⬆️ Torna su</button>
+        </div>
     </main>
 
     <!-- BET MODAL (Piazza / Modifica Giocata) -->
@@ -468,6 +473,16 @@
             const mode = document.getElementById('adviceMode').value;
             
             let filtered = [...globalData.partite];
+            
+            // FILTRO TEMPORALE: Escludi partite già giocate (data_inizio nel passato)
+            const now = new Date();
+            filtered = filtered.filter(p => {
+                try {
+                    const matchDate = new Date(p.data_inizio.replace(' ', 'T'));
+                    return matchDate > now;
+                } catch(e) { return true; } // Se non riesce a parsare, la mostra
+            });
+            
             if(filter === 'top') {
                 const topLeagues = ["Serie A", "Premier League", "La Liga", "Bundesliga", "Ligue 1"];
                 filtered = filtered.filter(p => topLeagues.some(l => p.campionato.includes(l)));
@@ -694,19 +709,53 @@
                     // 3. AUTO-REFERTO: Aggiorniamo le scommesse 'pending' se il risultato è presente
                     for (let s of scommesse) {
                         if (s.status === 'pending') {
-                            // Creiamo la chiave di ricerca (home-away pulita)
-                            const key = s.teams.replace(" vs ", "-").toLowerCase().replace(/ /g, "");
-                            if (liveResults[key]) {
-                                let matchResult = liveResults[key].result;
+                            // Generiamo TUTTE le possibili chiavi per massimizzare il matching
+                            const teams = s.teams || '';
+                            const parts = teams.split(' vs ');
+                            if (parts.length < 2) continue;
+                            const home = parts[0].trim();
+                            const away = parts[1].trim();
+                            
+                            // Normalizzazione: rimuovi suffissi comuni (FC, SC, BC...)
+                            function normTeam(n) {
+                                return n.toLowerCase().replace(/ fc| afc| sc| bc| cf| ssc| ss| ac| as/gi, '').trim();
+                            }
+                            
+                            // Genera chiavi candidate
+                            const candidateKeys = [
+                                `${home}-${away}`.toLowerCase().replace(/ /g, ''),
+                                `${normTeam(home)}-${normTeam(away)}`.replace(/ /g, ''),
+                                `${home.toLowerCase()}-${away.toLowerCase()}`.replace(/ /g, '')
+                            ];
+                            
+                            // Cerca il risultato con qualsiasi chiave
+                            let foundResult = null;
+                            for (const key of candidateKeys) {
+                                if (liveResults[key]) { foundResult = liveResults[key]; break; }
+                            }
+                            // Fallback: cerca match parziale (contiene)
+                            if (!foundResult) {
+                                const normH = normTeam(home).replace(/ /g, '');
+                                const normA = normTeam(away).replace(/ /g, '');
+                                for (const [rk, rv] of Object.entries(liveResults)) {
+                                    if (rk.includes(normH) && rk.includes(normA)) {
+                                        foundResult = rv; break;
+                                    }
+                                }
+                            }
+                            
+                            if (foundResult) {
+                                let matchResult = foundResult.result;
                                 let finalStatus = (matchResult === s.segno) ? 'win' : 'lose';
                                 
                                 // Aggiorniamo Supabase
                                 await sbClient.from('user_bets').update({ status: finalStatus }).eq('id', s.id);
                                 s.status = finalStatus; // Aggiornamento locale per UI
+                                console.log(`Auto-Referee: ${teams} -> ${finalStatus} (${foundResult.score})`);
                             }
                         }
                     }
-                } catch(e) { console.warn("Risultati.json non ancora disponibile."); }
+                } catch(e) { console.warn("Risultati.json non ancora disponibile:", e); }
 
                 renderStorico(scommesse);
                 renderChart(scommesse);
@@ -804,7 +853,7 @@
                         user_id: currentUser.id,
                         match_id: matchId,
                         teams: teams,
-                        match_date: 'Oggi',
+                        match_date: new Date().toISOString().split('T')[0],
                         segno: selectedSegno,
                         quota: quota,
                         stake: amount,

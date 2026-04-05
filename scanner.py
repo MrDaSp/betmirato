@@ -254,6 +254,15 @@ def fetch_odds():
             for ev in r.json():
                 bk = ev.get('bookmakers', [])
                 if not bk: continue
+                
+                # FILTRO: Scarta partite già iniziate o giocate
+                try:
+                    match_time = datetime.strptime(ev['commence_time'], "%Y-%m-%dT%H:%M:%SZ")
+                    if match_time < datetime.utcnow():
+                        continue  # Partita nel passato, skip
+                except:
+                    pass  # Se non riesce a parsare la data, la include comunque
+                    
                 ht, at = ev['home_team'], ev['away_team']
                 
                 best_q = {'1':0, 'X':0, '2':0}

@@ -892,3 +892,20 @@ Inoltre, da un'analisi del codice di `scanner.py`, è emerso un enorme bug della
 
 **Status Deploy:** Conflitto GitHub risolto. Modifiche pushate con successo in Produzione.
 ---
+
+### 📝 TO-DO Futuro / Appunti di Crescita: Hosting SaaS su Contabo
+**Data Annotazione:** 31 Marzo 2026
+
+- ✅ **Obiettivo:** Trasferire (quando le esigenze di scalabilità e automazione dei bot lo richiederanno) l'infrastruttura di hosting del gestionale (attualmente serverless su GitHub Pages + Supabase) su un server cloud dedicato gestito dall'AI.
+- 📍 **Provider Consigliato:** Contabo.com (VPS o Server Dedicato).
+- 🎯 **I Vantaggi:**
+  - **Controllo Totale:** Accesso Root su ambiente Ubuntu Linux.
+  - **Running H24:** Possibilità di eseguire processi continui (come lo Scanner Pre-Match e i Bot di avviso Telegram) 24/7 senza dipendere dai limiti dei Tier Gratuiti o le restrizioni tempo delle GitHub Actions.
+  - **Costi Ridotti:** Eccellente rapporto Prezzo/RAM rispetto ai competitor classici.
+- 🛠️ **Piano di Attuazione (Collaborazione Uomo-AI):**
+  1. L'utente acquista la VPS base su Contabo (con Ubuntu 24.04 LTS).
+  2. L'utente inoltra Indirizzo IP e Password di Root all'assistente AI per consentire all'AI l'accesso remoto via terminale.
+  3. L'AI installa e blinda l'intero web server in autonomia (Nginx, SSL/Let's Encrypt, dipendenze Node.js/Python).
+  4. Deploy definitivo e messa online con il dominio definitivo.
+
+---

@@ -11,6 +11,82 @@ HEADERS = {
     'x-rapidapi-key': API_KEY
 }
 
+# ========================================
+# NORMALIZZAZIONE NOMI (identica a scanner.py per garantire matching)
+# ========================================
+
+TEAM_ALIASES = {
+    'wolverhampton wanderers': ['wolverhampton', 'wolves'],
+    'brighton and hove albion': ['brighton'],
+    'nottingham forest': ['nottingham forest', 'nott\'ham forest'],
+    'leeds united': ['leeds'],
+    'west ham united': ['west ham'],
+    'tottenham hotspur': ['tottenham'],
+    'newcastle united': ['newcastle'],
+    'sheffield united': ['sheffield utd'],
+    'leicester city': ['leicester'],
+    'inter milan': ['inter', 'internazionale'],
+    'ac milan': ['milan', 'ac milan'],
+    'atalanta bc': ['atalanta'],
+    'hellas verona': ['verona', 'hellas verona'],
+    'as roma': ['roma', 'as roma'],
+    'ssc napoli': ['napoli'],
+    'juventus': ['juventus'],
+    'ss lazio': ['lazio'],
+    'afc bournemouth': ['bournemouth'],
+    'crystal palace': ['crystal palace'],
+    'manchester city': ['manchester city', 'man city'],
+    'manchester united': ['manchester united', 'man united', 'man utd'],
+    'burnley': ['burnley'],
+}
+
+def norm(name):
+    """Normalizza il nome di una squadra rimuovendo suffissi comuni"""
+    n = name.lower().strip()
+    for s in [' fc', ' afc', ' sc', ' bc', ' cf', ' ssc', ' ss', ' ac', ' as']:
+        n = n.replace(s, '')
+    return n.strip()
+
+def genera_chiavi_match(home_name, away_name):
+    """
+    Genera TUTTE le possibili chiavi per una partita, cosí il frontend
+    ha molte più chance di trovare il match.
+    Formato chiavi: "home-away" tutto minuscolo senza spazi.
+    """
+    chiavi = set()
+    
+    home_lower = home_name.lower()
+    away_lower = away_name.lower()
+    
+    # Chiave base originale (come faceva prima)
+    base = f"{home_name}-{away_name}".lower().replace(" ", "")
+    chiavi.add(base)
+    
+    # Chiave normalizzata (senza suffissi FC, SC, etc.)
+    norm_key = f"{norm(home_name)}-{norm(away_name)}".replace(" ", "")
+    chiavi.add(norm_key)
+    
+    # Chiavi con alias per home
+    home_aliases = [home_lower]
+    for canonical, aliases in TEAM_ALIASES.items():
+        if norm(home_name) in [norm(canonical)] + [norm(a) for a in aliases]:
+            home_aliases.extend([canonical] + aliases)
+    
+    # Chiavi con alias per away
+    away_aliases = [away_lower]
+    for canonical, aliases in TEAM_ALIASES.items():
+        if norm(away_name) in [norm(canonical)] + [norm(a) for a in aliases]:
+            away_aliases.extend([canonical] + aliases)
+    
+    # Genera tutte le combinazioni
+    for h in home_aliases:
+        for a in away_aliases:
+            chiavi.add(f"{h}-{a}".replace(" ", ""))
+            chiavi.add(f"{norm(h)}-{norm(a)}".replace(" ", ""))
+    
+    return list(chiavi)
+
+
 def fetch_recent_results():
     if not API_KEY:
         print("Errore: FOOTBALL_API_KEY non trovata.")
@@ -22,9 +98,8 @@ def fetch_recent_results():
     
     results_map = {}
     
-    # Lista delle leghe che monitoriamo (Serie A, Premier League, etc.)
-    # Usiamo gli ID di API-Football: 135 (Serie A), 39 (Premier), 140 (La Liga), 78 (Bundes), 61 (Ligue 1)
-    leagues = [135, 39, 140, 78, 61, 71, 94] # Aggiunte Serie B (71) e Portogallo (94)
+    # Lista delle leghe che monitoriamo
+    leagues = [135, 39, 140, 78, 61, 71, 94]
     
     for league_id in leagues:
         print(f"Recupero risultati per Lega ID {league_id}...")
@@ -34,7 +109,10 @@ def fetch_recent_results():
             response = requests.get(url, headers=HEADERS)
             data = response.json()
             
-            for fixture in data.get('response', []):
+            fixtures = data.get('response', [])
+            print(f"   -> {len(fixtures)} partite finite trovate")
+            
+            for fixture in fixtures:
                 f_id = fixture['fixture']['id']
                 home_name = fixture['teams']['home']['name']
                 away_name = fixture['teams']['away']['name']
@@ -46,13 +124,21 @@ def fetch_recent_results():
                 elif goals_home < goals_away: final_result = "2"
                 else: final_result = "X"
                 
-                # Salviamo con una chiave univoca (Nomi Squadre per facilità di matching)
-                key = f"{home_name}-{away_name}".lower().replace(" ", "")
-                results_map[key] = {
+                result_data = {
                     "result": final_result,
                     "score": f"{goals_home}-{goals_away}",
-                    "date": fixture['fixture']['date']
+                    "date": fixture['fixture']['date'],
+                    "home": home_name,
+                    "away": away_name
                 }
+                
+                # Generiamo TUTTE le chiavi possibili per massimizzare il matching
+                chiavi = genera_chiavi_match(home_name, away_name)
+                for chiave in chiavi:
+                    results_map[chiave] = result_data
+                    
+                print(f"   ✓ {home_name} {goals_home}-{goals_away} {away_name} ({final_result}) -> {len(chiavi)} chiavi")
+                
         except Exception as e:
             print(f"Errore nel recupero della lega {league_id}: {e}")
 
@@ -69,4 +155,6 @@ if __name__ == "__main__":
     with open('risultati.json', 'w') as f:
         json.dump(output, f, indent=4)
     
-    print(f"Completato! Salvati {len(recent_results)} risultati in risultati.json")
+    # Conta risultati unici (non chiavi duplicate)
+    unique_matches = len(set(r.get('date','') + r.get('score','') for r in recent_results.values()))
+    print(f"\nCompletato! Salvati {len(recent_results)} chiavi ({unique_matches} partite uniche) in risultati.json")
