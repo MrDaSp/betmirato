@@ -1,5 +1,5 @@
 {
-    "ultimo_aggiornamento": "2026-04-05 07:49:53",
+    "ultimo_aggiornamento": "2026-04-05 08:35:15",
     "risultati": {
         "sassuolo-cagliari": {
             "result": "1",
@@ -8,14 +8,14 @@
             "home": "Sassuolo",
             "away": "Cagliari"
         },
-        "hellasverona-fiorentina": {
+        "verona-fiorentina": {
             "result": "2",
             "score": "0-1",
             "date": "2026-04-04T16:00:00Z",
             "home": "Hellas Verona",
             "away": "Fiorentina"
         },
-        "verona-fiorentina": {
+        "hellasverona-fiorentina": {
             "result": "2",
             "score": "0-1",
             "date": "2026-04-04T16:00:00Z",
