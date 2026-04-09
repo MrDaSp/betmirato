@@ -1,33 +1,4 @@
 {
-    "ultimo_aggiornamento": "2026-04-09 16:14:10",
-    "risultati": {
-        "sscnapoli-milan": {
-            "result": "1",
-            "score": "1-0",
-            "date": "2026-04-06T18:45:00Z",
-            "home": "Napoli",
-            "away": "AC Milan"
-        },
-        "napoli-milan": {
-            "result": "1",
-            "score": "1-0",
-            "date": "2026-04-06T18:45:00Z",
-            "home": "Napoli",
-            "away": "AC Milan"
-        },
-        "napoli-acmilan": {
-            "result": "1",
-            "score": "1-0",
-            "date": "2026-04-06T18:45:00Z",
-            "home": "Napoli",
-            "away": "AC Milan"
-        },
-        "sscnapoli-acmilan": {
-            "result": "1",
-            "score": "1-0",
-            "date": "2026-04-06T18:45:00Z",
-            "home": "Napoli",
-            "away": "AC Milan"
-        }
-    }
+    "ultimo_aggiornamento": "2026-04-09 21:40:42",
+    "risultati": {}
 }
