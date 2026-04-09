@@ -1,5 +1,5 @@
 {
-    "ultimo_aggiornamento": "2026-04-08 21:36:20",
+    "ultimo_aggiornamento": "2026-04-09 09:00:35",
     "risultati": {
         "udinese-como": {
             "result": "X",
@@ -36,7 +36,7 @@
             "home": "Napoli",
             "away": "AC Milan"
         },
-        "napoli-milan": {
+        "sscnapoli-milan": {
             "result": "1",
             "score": "1-0",
             "date": "2026-04-06T18:45:00Z",
@@ -50,7 +50,7 @@
             "home": "Napoli",
             "away": "AC Milan"
         },
-        "sscnapoli-milan": {
+        "napoli-milan": {
             "result": "1",
             "score": "1-0",
             "date": "2026-04-06T18:45:00Z",
