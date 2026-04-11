@@ -1,14 +1,14 @@
 {
-    "ultimo_aggiornamento": "2026-04-11 15:26:23",
+    "ultimo_aggiornamento": "2026-04-11 21:25:56",
     "risultati": {
-        "asroma-pisa": {
+        "roma-pisa": {
             "result": "1",
             "score": "3-0",
             "date": "2026-04-10T18:45:00Z",
             "home": "AS Roma",
             "away": "Pisa"
         },
-        "roma-pisa": {
+        "asroma-pisa": {
             "result": "1",
             "score": "3-0",
             "date": "2026-04-10T18:45:00Z",
@@ -36,6 +36,41 @@
             "home": "Torino",
             "away": "Hellas Verona"
         },
+        "acmilan-udinese": {
+            "result": "2",
+            "score": "0-3",
+            "date": "2026-04-11T16:00:00Z",
+            "home": "AC Milan",
+            "away": "Udinese"
+        },
+        "milan-udinese": {
+            "result": "2",
+            "score": "0-3",
+            "date": "2026-04-11T16:00:00Z",
+            "home": "AC Milan",
+            "away": "Udinese"
+        },
+        "atalanta-juventus": {
+            "result": "2",
+            "score": "0-1",
+            "date": "2026-04-11T18:45:00Z",
+            "home": "Atalanta BC",
+            "away": "Juventus"
+        },
+        "atalantabc-juventus": {
+            "result": "2",
+            "score": "0-1",
+            "date": "2026-04-11T18:45:00Z",
+            "home": "Atalanta BC",
+            "away": "Juventus"
+        },
+        "westhamunited-wolverhamptonwanderers": {
+            "result": "1",
+            "score": "4-0",
+            "date": "2026-04-10T19:00:00Z",
+            "home": "West Ham United",
+            "away": "Wolverhampton Wanderers"
+        },
         "westham-wolves": {
             "result": "1",
             "score": "4-0",
@@ -50,14 +85,14 @@
             "home": "West Ham United",
             "away": "Wolverhampton Wanderers"
         },
-        "westhamunited-wolverhampton": {
+        "westham-wolverhamptonwanderers": {
             "result": "1",
             "score": "4-0",
             "date": "2026-04-10T19:00:00Z",
             "home": "West Ham United",
             "away": "Wolverhampton Wanderers"
         },
-        "westhamunited-wolverhamptonwanderers": {
+        "westhamunited-wolverhampton": {
             "result": "1",
             "score": "4-0",
             "date": "2026-04-10T19:00:00Z",
@@ -71,12 +106,12 @@
             "home": "West Ham United",
             "away": "Wolverhampton Wanderers"
         },
-        "westham-wolverhamptonwanderers": {
-            "result": "1",
-            "score": "4-0",
-            "date": "2026-04-10T19:00:00Z",
-            "home": "West Ham United",
-            "away": "Wolverhampton Wanderers"
+        "arsenal-afcbournemouth": {
+            "result": "2",
+            "score": "1-2",
+            "date": "2026-04-11T11:30:00Z",
+            "home": "Arsenal",
+            "away": "Bournemouth"
         },
         "arsenal-bournemouth": {
             "result": "2",
@@ -85,12 +120,33 @@
             "home": "Arsenal",
             "away": "Bournemouth"
         },
-        "arsenal-afcbournemouth": {
+        "brentford-everton": {
+            "result": "X",
+            "score": "2-2",
+            "date": "2026-04-11T14:00:00Z",
+            "home": "Brentford",
+            "away": "Everton"
+        },
+        "burnley-brightonandhovealbion": {
             "result": "2",
-            "score": "1-2",
-            "date": "2026-04-11T11:30:00Z",
-            "home": "Arsenal",
-            "away": "Bournemouth"
+            "score": "0-2",
+            "date": "2026-04-11T14:00:00Z",
+            "home": "Burnley",
+            "away": "Brighton and Hove Albion"
+        },
+        "burnley-brighton": {
+            "result": "2",
+            "score": "0-2",
+            "date": "2026-04-11T14:00:00Z",
+            "home": "Burnley",
+            "away": "Brighton and Hove Albion"
+        },
+        "liverpool-fulham": {
+            "result": "1",
+            "score": "2-0",
+            "date": "2026-04-11T16:30:00Z",
+            "home": "Liverpool",
+            "away": "Fulham"
         }
     }
 }
