@@ -1,5 +1,5 @@
 {
-    "ultimo_aggiornamento": "2026-04-11 08:34:57",
+    "ultimo_aggiornamento": "2026-04-11 15:26:23",
     "risultati": {
         "asroma-pisa": {
             "result": "1",
@@ -15,7 +15,28 @@
             "home": "AS Roma",
             "away": "Pisa"
         },
-        "westhamunited-wolverhamptonwanderers": {
+        "cagliari-cremonese": {
+            "result": "1",
+            "score": "1-0",
+            "date": "2026-04-11T13:00:00Z",
+            "home": "Cagliari",
+            "away": "Cremonese"
+        },
+        "torino-hellasverona": {
+            "result": "1",
+            "score": "2-1",
+            "date": "2026-04-11T13:03:00Z",
+            "home": "Torino",
+            "away": "Hellas Verona"
+        },
+        "torino-verona": {
+            "result": "1",
+            "score": "2-1",
+            "date": "2026-04-11T13:03:00Z",
+            "home": "Torino",
+            "away": "Hellas Verona"
+        },
+        "westham-wolves": {
             "result": "1",
             "score": "4-0",
             "date": "2026-04-10T19:00:00Z",
@@ -23,6 +44,20 @@
             "away": "Wolverhampton Wanderers"
         },
         "westhamunited-wolves": {
+            "result": "1",
+            "score": "4-0",
+            "date": "2026-04-10T19:00:00Z",
+            "home": "West Ham United",
+            "away": "Wolverhampton Wanderers"
+        },
+        "westhamunited-wolverhampton": {
+            "result": "1",
+            "score": "4-0",
+            "date": "2026-04-10T19:00:00Z",
+            "home": "West Ham United",
+            "away": "Wolverhampton Wanderers"
+        },
+        "westhamunited-wolverhamptonwanderers": {
             "result": "1",
             "score": "4-0",
             "date": "2026-04-10T19:00:00Z",
@@ -43,19 +78,19 @@
             "home": "West Ham United",
             "away": "Wolverhampton Wanderers"
         },
-        "westham-wolves": {
-            "result": "1",
-            "score": "4-0",
-            "date": "2026-04-10T19:00:00Z",
-            "home": "West Ham United",
-            "away": "Wolverhampton Wanderers"
+        "arsenal-bournemouth": {
+            "result": "2",
+            "score": "1-2",
+            "date": "2026-04-11T11:30:00Z",
+            "home": "Arsenal",
+            "away": "Bournemouth"
         },
-        "westhamunited-wolverhampton": {
-            "result": "1",
-            "score": "4-0",
-            "date": "2026-04-10T19:00:00Z",
-            "home": "West Ham United",
-            "away": "Wolverhampton Wanderers"
+        "arsenal-afcbournemouth": {
+            "result": "2",
+            "score": "1-2",
+            "date": "2026-04-11T11:30:00Z",
+            "home": "Arsenal",
+            "away": "Bournemouth"
         }
     }
 }
