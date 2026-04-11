@@ -1,5 +1,5 @@
 {
-    "ultimo_aggiornamento": "2026-04-10 21:30:46",
+    "ultimo_aggiornamento": "2026-04-11 08:34:57",
     "risultati": {
         "asroma-pisa": {
             "result": "1",
@@ -15,14 +15,7 @@
             "home": "AS Roma",
             "away": "Pisa"
         },
-        "westham-wolverhampton": {
-            "result": "1",
-            "score": "4-0",
-            "date": "2026-04-10T19:00:00Z",
-            "home": "West Ham United",
-            "away": "Wolverhampton Wanderers"
-        },
-        "westhamunited-wolverhampton": {
+        "westhamunited-wolverhamptonwanderers": {
             "result": "1",
             "score": "4-0",
             "date": "2026-04-10T19:00:00Z",
@@ -30,6 +23,13 @@
             "away": "Wolverhampton Wanderers"
         },
         "westhamunited-wolves": {
+            "result": "1",
+            "score": "4-0",
+            "date": "2026-04-10T19:00:00Z",
+            "home": "West Ham United",
+            "away": "Wolverhampton Wanderers"
+        },
+        "westham-wolverhampton": {
             "result": "1",
             "score": "4-0",
             "date": "2026-04-10T19:00:00Z",
@@ -50,7 +50,7 @@
             "home": "West Ham United",
             "away": "Wolverhampton Wanderers"
         },
-        "westhamunited-wolverhamptonwanderers": {
+        "westhamunited-wolverhampton": {
             "result": "1",
             "score": "4-0",
             "date": "2026-04-10T19:00:00Z",
