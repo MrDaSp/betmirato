@@ -1,14 +1,14 @@
 {
-    "ultimo_aggiornamento": "2026-04-12 08:39:31",
+    "ultimo_aggiornamento": "2026-04-12 15:30:11",
     "risultati": {
-        "asroma-pisa": {
+        "roma-pisa": {
             "result": "1",
             "score": "3-0",
             "date": "2026-04-10T18:45:00Z",
             "home": "AS Roma",
             "away": "Pisa"
         },
-        "roma-pisa": {
+        "asroma-pisa": {
             "result": "1",
             "score": "3-0",
             "date": "2026-04-10T18:45:00Z",
@@ -50,13 +50,6 @@
             "home": "AC Milan",
             "away": "Udinese"
         },
-        "atalanta-juventus": {
-            "result": "2",
-            "score": "0-1",
-            "date": "2026-04-11T18:45:00Z",
-            "home": "Atalanta BC",
-            "away": "Juventus"
-        },
         "atalantabc-juventus": {
             "result": "2",
             "score": "0-1",
@@ -64,12 +57,33 @@
             "home": "Atalanta BC",
             "away": "Juventus"
         },
-        "westhamunited-wolverhamptonwanderers": {
+        "atalanta-juventus": {
+            "result": "2",
+            "score": "0-1",
+            "date": "2026-04-11T18:45:00Z",
+            "home": "Atalanta BC",
+            "away": "Juventus"
+        },
+        "genoa-sassuolo": {
             "result": "1",
-            "score": "4-0",
-            "date": "2026-04-10T19:00:00Z",
-            "home": "West Ham United",
-            "away": "Wolverhampton Wanderers"
+            "score": "2-1",
+            "date": "2026-04-12T10:31:00Z",
+            "home": "Genoa",
+            "away": "Sassuolo"
+        },
+        "parma-napoli": {
+            "result": "X",
+            "score": "1-1",
+            "date": "2026-04-12T13:00:00Z",
+            "home": "Parma",
+            "away": "Napoli"
+        },
+        "parma-sscnapoli": {
+            "result": "X",
+            "score": "1-1",
+            "date": "2026-04-12T13:00:00Z",
+            "home": "Parma",
+            "away": "Napoli"
         },
         "westham-wolverhamptonwanderers": {
             "result": "1",
@@ -78,14 +92,7 @@
             "home": "West Ham United",
             "away": "Wolverhampton Wanderers"
         },
-        "westham-wolves": {
-            "result": "1",
-            "score": "4-0",
-            "date": "2026-04-10T19:00:00Z",
-            "home": "West Ham United",
-            "away": "Wolverhampton Wanderers"
-        },
-        "westham-wolverhampton": {
+        "westhamunited-wolves": {
             "result": "1",
             "score": "4-0",
             "date": "2026-04-10T19:00:00Z",
@@ -99,7 +106,21 @@
             "home": "West Ham United",
             "away": "Wolverhampton Wanderers"
         },
-        "westhamunited-wolves": {
+        "westham-wolverhampton": {
+            "result": "1",
+            "score": "4-0",
+            "date": "2026-04-10T19:00:00Z",
+            "home": "West Ham United",
+            "away": "Wolverhampton Wanderers"
+        },
+        "westhamunited-wolverhamptonwanderers": {
+            "result": "1",
+            "score": "4-0",
+            "date": "2026-04-10T19:00:00Z",
+            "home": "West Ham United",
+            "away": "Wolverhampton Wanderers"
+        },
+        "westham-wolves": {
             "result": "1",
             "score": "4-0",
             "date": "2026-04-10T19:00:00Z",
@@ -147,6 +168,48 @@
             "date": "2026-04-11T16:30:00Z",
             "home": "Liverpool",
             "away": "Fulham"
+        },
+        "nott'hamforest-astonvilla": {
+            "result": "X",
+            "score": "1-1",
+            "date": "2026-04-12T13:00:00Z",
+            "home": "Nottingham Forest",
+            "away": "Aston Villa"
+        },
+        "nottinghamforest-astonvilla": {
+            "result": "X",
+            "score": "1-1",
+            "date": "2026-04-12T13:00:00Z",
+            "home": "Nottingham Forest",
+            "away": "Aston Villa"
+        },
+        "crystalpalace-newcastle": {
+            "result": "1",
+            "score": "2-1",
+            "date": "2026-04-12T13:00:00Z",
+            "home": "Crystal Palace",
+            "away": "Newcastle United"
+        },
+        "crystalpalace-newcastleunited": {
+            "result": "1",
+            "score": "2-1",
+            "date": "2026-04-12T13:00:00Z",
+            "home": "Crystal Palace",
+            "away": "Newcastle United"
+        },
+        "sunderland-tottenhamhotspur": {
+            "result": "1",
+            "score": "1-0",
+            "date": "2026-04-12T13:00:00Z",
+            "home": "Sunderland",
+            "away": "Tottenham Hotspur"
+        },
+        "sunderland-tottenham": {
+            "result": "1",
+            "score": "1-0",
+            "date": "2026-04-12T13:00:00Z",
+            "home": "Sunderland",
+            "away": "Tottenham Hotspur"
         }
     }
 }
