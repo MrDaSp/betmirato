@@ -1,20 +1,6 @@
 {
-    "ultimo_aggiornamento": "2026-04-13 16:07:43",
+    "ultimo_aggiornamento": "2026-04-13 21:40:56",
     "risultati": {
-        "asroma-pisa": {
-            "result": "1",
-            "score": "3-0",
-            "date": "2026-04-10T18:45:00Z",
-            "home": "AS Roma",
-            "away": "Pisa"
-        },
-        "roma-pisa": {
-            "result": "1",
-            "score": "3-0",
-            "date": "2026-04-10T18:45:00Z",
-            "home": "AS Roma",
-            "away": "Pisa"
-        },
         "cagliari-cremonese": {
             "result": "1",
             "score": "1-0",
@@ -22,14 +8,14 @@
             "home": "Cagliari",
             "away": "Cremonese"
         },
-        "torino-verona": {
+        "torino-hellasverona": {
             "result": "1",
             "score": "2-1",
             "date": "2026-04-11T13:03:00Z",
             "home": "Torino",
             "away": "Hellas Verona"
         },
-        "torino-hellasverona": {
+        "torino-verona": {
             "result": "1",
             "score": "2-1",
             "date": "2026-04-11T13:03:00Z",
@@ -113,47 +99,19 @@
             "home": "Como",
             "away": "Inter Milan"
         },
-        "westham-wolverhampton": {
+        "fiorentina-lazio": {
             "result": "1",
-            "score": "4-0",
-            "date": "2026-04-10T19:00:00Z",
-            "home": "West Ham United",
-            "away": "Wolverhampton Wanderers"
+            "score": "1-0",
+            "date": "2026-04-13T18:48:00Z",
+            "home": "Fiorentina",
+            "away": "Lazio"
         },
-        "westham-wolverhamptonwanderers": {
+        "fiorentina-sslazio": {
             "result": "1",
-            "score": "4-0",
-            "date": "2026-04-10T19:00:00Z",
-            "home": "West Ham United",
-            "away": "Wolverhampton Wanderers"
-        },
-        "westhamunited-wolverhamptonwanderers": {
-            "result": "1",
-            "score": "4-0",
-            "date": "2026-04-10T19:00:00Z",
-            "home": "West Ham United",
-            "away": "Wolverhampton Wanderers"
-        },
-        "westhamunited-wolverhampton": {
-            "result": "1",
-            "score": "4-0",
-            "date": "2026-04-10T19:00:00Z",
-            "home": "West Ham United",
-            "away": "Wolverhampton Wanderers"
-        },
-        "westhamunited-wolves": {
-            "result": "1",
-            "score": "4-0",
-            "date": "2026-04-10T19:00:00Z",
-            "home": "West Ham United",
-            "away": "Wolverhampton Wanderers"
-        },
-        "westham-wolves": {
-            "result": "1",
-            "score": "4-0",
-            "date": "2026-04-10T19:00:00Z",
-            "home": "West Ham United",
-            "away": "Wolverhampton Wanderers"
+            "score": "1-0",
+            "date": "2026-04-13T18:48:00Z",
+            "home": "Fiorentina",
+            "away": "Lazio"
         },
         "arsenal-afcbournemouth": {
             "result": "2",
@@ -176,14 +134,14 @@
             "home": "Brentford",
             "away": "Everton"
         },
-        "burnley-brightonandhovealbion": {
+        "burnley-brighton": {
             "result": "2",
             "score": "0-2",
             "date": "2026-04-11T14:00:00Z",
             "home": "Burnley",
             "away": "Brighton and Hove Albion"
         },
-        "burnley-brighton": {
+        "burnley-brightonandhovealbion": {
             "result": "2",
             "score": "0-2",
             "date": "2026-04-11T14:00:00Z",
@@ -197,14 +155,14 @@
             "home": "Liverpool",
             "away": "Fulham"
         },
-        "nott'hamforest-astonvilla": {
+        "nottinghamforest-astonvilla": {
             "result": "X",
             "score": "1-1",
             "date": "2026-04-12T13:00:00Z",
             "home": "Nottingham Forest",
             "away": "Aston Villa"
         },
-        "nottinghamforest-astonvilla": {
+        "nott'hamforest-astonvilla": {
             "result": "X",
             "score": "1-1",
             "date": "2026-04-12T13:00:00Z",
@@ -225,14 +183,14 @@
             "home": "Crystal Palace",
             "away": "Newcastle United"
         },
-        "sunderland-tottenhamhotspur": {
+        "sunderland-tottenham": {
             "result": "1",
             "score": "1-0",
             "date": "2026-04-12T13:00:00Z",
             "home": "Sunderland",
             "away": "Tottenham Hotspur"
         },
-        "sunderland-tottenham": {
+        "sunderland-tottenhamhotspur": {
             "result": "1",
             "score": "1-0",
             "date": "2026-04-12T13:00:00Z",
@@ -252,6 +210,48 @@
             "date": "2026-04-12T15:30:00Z",
             "home": "Chelsea",
             "away": "Manchester City"
+        },
+        "manutd-leeds": {
+            "result": "2",
+            "score": "1-2",
+            "date": "2026-04-13T19:00:00Z",
+            "home": "Manchester United",
+            "away": "Leeds United"
+        },
+        "manchesterunited-leedsunited": {
+            "result": "2",
+            "score": "1-2",
+            "date": "2026-04-13T19:00:00Z",
+            "home": "Manchester United",
+            "away": "Leeds United"
+        },
+        "manchesterunited-leeds": {
+            "result": "2",
+            "score": "1-2",
+            "date": "2026-04-13T19:00:00Z",
+            "home": "Manchester United",
+            "away": "Leeds United"
+        },
+        "manutd-leedsunited": {
+            "result": "2",
+            "score": "1-2",
+            "date": "2026-04-13T19:00:00Z",
+            "home": "Manchester United",
+            "away": "Leeds United"
+        },
+        "manunited-leeds": {
+            "result": "2",
+            "score": "1-2",
+            "date": "2026-04-13T19:00:00Z",
+            "home": "Manchester United",
+            "away": "Leeds United"
+        },
+        "manunited-leedsunited": {
+            "result": "2",
+            "score": "1-2",
+            "date": "2026-04-13T19:00:00Z",
+            "home": "Manchester United",
+            "away": "Leeds United"
         }
     }
 }
