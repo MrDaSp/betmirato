@@ -1,5 +1,5 @@
 {
-    "ultimo_aggiornamento": "2026-04-14 21:43:16",
+    "ultimo_aggiornamento": "2026-04-15 09:11:39",
     "risultati": {
         "genoa-sassuolo": {
             "result": "1",
@@ -8,14 +8,14 @@
             "home": "Genoa",
             "away": "Sassuolo"
         },
-        "parma-napoli": {
+        "parma-sscnapoli": {
             "result": "X",
             "score": "1-1",
             "date": "2026-04-12T13:00:00Z",
             "home": "Parma",
             "away": "Napoli"
         },
-        "parma-sscnapoli": {
+        "parma-napoli": {
             "result": "X",
             "score": "1-1",
             "date": "2026-04-12T13:00:00Z",
@@ -64,14 +64,14 @@
             "home": "Fiorentina",
             "away": "Lazio"
         },
-        "nottinghamforest-astonvilla": {
+        "nott'hamforest-astonvilla": {
             "result": "X",
             "score": "1-1",
             "date": "2026-04-12T13:00:00Z",
             "home": "Nottingham Forest",
             "away": "Aston Villa"
         },
-        "nott'hamforest-astonvilla": {
+        "nottinghamforest-astonvilla": {
             "result": "X",
             "score": "1-1",
             "date": "2026-04-12T13:00:00Z",
@@ -120,7 +120,14 @@
             "home": "Chelsea",
             "away": "Manchester City"
         },
-        "manutd-leedsunited": {
+        "manchesterunited-leedsunited": {
+            "result": "2",
+            "score": "1-2",
+            "date": "2026-04-13T19:00:00Z",
+            "home": "Manchester United",
+            "away": "Leeds United"
+        },
+        "manutd-leeds": {
             "result": "2",
             "score": "1-2",
             "date": "2026-04-13T19:00:00Z",
@@ -148,14 +155,7 @@
             "home": "Manchester United",
             "away": "Leeds United"
         },
-        "manchesterunited-leedsunited": {
-            "result": "2",
-            "score": "1-2",
-            "date": "2026-04-13T19:00:00Z",
-            "home": "Manchester United",
-            "away": "Leeds United"
-        },
-        "manutd-leeds": {
+        "manutd-leedsunited": {
             "result": "2",
             "score": "1-2",
             "date": "2026-04-13T19:00:00Z",
