@@ -1,14 +1,14 @@
 {
-    "ultimo_aggiornamento": "2026-04-16 09:10:50",
+    "ultimo_aggiornamento": "2026-04-16 16:17:29",
     "risultati": {
-        "fiorentina-lazio": {
+        "fiorentina-sslazio": {
             "result": "1",
             "score": "1-0",
             "date": "2026-04-13T18:48:00Z",
             "home": "Fiorentina",
             "away": "Lazio"
         },
-        "fiorentina-sslazio": {
+        "fiorentina-lazio": {
             "result": "1",
             "score": "1-0",
             "date": "2026-04-13T18:48:00Z",
@@ -22,7 +22,14 @@
             "home": "Manchester United",
             "away": "Leeds United"
         },
-        "manutd-leeds": {
+        "manchesterunited-leedsunited": {
+            "result": "2",
+            "score": "1-2",
+            "date": "2026-04-13T19:00:00Z",
+            "home": "Manchester United",
+            "away": "Leeds United"
+        },
+        "manchesterunited-leeds": {
             "result": "2",
             "score": "1-2",
             "date": "2026-04-13T19:00:00Z",
@@ -43,14 +50,7 @@
             "home": "Manchester United",
             "away": "Leeds United"
         },
-        "manchesterunited-leeds": {
-            "result": "2",
-            "score": "1-2",
-            "date": "2026-04-13T19:00:00Z",
-            "home": "Manchester United",
-            "away": "Leeds United"
-        },
-        "manchesterunited-leedsunited": {
+        "manutd-leeds": {
             "result": "2",
             "score": "1-2",
             "date": "2026-04-13T19:00:00Z",
