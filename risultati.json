@@ -1,4 +1,33 @@
 {
-    "ultimo_aggiornamento": "2026-04-17 15:53:16",
-    "risultati": {}
+    "ultimo_aggiornamento": "2026-04-17 21:35:16",
+    "risultati": {
+        "sassuolo-como": {
+            "result": "1",
+            "score": "2-1",
+            "date": "2026-04-17T16:31:00Z",
+            "home": "Sassuolo",
+            "away": "Como"
+        },
+        "intermilan-cagliari": {
+            "result": "1",
+            "score": "3-0",
+            "date": "2026-04-17T18:45:00Z",
+            "home": "Inter Milan",
+            "away": "Cagliari"
+        },
+        "inter-cagliari": {
+            "result": "1",
+            "score": "3-0",
+            "date": "2026-04-17T18:45:00Z",
+            "home": "Inter Milan",
+            "away": "Cagliari"
+        },
+        "internazionale-cagliari": {
+            "result": "1",
+            "score": "3-0",
+            "date": "2026-04-17T18:45:00Z",
+            "home": "Inter Milan",
+            "away": "Cagliari"
+        }
+    }
 }
