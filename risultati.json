@@ -1,5 +1,5 @@
 {
-    "ultimo_aggiornamento": "2026-04-18 08:40:38",
+    "ultimo_aggiornamento": "2026-04-18 15:31:34",
     "risultati": {
         "sassuolo-como": {
             "result": "1",
@@ -7,13 +7,6 @@
             "date": "2026-04-17T16:31:00Z",
             "home": "Sassuolo",
             "away": "Como"
-        },
-        "intermilan-cagliari": {
-            "result": "1",
-            "score": "3-0",
-            "date": "2026-04-17T18:45:00Z",
-            "home": "Inter Milan",
-            "away": "Cagliari"
         },
         "internazionale-cagliari": {
             "result": "1",
@@ -28,6 +21,27 @@
             "date": "2026-04-17T18:45:00Z",
             "home": "Inter Milan",
             "away": "Cagliari"
+        },
+        "intermilan-cagliari": {
+            "result": "1",
+            "score": "3-0",
+            "date": "2026-04-17T18:45:00Z",
+            "home": "Inter Milan",
+            "away": "Cagliari"
+        },
+        "udinese-parma": {
+            "result": "2",
+            "score": "0-1",
+            "date": "2026-04-18T13:00:00Z",
+            "home": "Udinese",
+            "away": "Parma"
+        },
+        "brentford-fulham": {
+            "result": "X",
+            "score": "0-0",
+            "date": "2026-04-18T11:31:00Z",
+            "home": "Brentford",
+            "away": "Fulham"
         }
     }
 }
