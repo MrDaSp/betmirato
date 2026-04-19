@@ -1,5 +1,5 @@
 {
-    "ultimo_aggiornamento": "2026-04-18 21:27:07",
+    "ultimo_aggiornamento": "2026-04-19 08:44:06",
     "risultati": {
         "sassuolo-como": {
             "result": "1",
@@ -15,14 +15,14 @@
             "home": "Inter Milan",
             "away": "Cagliari"
         },
-        "intermilan-cagliari": {
+        "internazionale-cagliari": {
             "result": "1",
             "score": "3-0",
             "date": "2026-04-17T18:45:00Z",
             "home": "Inter Milan",
             "away": "Cagliari"
         },
-        "internazionale-cagliari": {
+        "intermilan-cagliari": {
             "result": "1",
             "score": "3-0",
             "date": "2026-04-17T18:45:00Z",
@@ -36,14 +36,7 @@
             "home": "Udinese",
             "away": "Parma"
         },
-        "napoli-lazio": {
-            "result": "2",
-            "score": "0-2",
-            "date": "2026-04-18T16:01:00Z",
-            "home": "Napoli",
-            "away": "Lazio"
-        },
-        "sscnapoli-sslazio": {
+        "sscnapoli-lazio": {
             "result": "2",
             "score": "0-2",
             "date": "2026-04-18T16:01:00Z",
@@ -57,19 +50,19 @@
             "home": "Napoli",
             "away": "Lazio"
         },
-        "sscnapoli-lazio": {
+        "sscnapoli-sslazio": {
             "result": "2",
             "score": "0-2",
             "date": "2026-04-18T16:01:00Z",
             "home": "Napoli",
             "away": "Lazio"
         },
-        "roma-atalantabc": {
-            "result": "X",
-            "score": "1-1",
-            "date": "2026-04-18T18:45:00Z",
-            "home": "AS Roma",
-            "away": "Atalanta BC"
+        "napoli-lazio": {
+            "result": "2",
+            "score": "0-2",
+            "date": "2026-04-18T16:01:00Z",
+            "home": "Napoli",
+            "away": "Lazio"
         },
         "asroma-atalantabc": {
             "result": "X",
@@ -78,7 +71,7 @@
             "home": "AS Roma",
             "away": "Atalanta BC"
         },
-        "asroma-atalanta": {
+        "roma-atalantabc": {
             "result": "X",
             "score": "1-1",
             "date": "2026-04-18T18:45:00Z",
@@ -92,6 +85,13 @@
             "home": "AS Roma",
             "away": "Atalanta BC"
         },
+        "asroma-atalanta": {
+            "result": "X",
+            "score": "1-1",
+            "date": "2026-04-18T18:45:00Z",
+            "home": "AS Roma",
+            "away": "Atalanta BC"
+        },
         "brentford-fulham": {
             "result": "X",
             "score": "0-0",
@@ -99,14 +99,14 @@
             "home": "Brentford",
             "away": "Fulham"
         },
-        "newcastle-bournemouth": {
+        "newcastle-afcbournemouth": {
             "result": "2",
             "score": "1-2",
             "date": "2026-04-18T14:00:00Z",
             "home": "Newcastle United",
             "away": "Bournemouth"
         },
-        "newcastle-afcbournemouth": {
+        "newcastle-bournemouth": {
             "result": "2",
             "score": "1-2",
             "date": "2026-04-18T14:00:00Z",
@@ -127,7 +127,7 @@
             "home": "Newcastle United",
             "away": "Bournemouth"
         },
-        "leeds-wolves": {
+        "leedsunited-wolverhamptonwanderers": {
             "result": "1",
             "score": "3-0",
             "date": "2026-04-18T14:00:00Z",
@@ -141,14 +141,7 @@
             "home": "Leeds United",
             "away": "Wolverhampton Wanderers"
         },
-        "leedsunited-wolverhamptonwanderers": {
-            "result": "1",
-            "score": "3-0",
-            "date": "2026-04-18T14:00:00Z",
-            "home": "Leeds United",
-            "away": "Wolverhampton Wanderers"
-        },
-        "leeds-wolverhamptonwanderers": {
+        "leedsunited-wolverhampton": {
             "result": "1",
             "score": "3-0",
             "date": "2026-04-18T14:00:00Z",
@@ -162,28 +155,21 @@
             "home": "Leeds United",
             "away": "Wolverhampton Wanderers"
         },
-        "leedsunited-wolverhampton": {
+        "leeds-wolves": {
             "result": "1",
             "score": "3-0",
             "date": "2026-04-18T14:00:00Z",
             "home": "Leeds United",
             "away": "Wolverhampton Wanderers"
         },
-        "tottenham-brighton": {
-            "result": "X",
-            "score": "2-2",
-            "date": "2026-04-18T16:30:00Z",
-            "home": "Tottenham Hotspur",
-            "away": "Brighton and Hove Albion"
+        "leeds-wolverhamptonwanderers": {
+            "result": "1",
+            "score": "3-0",
+            "date": "2026-04-18T14:00:00Z",
+            "home": "Leeds United",
+            "away": "Wolverhampton Wanderers"
         },
         "tottenhamhotspur-brighton": {
-            "result": "X",
-            "score": "2-2",
-            "date": "2026-04-18T16:30:00Z",
-            "home": "Tottenham Hotspur",
-            "away": "Brighton and Hove Albion"
-        },
-        "tottenham-brightonandhovealbion": {
             "result": "X",
             "score": "2-2",
             "date": "2026-04-18T16:30:00Z",
@@ -197,6 +183,20 @@
             "home": "Tottenham Hotspur",
             "away": "Brighton and Hove Albion"
         },
+        "tottenham-brightonandhovealbion": {
+            "result": "X",
+            "score": "2-2",
+            "date": "2026-04-18T16:30:00Z",
+            "home": "Tottenham Hotspur",
+            "away": "Brighton and Hove Albion"
+        },
+        "tottenham-brighton": {
+            "result": "X",
+            "score": "2-2",
+            "date": "2026-04-18T16:30:00Z",
+            "home": "Tottenham Hotspur",
+            "away": "Brighton and Hove Albion"
+        },
         "chelsea-manutd": {
             "result": "2",
             "score": "0-1",
@@ -204,14 +204,14 @@
             "home": "Chelsea",
             "away": "Manchester United"
         },
-        "chelsea-manunited": {
+        "chelsea-manchesterunited": {
             "result": "2",
             "score": "0-1",
             "date": "2026-04-18T19:00:00Z",
             "home": "Chelsea",
             "away": "Manchester United"
         },
-        "chelsea-manchesterunited": {
+        "chelsea-manunited": {
             "result": "2",
             "score": "0-1",
             "date": "2026-04-18T19:00:00Z",
