@@ -1,34 +1,6 @@
 {
-    "ultimo_aggiornamento": "2026-04-21 16:06:05",
+    "ultimo_aggiornamento": "2026-04-21 21:38:48",
     "risultati": {
-        "asroma-atalanta": {
-            "result": "X",
-            "score": "1-1",
-            "date": "2026-04-18T18:45:00Z",
-            "home": "AS Roma",
-            "away": "Atalanta BC"
-        },
-        "roma-atalanta": {
-            "result": "X",
-            "score": "1-1",
-            "date": "2026-04-18T18:45:00Z",
-            "home": "AS Roma",
-            "away": "Atalanta BC"
-        },
-        "roma-atalantabc": {
-            "result": "X",
-            "score": "1-1",
-            "date": "2026-04-18T18:45:00Z",
-            "home": "AS Roma",
-            "away": "Atalanta BC"
-        },
-        "asroma-atalantabc": {
-            "result": "X",
-            "score": "1-1",
-            "date": "2026-04-18T18:45:00Z",
-            "home": "AS Roma",
-            "away": "Atalanta BC"
-        },
         "cremonese-torino": {
             "result": "X",
             "score": "0-0",
@@ -36,14 +8,14 @@
             "home": "Cremonese",
             "away": "Torino"
         },
-        "verona-milan": {
+        "hellasverona-acmilan": {
             "result": "2",
             "score": "0-1",
             "date": "2026-04-19T13:02:00Z",
             "home": "Hellas Verona",
             "away": "AC Milan"
         },
-        "hellasverona-milan": {
+        "verona-milan": {
             "result": "2",
             "score": "0-1",
             "date": "2026-04-19T13:02:00Z",
@@ -57,7 +29,7 @@
             "home": "Hellas Verona",
             "away": "AC Milan"
         },
-        "hellasverona-acmilan": {
+        "hellasverona-milan": {
             "result": "2",
             "score": "0-1",
             "date": "2026-04-19T13:02:00Z",
@@ -84,55 +56,6 @@
             "date": "2026-04-20T18:47:00Z",
             "home": "Lecce",
             "away": "Fiorentina"
-        },
-        "tottenham-brighton": {
-            "result": "X",
-            "score": "2-2",
-            "date": "2026-04-18T16:30:00Z",
-            "home": "Tottenham Hotspur",
-            "away": "Brighton and Hove Albion"
-        },
-        "tottenham-brightonandhovealbion": {
-            "result": "X",
-            "score": "2-2",
-            "date": "2026-04-18T16:30:00Z",
-            "home": "Tottenham Hotspur",
-            "away": "Brighton and Hove Albion"
-        },
-        "tottenhamhotspur-brighton": {
-            "result": "X",
-            "score": "2-2",
-            "date": "2026-04-18T16:30:00Z",
-            "home": "Tottenham Hotspur",
-            "away": "Brighton and Hove Albion"
-        },
-        "tottenhamhotspur-brightonandhovealbion": {
-            "result": "X",
-            "score": "2-2",
-            "date": "2026-04-18T16:30:00Z",
-            "home": "Tottenham Hotspur",
-            "away": "Brighton and Hove Albion"
-        },
-        "chelsea-manunited": {
-            "result": "2",
-            "score": "0-1",
-            "date": "2026-04-18T19:00:00Z",
-            "home": "Chelsea",
-            "away": "Manchester United"
-        },
-        "chelsea-manutd": {
-            "result": "2",
-            "score": "0-1",
-            "date": "2026-04-18T19:00:00Z",
-            "home": "Chelsea",
-            "away": "Manchester United"
-        },
-        "chelsea-manchesterunited": {
-            "result": "2",
-            "score": "0-1",
-            "date": "2026-04-18T19:00:00Z",
-            "home": "Chelsea",
-            "away": "Manchester United"
         },
         "astonvilla-sunderland": {
             "result": "1",
@@ -162,14 +85,14 @@
             "home": "Everton",
             "away": "Liverpool"
         },
-        "mancity-arsenal": {
+        "manchestercity-arsenal": {
             "result": "1",
             "score": "2-1",
             "date": "2026-04-19T15:30:00Z",
             "home": "Manchester City",
             "away": "Arsenal"
         },
-        "manchestercity-arsenal": {
+        "mancity-arsenal": {
             "result": "1",
             "score": "2-1",
             "date": "2026-04-19T15:30:00Z",
@@ -189,6 +112,20 @@
             "date": "2026-04-20T19:00:00Z",
             "home": "Crystal Palace",
             "away": "West Ham United"
+        },
+        "brighton-chelsea": {
+            "result": "1",
+            "score": "3-0",
+            "date": "2026-04-21T19:00:00Z",
+            "home": "Brighton and Hove Albion",
+            "away": "Chelsea"
+        },
+        "brightonandhovealbion-chelsea": {
+            "result": "1",
+            "score": "3-0",
+            "date": "2026-04-21T19:00:00Z",
+            "home": "Brighton and Hove Albion",
+            "away": "Chelsea"
         }
     }
 }
