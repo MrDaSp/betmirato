@@ -1,48 +1,6 @@
 {
-    "ultimo_aggiornamento": "2026-04-22 09:13:25",
+    "ultimo_aggiornamento": "2026-04-22 16:04:50",
     "risultati": {
-        "cremonese-torino": {
-            "result": "X",
-            "score": "0-0",
-            "date": "2026-04-19T10:30:00Z",
-            "home": "Cremonese",
-            "away": "Torino"
-        },
-        "verona-milan": {
-            "result": "2",
-            "score": "0-1",
-            "date": "2026-04-19T13:02:00Z",
-            "home": "Hellas Verona",
-            "away": "AC Milan"
-        },
-        "verona-acmilan": {
-            "result": "2",
-            "score": "0-1",
-            "date": "2026-04-19T13:02:00Z",
-            "home": "Hellas Verona",
-            "away": "AC Milan"
-        },
-        "hellasverona-acmilan": {
-            "result": "2",
-            "score": "0-1",
-            "date": "2026-04-19T13:02:00Z",
-            "home": "Hellas Verona",
-            "away": "AC Milan"
-        },
-        "hellasverona-milan": {
-            "result": "2",
-            "score": "0-1",
-            "date": "2026-04-19T13:02:00Z",
-            "home": "Hellas Verona",
-            "away": "AC Milan"
-        },
-        "pisa-genoa": {
-            "result": "2",
-            "score": "1-2",
-            "date": "2026-04-19T16:00:00Z",
-            "home": "Pisa",
-            "away": "Genoa"
-        },
         "juventus-bologna": {
             "result": "1",
             "score": "2-0",
@@ -56,48 +14,6 @@
             "date": "2026-04-20T18:47:00Z",
             "home": "Lecce",
             "away": "Fiorentina"
-        },
-        "astonvilla-sunderland": {
-            "result": "1",
-            "score": "4-3",
-            "date": "2026-04-19T13:00:00Z",
-            "home": "Aston Villa",
-            "away": "Sunderland"
-        },
-        "nottinghamforest-burnley": {
-            "result": "1",
-            "score": "4-1",
-            "date": "2026-04-19T13:00:00Z",
-            "home": "Nottingham Forest",
-            "away": "Burnley"
-        },
-        "nott'hamforest-burnley": {
-            "result": "1",
-            "score": "4-1",
-            "date": "2026-04-19T13:00:00Z",
-            "home": "Nottingham Forest",
-            "away": "Burnley"
-        },
-        "everton-liverpool": {
-            "result": "2",
-            "score": "1-2",
-            "date": "2026-04-19T13:00:00Z",
-            "home": "Everton",
-            "away": "Liverpool"
-        },
-        "manchestercity-arsenal": {
-            "result": "1",
-            "score": "2-1",
-            "date": "2026-04-19T15:30:00Z",
-            "home": "Manchester City",
-            "away": "Arsenal"
-        },
-        "mancity-arsenal": {
-            "result": "1",
-            "score": "2-1",
-            "date": "2026-04-19T15:30:00Z",
-            "home": "Manchester City",
-            "away": "Arsenal"
         },
         "crystalpalace-westham": {
             "result": "X",
@@ -113,14 +29,14 @@
             "home": "Crystal Palace",
             "away": "West Ham United"
         },
-        "brighton-chelsea": {
+        "brightonandhovealbion-chelsea": {
             "result": "1",
             "score": "3-0",
             "date": "2026-04-21T19:00:00Z",
             "home": "Brighton and Hove Albion",
             "away": "Chelsea"
         },
-        "brightonandhovealbion-chelsea": {
+        "brighton-chelsea": {
             "result": "1",
             "score": "3-0",
             "date": "2026-04-21T19:00:00Z",
