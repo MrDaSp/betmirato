@@ -1,5 +1,5 @@
 {
-    "ultimo_aggiornamento": "2026-04-21 21:38:48",
+    "ultimo_aggiornamento": "2026-04-22 09:13:25",
     "risultati": {
         "cremonese-torino": {
             "result": "X",
@@ -7,13 +7,6 @@
             "date": "2026-04-19T10:30:00Z",
             "home": "Cremonese",
             "away": "Torino"
-        },
-        "hellasverona-acmilan": {
-            "result": "2",
-            "score": "0-1",
-            "date": "2026-04-19T13:02:00Z",
-            "home": "Hellas Verona",
-            "away": "AC Milan"
         },
         "verona-milan": {
             "result": "2",
@@ -23,6 +16,13 @@
             "away": "AC Milan"
         },
         "verona-acmilan": {
+            "result": "2",
+            "score": "0-1",
+            "date": "2026-04-19T13:02:00Z",
+            "home": "Hellas Verona",
+            "away": "AC Milan"
+        },
+        "hellasverona-acmilan": {
             "result": "2",
             "score": "0-1",
             "date": "2026-04-19T13:02:00Z",
@@ -99,14 +99,14 @@
             "home": "Manchester City",
             "away": "Arsenal"
         },
-        "crystalpalace-westhamunited": {
+        "crystalpalace-westham": {
             "result": "X",
             "score": "0-0",
             "date": "2026-04-20T19:00:00Z",
             "home": "Crystal Palace",
             "away": "West Ham United"
         },
-        "crystalpalace-westham": {
+        "crystalpalace-westhamunited": {
             "result": "X",
             "score": "0-0",
             "date": "2026-04-20T19:00:00Z",
