@@ -1,13 +1,6 @@
 {
-    "ultimo_aggiornamento": "2026-04-22 16:04:50",
+    "ultimo_aggiornamento": "2026-04-22 21:43:53",
     "risultati": {
-        "juventus-bologna": {
-            "result": "1",
-            "score": "2-0",
-            "date": "2026-04-19T18:45:00Z",
-            "home": "Juventus",
-            "away": "Bologna"
-        },
         "lecce-fiorentina": {
             "result": "X",
             "score": "1-1",
@@ -42,6 +35,48 @@
             "date": "2026-04-21T19:00:00Z",
             "home": "Brighton and Hove Albion",
             "away": "Chelsea"
+        },
+        "bournemouth-leeds": {
+            "result": "X",
+            "score": "2-2",
+            "date": "2026-04-22T19:00:00Z",
+            "home": "Bournemouth",
+            "away": "Leeds United"
+        },
+        "afcbournemouth-leeds": {
+            "result": "X",
+            "score": "2-2",
+            "date": "2026-04-22T19:00:00Z",
+            "home": "Bournemouth",
+            "away": "Leeds United"
+        },
+        "afcbournemouth-leedsunited": {
+            "result": "X",
+            "score": "2-2",
+            "date": "2026-04-22T19:00:00Z",
+            "home": "Bournemouth",
+            "away": "Leeds United"
+        },
+        "bournemouth-leedsunited": {
+            "result": "X",
+            "score": "2-2",
+            "date": "2026-04-22T19:00:00Z",
+            "home": "Bournemouth",
+            "away": "Leeds United"
+        },
+        "burnley-mancity": {
+            "result": "2",
+            "score": "0-1",
+            "date": "2026-04-22T19:00:00Z",
+            "home": "Burnley",
+            "away": "Manchester City"
+        },
+        "burnley-manchestercity": {
+            "result": "2",
+            "score": "0-1",
+            "date": "2026-04-22T19:00:00Z",
+            "home": "Burnley",
+            "away": "Manchester City"
         }
     }
 }

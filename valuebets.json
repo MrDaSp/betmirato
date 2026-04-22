@@ -1,5 +1,5 @@
 {
-    "ultimo_aggiornamento": "2026-04-22 16:04:50",
+    "ultimo_aggiornamento": "2026-04-22 21:43:52",
     "versione_scanner": "2.0",
     "fonti_dati": {
         "quote": "The-Odds-API",
@@ -14,9 +14,9 @@
             "squadra_ospite": "Aston Villa",
             "data_inizio": "2026-04-25 13:30",
             "quote": {
-                "1": 2.68,
+                "1": 2.76,
                 "X": 3.75,
-                "2": 2.74
+                "2": 2.66
             },
             "bookies": {
                 "1": "Betfair",
@@ -27,9 +27,9 @@
             "modificatori": [],
             "dati_verificati": false,
             "prob_full": {
-                "1": 34.32,
-                "X": 32.39,
-                "2": 33.21
+                "1": 32.85,
+                "X": 32.38,
+                "2": 34.69
             },
             "consiglio": {
                 "segno": "X",
@@ -43,83 +43,13 @@
             }
         },
         {
-            "id": "6273cdde58224d3b30e4d2a0a74b72df",
-            "campionato": "Premier League",
-            "squadra_casa": "Manchester United",
-            "squadra_ospite": "Liverpool",
-            "data_inizio": "2026-05-03 16:30",
-            "quote": {
-                "1": 2.4,
-                "X": 3.85,
-                "2": 2.88
-            },
-            "bookies": {
-                "1": "Betfair",
-                "X": "Betfair",
-                "2": "Betfair"
-            },
-            "stats": {},
-            "modificatori": [],
-            "dati_verificati": false,
-            "prob_full": {
-                "1": 38.78,
-                "X": 31.56,
-                "2": 29.57
-            },
-            "consiglio": {
-                "segno": "X",
-                "quota_bookmaker": 3.85,
-                "prob_bookmaker": 26.0,
-                "prob_calcolata": 31.6,
-                "edge": 5.6,
-                "edge_grezzo": 5.6,
-                "semaforo": "verde",
-                "bookmaker": "Betfair"
-            }
-        },
-        {
-            "id": "c5137cd717098fbb38acd0236bc41b34",
-            "campionato": "Premier League",
-            "squadra_casa": "Wolverhampton Wanderers",
-            "squadra_ospite": "Tottenham Hotspur",
-            "data_inizio": "2026-04-25 16:00",
-            "quote": {
-                "1": 4.5,
-                "X": 4.5,
-                "2": 1.78
-            },
-            "bookies": {
-                "1": "Betfair",
-                "X": "Betfair",
-                "2": "Betfair"
-            },
-            "stats": {},
-            "modificatori": [],
-            "dati_verificati": false,
-            "prob_full": {
-                "1": 14.66,
-                "X": 27.41,
-                "2": 57.6
-            },
-            "consiglio": {
-                "segno": "X",
-                "quota_bookmaker": 4.5,
-                "prob_bookmaker": 22.2,
-                "prob_calcolata": 27.4,
-                "edge": 5.2,
-                "edge_grezzo": 5.2,
-                "semaforo": "verde",
-                "bookmaker": "Betfair"
-            }
-        },
-        {
             "id": "82a45989e8b145f27fbd7932180e1121",
             "campionato": "Premier League",
             "squadra_casa": "Aston Villa",
             "squadra_ospite": "Tottenham Hotspur",
             "data_inizio": "2026-05-03 20:00",
             "quote": {
-                "1": 2.12,
+                "1": 2.14,
                 "X": 3.9,
                 "2": 3.35
             },
@@ -132,15 +62,50 @@
             "modificatori": [],
             "dati_verificati": false,
             "prob_full": {
-                "1": 46.01,
-                "X": 30.53,
-                "2": 23.32
+                "1": 45.68,
+                "X": 30.68,
+                "2": 23.5
             },
             "consiglio": {
                 "segno": "X",
                 "quota_bookmaker": 3.9,
                 "prob_bookmaker": 25.6,
-                "prob_calcolata": 30.5,
+                "prob_calcolata": 30.7,
+                "edge": 5.0,
+                "edge_grezzo": 5.0,
+                "semaforo": "verde",
+                "bookmaker": "Betfair"
+            }
+        },
+        {
+            "id": "c5137cd717098fbb38acd0236bc41b34",
+            "campionato": "Premier League",
+            "squadra_casa": "Wolverhampton Wanderers",
+            "squadra_ospite": "Tottenham Hotspur",
+            "data_inizio": "2026-04-25 16:00",
+            "quote": {
+                "1": 4.6,
+                "X": 4.5,
+                "2": 1.76
+            },
+            "bookies": {
+                "1": "Betfair",
+                "X": "Betfair",
+                "2": "Betfair"
+            },
+            "stats": {},
+            "modificatori": [],
+            "dati_verificati": false,
+            "prob_full": {
+                "1": 14.15,
+                "X": 27.14,
+                "2": 58.36
+            },
+            "consiglio": {
+                "segno": "X",
+                "quota_bookmaker": 4.5,
+                "prob_bookmaker": 22.2,
+                "prob_calcolata": 27.1,
                 "edge": 4.9,
                 "edge_grezzo": 4.9,
                 "semaforo": "gialla",
@@ -180,6 +145,41 @@
                 "edge_grezzo": 4.6,
                 "semaforo": "gialla",
                 "bookmaker": "Betfair"
+            }
+        },
+        {
+            "id": "6273cdde58224d3b30e4d2a0a74b72df",
+            "campionato": "Premier League",
+            "squadra_casa": "Manchester United",
+            "squadra_ospite": "Liverpool",
+            "data_inizio": "2026-05-03 16:30",
+            "quote": {
+                "1": 2.56,
+                "X": 3.6,
+                "2": 2.86
+            },
+            "bookies": {
+                "1": "Betfair",
+                "X": "William Hill",
+                "2": "Betfair"
+            },
+            "stats": {},
+            "modificatori": [],
+            "dati_verificati": false,
+            "prob_full": {
+                "1": 36.58,
+                "X": 32.28,
+                "2": 31.07
+            },
+            "consiglio": {
+                "segno": "X",
+                "quota_bookmaker": 3.6,
+                "prob_bookmaker": 27.8,
+                "prob_calcolata": 32.3,
+                "edge": 4.5,
+                "edge_grezzo": 4.5,
+                "semaforo": "gialla",
+                "bookmaker": "William Hill"
             }
         },
         {
@@ -224,7 +224,7 @@
             "squadra_ospite": "Brentford",
             "data_inizio": "2026-04-27 21:00",
             "quote": {
-                "1": 1.91,
+                "1": 1.92,
                 "X": 4.0,
                 "2": 4.2
             },
@@ -237,122 +237,17 @@
             "modificatori": [],
             "dati_verificati": false,
             "prob_full": {
-                "1": 53.87,
-                "X": 28.97,
-                "2": 16.93
+                "1": 53.68,
+                "X": 29.08,
+                "2": 17.01
             },
             "consiglio": {
                 "segno": "X",
                 "quota_bookmaker": 4.0,
                 "prob_bookmaker": 25.0,
-                "prob_calcolata": 29.0,
-                "edge": 4.0,
-                "edge_grezzo": 4.0,
-                "semaforo": "gialla",
-                "bookmaker": "Betfair"
-            }
-        },
-        {
-            "id": "09d5570dec06194bdd8124831b9deb5a",
-            "campionato": "Premier League",
-            "squadra_casa": "Everton",
-            "squadra_ospite": "Manchester City",
-            "data_inizio": "2026-05-04 21:00",
-            "quote": {
-                "1": 6.2,
-                "X": 4.3,
-                "2": 1.63
-            },
-            "bookies": {
-                "1": "Betfair",
-                "X": "Betfair",
-                "2": "Betfair"
-            },
-            "stats": {},
-            "modificatori": [],
-            "dati_verificati": false,
-            "prob_full": {
-                "1": 9.44,
-                "X": 24.81,
-                "2": 65.26
-            },
-            "consiglio": {
-                "segno": "2",
-                "quota_bookmaker": 1.63,
-                "prob_bookmaker": 61.3,
-                "prob_calcolata": 65.3,
-                "edge": 3.9,
-                "edge_grezzo": 3.9,
-                "semaforo": "gialla",
-                "bookmaker": "Betfair"
-            }
-        },
-        {
-            "id": "699bf1a1a9eb1b2ed120fea0c2225ddf",
-            "campionato": "Premier League",
-            "squadra_casa": "Chelsea",
-            "squadra_ospite": "Nottingham Forest",
-            "data_inizio": "2026-05-04 16:00",
-            "quote": {
-                "1": 1.84,
-                "X": 4.1,
-                "2": 4.5
-            },
-            "bookies": {
-                "1": "Betfair",
-                "X": "Betfair",
-                "2": "William Hill"
-            },
-            "stats": {},
-            "modificatori": [],
-            "dati_verificati": false,
-            "prob_full": {
-                "1": 56.38,
-                "X": 28.16,
-                "2": 15.18
-            },
-            "consiglio": {
-                "segno": "X",
-                "quota_bookmaker": 4.1,
-                "prob_bookmaker": 24.4,
-                "prob_calcolata": 28.2,
-                "edge": 3.8,
-                "edge_grezzo": 3.8,
-                "semaforo": "gialla",
-                "bookmaker": "Betfair"
-            }
-        },
-        {
-            "id": "4a1a7f4a60859fc3ecc69d05f5729556",
-            "campionato": "Premier League",
-            "squadra_casa": "Burnley",
-            "squadra_ospite": "Manchester City",
-            "data_inizio": "2026-04-22 21:00",
-            "quote": {
-                "1": 21.0,
-                "X": 10.5,
-                "2": 1.16
-            },
-            "bookies": {
-                "1": "Betfair",
-                "X": "Betfair",
-                "2": "Betfair"
-            },
-            "stats": {},
-            "modificatori": [],
-            "dati_verificati": false,
-            "prob_full": {
-                "1": 1.47,
-                "X": 13.1,
-                "2": 83.14
-            },
-            "consiglio": {
-                "segno": "X",
-                "quota_bookmaker": 10.5,
-                "prob_bookmaker": 9.5,
-                "prob_calcolata": 13.1,
-                "edge": 3.6,
-                "edge_grezzo": 3.6,
+                "prob_calcolata": 29.1,
+                "edge": 4.1,
+                "edge_grezzo": 4.1,
                 "semaforo": "gialla",
                 "bookmaker": "Betfair"
             }
@@ -393,15 +288,15 @@
             }
         },
         {
-            "id": "690fef3d62fc4c8015481626d5aab274",
-            "campionato": "Premier League",
-            "squadra_casa": "Bournemouth",
-            "squadra_ospite": "Leeds United",
-            "data_inizio": "2026-04-22 21:00",
+            "id": "20842ac2a58d66de639f359e26217e33",
+            "campionato": "Serie A",
+            "squadra_casa": "Napoli",
+            "squadra_ospite": "Cremonese",
+            "data_inizio": "2026-04-24 20:45",
             "quote": {
-                "1": 2.02,
-                "X": 3.75,
-                "2": 4.0
+                "1": 1.36,
+                "X": 5.4,
+                "2": 12.0
             },
             "bookies": {
                 "1": "Betfair",
@@ -412,15 +307,15 @@
             "modificatori": [],
             "dati_verificati": false,
             "prob_full": {
-                "1": 50.99,
-                "X": 30.07,
-                "2": 18.76
+                "1": 76.92,
+                "X": 18.36,
+                "2": 3.58
             },
             "consiglio": {
-                "segno": "X",
-                "quota_bookmaker": 3.75,
-                "prob_bookmaker": 26.7,
-                "prob_calcolata": 30.1,
+                "segno": "1",
+                "quota_bookmaker": 1.36,
+                "prob_bookmaker": 73.5,
+                "prob_calcolata": 76.9,
                 "edge": 3.4,
                 "edge_grezzo": 3.4,
                 "semaforo": "gialla",
@@ -428,15 +323,50 @@
             }
         },
         {
-            "id": "eaaf4ed0986f4f5414fc727f5c235d48",
+            "id": "09d5570dec06194bdd8124831b9deb5a",
             "campionato": "Premier League",
-            "squadra_casa": "Leeds United",
-            "squadra_ospite": "Burnley",
-            "data_inizio": "2026-05-01 21:00",
+            "squadra_casa": "Everton",
+            "squadra_ospite": "Manchester City",
+            "data_inizio": "2026-05-04 21:00",
             "quote": {
-                "1": 1.51,
-                "X": 4.5,
-                "2": 7.2
+                "1": 6.4,
+                "X": 4.6,
+                "2": 1.57
+            },
+            "bookies": {
+                "1": "Betfair",
+                "X": "Betfair",
+                "2": "William Hill"
+            },
+            "stats": {},
+            "modificatori": [],
+            "dati_verificati": false,
+            "prob_full": {
+                "1": 8.69,
+                "X": 23.76,
+                "2": 66.96
+            },
+            "consiglio": {
+                "segno": "2",
+                "quota_bookmaker": 1.57,
+                "prob_bookmaker": 63.7,
+                "prob_calcolata": 67.0,
+                "edge": 3.3,
+                "edge_grezzo": 3.3,
+                "semaforo": "gialla",
+                "bookmaker": "William Hill"
+            }
+        },
+        {
+            "id": "8a5b7d24683637ab7350fe8a20af1a62",
+            "campionato": "Premier League",
+            "squadra_casa": "Liverpool",
+            "squadra_ospite": "Crystal Palace",
+            "data_inizio": "2026-04-25 16:00",
+            "quote": {
+                "1": 1.48,
+                "X": 5.3,
+                "2": 6.8
             },
             "bookies": {
                 "1": "Betfair",
@@ -447,17 +377,87 @@
             "modificatori": [],
             "dati_verificati": false,
             "prob_full": {
-                "1": 69.58,
-                "X": 22.44,
-                "2": 7.27
+                "1": 69.66,
+                "X": 22.05,
+                "2": 7.51
             },
             "consiglio": {
-                "segno": "1",
-                "quota_bookmaker": 1.51,
-                "prob_bookmaker": 66.2,
-                "prob_calcolata": 69.6,
-                "edge": 3.4,
-                "edge_grezzo": 3.4,
+                "segno": "X",
+                "quota_bookmaker": 5.3,
+                "prob_bookmaker": 18.9,
+                "prob_calcolata": 22.1,
+                "edge": 3.2,
+                "edge_grezzo": 3.2,
+                "semaforo": "gialla",
+                "bookmaker": "Betfair"
+            }
+        },
+        {
+            "id": "76829fec3394b52a992b0a21eedbccf6",
+            "campionato": "Premier League",
+            "squadra_casa": "Arsenal",
+            "squadra_ospite": "Newcastle United",
+            "data_inizio": "2026-04-25 18:30",
+            "quote": {
+                "1": 1.52,
+                "X": 5.1,
+                "2": 6.6
+            },
+            "bookies": {
+                "1": "Betfair",
+                "X": "Betfair",
+                "2": "Betfair"
+            },
+            "stats": {},
+            "modificatori": [],
+            "dati_verificati": false,
+            "prob_full": {
+                "1": 68.43,
+                "X": 22.83,
+                "2": 8.05
+            },
+            "consiglio": {
+                "segno": "X",
+                "quota_bookmaker": 5.1,
+                "prob_bookmaker": 19.6,
+                "prob_calcolata": 22.8,
+                "edge": 3.2,
+                "edge_grezzo": 3.2,
+                "semaforo": "gialla",
+                "bookmaker": "Betfair"
+            }
+        },
+        {
+            "id": "8a9614a1c1dd66d813d98f08f3d7efd8",
+            "campionato": "Serie A",
+            "squadra_casa": "Bologna",
+            "squadra_ospite": "AS Roma",
+            "data_inizio": "2026-04-25 18:00",
+            "quote": {
+                "1": 3.15,
+                "X": 3.35,
+                "2": 2.54
+            },
+            "bookies": {
+                "1": "Betfair",
+                "X": "Betfair",
+                "2": "Betfair"
+            },
+            "stats": {},
+            "modificatori": [],
+            "dati_verificati": false,
+            "prob_full": {
+                "1": 28.3,
+                "X": 32.91,
+                "2": 38.71
+            },
+            "consiglio": {
+                "segno": "X",
+                "quota_bookmaker": 3.35,
+                "prob_bookmaker": 29.9,
+                "prob_calcolata": 32.9,
+                "edge": 3.1,
+                "edge_grezzo": 3.1,
                 "semaforo": "gialla",
                 "bookmaker": "Betfair"
             }
@@ -469,43 +469,8 @@
             "squadra_ospite": "Atalanta BC",
             "data_inizio": "2026-04-27 18:30",
             "quote": {
-                "1": 5.1,
-                "X": 3.85,
-                "2": 1.77
-            },
-            "bookies": {
-                "1": "Betfair",
-                "X": "Betfair",
-                "2": "Betfair"
-            },
-            "stats": {},
-            "modificatori": [],
-            "dati_verificati": false,
-            "prob_full": {
-                "1": 12.79,
-                "X": 27.18,
-                "2": 59.7
-            },
-            "consiglio": {
-                "segno": "2",
-                "quota_bookmaker": 1.77,
-                "prob_bookmaker": 56.5,
-                "prob_calcolata": 59.7,
-                "edge": 3.2,
-                "edge_grezzo": 3.2,
-                "semaforo": "gialla",
-                "bookmaker": "Betfair"
-            }
-        },
-        {
-            "id": "b0d1e670b682b0ed37d6b0bc271efa6a",
-            "campionato": "Serie A",
-            "squadra_casa": "Genoa",
-            "squadra_ospite": "Como",
-            "data_inizio": "2026-04-26 15:00",
-            "quote": {
                 "1": 4.9,
-                "X": 3.9,
+                "X": 3.75,
                 "2": 1.82
             },
             "bookies": {
@@ -568,6 +533,41 @@
             }
         },
         {
+            "id": "b0d1e670b682b0ed37d6b0bc271efa6a",
+            "campionato": "Serie A",
+            "squadra_casa": "Genoa",
+            "squadra_ospite": "Como",
+            "data_inizio": "2026-04-26 15:00",
+            "quote": {
+                "1": 4.9,
+                "X": 3.9,
+                "2": 1.81
+            },
+            "bookies": {
+                "1": "Betfair",
+                "X": "Betfair",
+                "2": "Betfair"
+            },
+            "stats": {},
+            "modificatori": [],
+            "dati_verificati": false,
+            "prob_full": {
+                "1": 13.66,
+                "X": 27.74,
+                "2": 58.29
+            },
+            "consiglio": {
+                "segno": "2",
+                "quota_bookmaker": 1.81,
+                "prob_bookmaker": 55.2,
+                "prob_calcolata": 58.3,
+                "edge": 3.0,
+                "edge_grezzo": 3.0,
+                "semaforo": "gialla",
+                "bookmaker": "Betfair"
+            }
+        },
+        {
             "id": "8b2db66328633438dcd0b0cb30f8f3df",
             "campionato": "Serie A",
             "squadra_casa": "Torino",
@@ -596,6 +596,41 @@
                 "quota_bookmaker": 1.45,
                 "prob_bookmaker": 69.0,
                 "prob_calcolata": 72.0,
+                "edge": 3.0,
+                "edge_grezzo": 3.0,
+                "semaforo": "gialla",
+                "bookmaker": "Betfair"
+            }
+        },
+        {
+            "id": "eaaf4ed0986f4f5414fc727f5c235d48",
+            "campionato": "Premier League",
+            "squadra_casa": "Leeds United",
+            "squadra_ospite": "Burnley",
+            "data_inizio": "2026-05-01 21:00",
+            "quote": {
+                "1": 1.46,
+                "X": 4.7,
+                "2": 7.8
+            },
+            "bookies": {
+                "1": "Betfair",
+                "X": "Betfair",
+                "2": "Betfair"
+            },
+            "stats": {},
+            "modificatori": [],
+            "dati_verificati": false,
+            "prob_full": {
+                "1": 71.49,
+                "X": 21.33,
+                "2": 6.35
+            },
+            "consiglio": {
+                "segno": "1",
+                "quota_bookmaker": 1.46,
+                "prob_bookmaker": 68.5,
+                "prob_calcolata": 71.5,
                 "edge": 3.0,
                 "edge_grezzo": 3.0,
                 "semaforo": "gialla",
@@ -638,76 +673,6 @@
             }
         },
         {
-            "id": "20842ac2a58d66de639f359e26217e33",
-            "campionato": "Serie A",
-            "squadra_casa": "Napoli",
-            "squadra_ospite": "Cremonese",
-            "data_inizio": "2026-04-24 20:45",
-            "quote": {
-                "1": 1.36,
-                "X": 5.5,
-                "2": 11.0
-            },
-            "bookies": {
-                "1": "Betfair",
-                "X": "Betfair",
-                "2": "Betfair"
-            },
-            "stats": {},
-            "modificatori": [],
-            "dati_verificati": false,
-            "prob_full": {
-                "1": 76.38,
-                "X": 18.55,
-                "2": 3.93
-            },
-            "consiglio": {
-                "segno": "1",
-                "quota_bookmaker": 1.36,
-                "prob_bookmaker": 73.5,
-                "prob_calcolata": 76.4,
-                "edge": 2.9,
-                "edge_grezzo": 2.9,
-                "semaforo": "gialla",
-                "bookmaker": "Betfair"
-            }
-        },
-        {
-            "id": "8a9614a1c1dd66d813d98f08f3d7efd8",
-            "campionato": "Serie A",
-            "squadra_casa": "Bologna",
-            "squadra_ospite": "AS Roma",
-            "data_inizio": "2026-04-25 18:00",
-            "quote": {
-                "1": 3.1,
-                "X": 3.35,
-                "2": 2.54
-            },
-            "bookies": {
-                "1": "Betfair",
-                "X": "Betfair",
-                "2": "Betfair"
-            },
-            "stats": {},
-            "modificatori": [],
-            "dati_verificati": false,
-            "prob_full": {
-                "1": 28.72,
-                "X": 32.8,
-                "2": 38.41
-            },
-            "consiglio": {
-                "segno": "X",
-                "quota_bookmaker": 3.35,
-                "prob_bookmaker": 29.9,
-                "prob_calcolata": 32.8,
-                "edge": 2.9,
-                "edge_grezzo": 2.9,
-                "semaforo": "gialla",
-                "bookmaker": "Betfair"
-            }
-        },
-        {
             "id": "161f9baeab748dcfa4d2df893f14b25b",
             "campionato": "Serie A",
             "squadra_casa": "Fiorentina",
@@ -743,15 +708,15 @@
             }
         },
         {
-            "id": "8a5b7d24683637ab7350fe8a20af1a62",
-            "campionato": "Premier League",
-            "squadra_casa": "Liverpool",
-            "squadra_ospite": "Crystal Palace",
-            "data_inizio": "2026-04-25 16:00",
+            "id": "aa8294b91a1920474d420d34851aaceb",
+            "campionato": "Serie A",
+            "squadra_casa": "Lazio",
+            "squadra_ospite": "Udinese",
+            "data_inizio": "2026-04-27 20:45",
             "quote": {
-                "1": 1.49,
-                "X": 5.2,
-                "2": 7.0
+                "1": 2.08,
+                "X": 3.3,
+                "2": 4.2
             },
             "bookies": {
                 "1": "Betfair",
@@ -762,34 +727,34 @@
             "modificatori": [],
             "dati_verificati": false,
             "prob_full": {
-                "1": 69.74,
-                "X": 22.15,
-                "2": 7.35
+                "1": 50.76,
+                "X": 30.73,
+                "2": 18.35
             },
             "consiglio": {
-                "segno": "X",
-                "quota_bookmaker": 5.2,
-                "prob_bookmaker": 19.2,
-                "prob_calcolata": 22.1,
-                "edge": 2.9,
-                "edge_grezzo": 2.9,
+                "segno": "1",
+                "quota_bookmaker": 2.08,
+                "prob_bookmaker": 48.1,
+                "prob_calcolata": 50.8,
+                "edge": 2.7,
+                "edge_grezzo": 2.7,
                 "semaforo": "gialla",
                 "bookmaker": "Betfair"
             }
         },
         {
-            "id": "76829fec3394b52a992b0a21eedbccf6",
+            "id": "ac1ca15f14b17edc746f8c6e994b0155",
             "campionato": "Premier League",
-            "squadra_casa": "Arsenal",
-            "squadra_ospite": "Newcastle United",
-            "data_inizio": "2026-04-25 18:30",
+            "squadra_casa": "Bournemouth",
+            "squadra_ospite": "Crystal Palace",
+            "data_inizio": "2026-05-03 15:00",
             "quote": {
-                "1": 1.53,
-                "X": 4.9,
-                "2": 6.4
+                "1": 1.75,
+                "X": 4.1,
+                "2": 4.4
             },
             "bookies": {
-                "1": "Betfair",
+                "1": "William Hill",
                 "X": "Betfair",
                 "2": "Betfair"
             },
@@ -797,15 +762,15 @@
             "modificatori": [],
             "dati_verificati": false,
             "prob_full": {
-                "1": 67.86,
-                "X": 23.08,
-                "2": 8.4
+                "1": 57.87,
+                "X": 27.05,
+                "2": 14.73
             },
             "consiglio": {
                 "segno": "X",
-                "quota_bookmaker": 4.9,
-                "prob_bookmaker": 20.4,
-                "prob_calcolata": 23.1,
+                "quota_bookmaker": 4.1,
+                "prob_bookmaker": 24.4,
+                "prob_calcolata": 27.1,
                 "edge": 2.7,
                 "edge_grezzo": 2.7,
                 "semaforo": "gialla",
@@ -848,34 +813,34 @@
             }
         },
         {
-            "id": "aa8294b91a1920474d420d34851aaceb",
-            "campionato": "Serie A",
-            "squadra_casa": "Lazio",
-            "squadra_ospite": "Udinese",
-            "data_inizio": "2026-04-27 20:45",
+            "id": "699bf1a1a9eb1b2ed120fea0c2225ddf",
+            "campionato": "Premier League",
+            "squadra_casa": "Chelsea",
+            "squadra_ospite": "Nottingham Forest",
+            "data_inizio": "2026-05-04 16:00",
             "quote": {
-                "1": 2.04,
-                "X": 3.35,
-                "2": 4.2
+                "1": 1.79,
+                "X": 4.0,
+                "2": 4.5
             },
             "bookies": {
                 "1": "Betfair",
                 "X": "Betfair",
-                "2": "Betfair"
+                "2": "William Hill"
             },
             "stats": {},
             "modificatori": [],
             "dati_verificati": false,
             "prob_full": {
-                "1": 51.47,
-                "X": 30.34,
-                "2": 18.03
+                "1": 57.39,
+                "X": 27.54,
+                "2": 14.75
             },
             "consiglio": {
-                "segno": "1",
-                "quota_bookmaker": 2.04,
-                "prob_bookmaker": 49.0,
-                "prob_calcolata": 51.5,
+                "segno": "X",
+                "quota_bookmaker": 4.0,
+                "prob_bookmaker": 25.0,
+                "prob_calcolata": 27.5,
                 "edge": 2.5,
                 "edge_grezzo": 2.5,
                 "semaforo": "gialla",
@@ -890,7 +855,7 @@
             "data_inizio": "2026-04-25 15:00",
             "quote": {
                 "1": 2.16,
-                "X": 3.25,
+                "X": 3.3,
                 "2": 4.0
             },
             "bookies": {
@@ -918,50 +883,15 @@
             }
         },
         {
-            "id": "ac1ca15f14b17edc746f8c6e994b0155",
-            "campionato": "Premier League",
-            "squadra_casa": "Bournemouth",
-            "squadra_ospite": "Crystal Palace",
-            "data_inizio": "2026-05-03 15:00",
-            "quote": {
-                "1": 1.75,
-                "X": 4.0,
-                "2": 4.1
-            },
-            "bookies": {
-                "1": "William Hill",
-                "X": "William Hill",
-                "2": "Betfair"
-            },
-            "stats": {},
-            "modificatori": [],
-            "dati_verificati": false,
-            "prob_full": {
-                "1": 56.7,
-                "X": 27.09,
-                "2": 15.85
-            },
-            "consiglio": {
-                "segno": "X",
-                "quota_bookmaker": 4.0,
-                "prob_bookmaker": 25.0,
-                "prob_calcolata": 27.1,
-                "edge": 2.1,
-                "edge_grezzo": 2.1,
-                "semaforo": "gialla",
-                "bookmaker": "William Hill"
-            }
-        },
-        {
             "id": "5744a34d60a47f720af59a055dab12c5",
             "campionato": "Serie A",
             "squadra_casa": "Hellas Verona",
             "squadra_ospite": "Lecce",
             "data_inizio": "2026-04-25 20:45",
             "quote": {
-                "1": 2.9,
+                "1": 2.88,
                 "X": 3.1,
-                "2": 2.94
+                "2": 2.96
             },
             "bookies": {
                 "1": "Betfair",
@@ -972,9 +902,9 @@
             "modificatori": [],
             "dati_verificati": false,
             "prob_full": {
-                "1": 33.35,
-                "X": 33.9,
-                "2": 32.7
+                "1": 33.68,
+                "X": 33.89,
+                "2": 32.37
             },
             "consiglio": {
                 "segno": "X",
@@ -1058,6 +988,41 @@
             }
         },
         {
+            "id": "16fa5da1e64cdb028c84396beecbb633",
+            "campionato": "Serie A",
+            "squadra_casa": "Como",
+            "squadra_ospite": "Napoli",
+            "data_inizio": "2026-05-02 18:00",
+            "quote": {
+                "1": 2.25,
+                "X": 3.3,
+                "2": 3.15
+            },
+            "bookies": {
+                "1": "William Hill",
+                "X": "William Hill",
+                "2": "Betfair"
+            },
+            "stats": {},
+            "modificatori": [],
+            "dati_verificati": false,
+            "prob_full": {
+                "1": 42.73,
+                "X": 31.21,
+                "2": 25.94
+            },
+            "consiglio": {
+                "segno": "X",
+                "quota_bookmaker": 3.3,
+                "prob_bookmaker": 30.3,
+                "prob_calcolata": 31.2,
+                "edge": 0.9,
+                "edge_grezzo": 0.9,
+                "semaforo": "gialla",
+                "bookmaker": "William Hill"
+            }
+        },
+        {
             "id": "1645356fdf0baa021e2808442260afb3",
             "campionato": "Serie A",
             "squadra_casa": "Atalanta BC",
@@ -1128,41 +1093,6 @@
             }
         },
         {
-            "id": "16fa5da1e64cdb028c84396beecbb633",
-            "campionato": "Serie A",
-            "squadra_casa": "Como",
-            "squadra_ospite": "Napoli",
-            "data_inizio": "2026-05-02 18:00",
-            "quote": {
-                "1": 2.25,
-                "X": 3.3,
-                "2": 2.9
-            },
-            "bookies": {
-                "1": "William Hill",
-                "X": "William Hill",
-                "2": "William Hill"
-            },
-            "stats": {},
-            "modificatori": [],
-            "dati_verificati": false,
-            "prob_full": {
-                "1": 41.05,
-                "X": 30.77,
-                "2": 28.05
-            },
-            "consiglio": {
-                "segno": "X",
-                "quota_bookmaker": 3.3,
-                "prob_bookmaker": 30.3,
-                "prob_calcolata": 30.8,
-                "edge": 0.5,
-                "edge_grezzo": 0.5,
-                "semaforo": "gialla",
-                "bookmaker": "William Hill"
-            }
-        },
-        {
             "id": "607bd701c9fdd9952ad391bbf5543997",
             "campionato": "Serie A",
             "squadra_casa": "AS Roma",
@@ -1206,7 +1136,7 @@
             "quote": {
                 "1": 2.74,
                 "X": 3.0,
-                "2": 2.96
+                "2": 2.98
             },
             "bookies": {
                 "1": "Betfair",
@@ -1217,17 +1147,17 @@
             "modificatori": [],
             "dati_verificati": false,
             "prob_full": {
-                "1": 35.16,
-                "X": 33.35,
-                "2": 31.43
+                "1": 35.29,
+                "X": 33.41,
+                "2": 31.24
             },
             "consiglio": {
                 "segno": "X",
                 "quota_bookmaker": 3.0,
                 "prob_bookmaker": 33.3,
                 "prob_calcolata": 33.4,
-                "edge": 0.0,
-                "edge_grezzo": 0.0,
+                "edge": 0.1,
+                "edge_grezzo": 0.1,
                 "semaforo": "gialla",
                 "bookmaker": "Betfair"
             }
@@ -1239,30 +1169,30 @@
             "squadra_ospite": "Torino",
             "data_inizio": "2026-05-02 15:00",
             "quote": {
-                "1": 2.22,
-                "X": 3.1,
+                "1": 2.24,
+                "X": 3.15,
                 "2": 3.45
             },
             "bookies": {
                 "1": "Betfair",
-                "X": "William Hill",
+                "X": "Betfair",
                 "2": "Betfair"
             },
             "stats": {},
             "modificatori": [],
             "dati_verificati": false,
             "prob_full": {
-                "1": 44.95,
-                "X": 31.4,
-                "2": 23.53
+                "1": 44.64,
+                "X": 31.55,
+                "2": 23.7
             },
             "consiglio": {
                 "segno": "1",
-                "quota_bookmaker": 2.22,
-                "prob_bookmaker": 45.0,
-                "prob_calcolata": 45.0,
-                "edge": -0.1,
-                "edge_grezzo": -0.1,
+                "quota_bookmaker": 2.24,
+                "prob_bookmaker": 44.6,
+                "prob_calcolata": 44.6,
+                "edge": -0.0,
+                "edge_grezzo": -0.0,
                 "semaforo": "rossa",
                 "bookmaker": "Betfair"
             }
