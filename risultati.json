@@ -1,5 +1,5 @@
 {
-    "ultimo_aggiornamento": "2026-04-22 21:43:53",
+    "ultimo_aggiornamento": "2026-04-23 09:19:52",
     "risultati": {
         "lecce-fiorentina": {
             "result": "X",
@@ -22,13 +22,6 @@
             "home": "Crystal Palace",
             "away": "West Ham United"
         },
-        "brightonandhovealbion-chelsea": {
-            "result": "1",
-            "score": "3-0",
-            "date": "2026-04-21T19:00:00Z",
-            "home": "Brighton and Hove Albion",
-            "away": "Chelsea"
-        },
         "brighton-chelsea": {
             "result": "1",
             "score": "3-0",
@@ -36,12 +29,12 @@
             "home": "Brighton and Hove Albion",
             "away": "Chelsea"
         },
-        "bournemouth-leeds": {
-            "result": "X",
-            "score": "2-2",
-            "date": "2026-04-22T19:00:00Z",
-            "home": "Bournemouth",
-            "away": "Leeds United"
+        "brightonandhovealbion-chelsea": {
+            "result": "1",
+            "score": "3-0",
+            "date": "2026-04-21T19:00:00Z",
+            "home": "Brighton and Hove Albion",
+            "away": "Chelsea"
         },
         "afcbournemouth-leeds": {
             "result": "X",
@@ -57,6 +50,13 @@
             "home": "Bournemouth",
             "away": "Leeds United"
         },
+        "bournemouth-leeds": {
+            "result": "X",
+            "score": "2-2",
+            "date": "2026-04-22T19:00:00Z",
+            "home": "Bournemouth",
+            "away": "Leeds United"
+        },
         "bournemouth-leedsunited": {
             "result": "X",
             "score": "2-2",
@@ -64,14 +64,14 @@
             "home": "Bournemouth",
             "away": "Leeds United"
         },
-        "burnley-mancity": {
+        "burnley-manchestercity": {
             "result": "2",
             "score": "0-1",
             "date": "2026-04-22T19:00:00Z",
             "home": "Burnley",
             "away": "Manchester City"
         },
-        "burnley-manchestercity": {
+        "burnley-mancity": {
             "result": "2",
             "score": "0-1",
             "date": "2026-04-22T19:00:00Z",
