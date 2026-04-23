@@ -1,26 +1,12 @@
 {
-    "ultimo_aggiornamento": "2026-04-23 16:25:37",
+    "ultimo_aggiornamento": "2026-04-23 21:39:28",
     "risultati": {
-        "lecce-fiorentina": {
-            "result": "X",
-            "score": "1-1",
-            "date": "2026-04-20T18:47:00Z",
-            "home": "Lecce",
-            "away": "Fiorentina"
-        },
-        "crystalpalace-westhamunited": {
-            "result": "X",
-            "score": "0-0",
-            "date": "2026-04-20T19:00:00Z",
-            "home": "Crystal Palace",
-            "away": "West Ham United"
-        },
-        "crystalpalace-westham": {
-            "result": "X",
-            "score": "0-0",
-            "date": "2026-04-20T19:00:00Z",
-            "home": "Crystal Palace",
-            "away": "West Ham United"
+        "brighton-chelsea": {
+            "result": "1",
+            "score": "3-0",
+            "date": "2026-04-21T19:00:00Z",
+            "home": "Brighton and Hove Albion",
+            "away": "Chelsea"
         },
         "brightonandhovealbion-chelsea": {
             "result": "1",
@@ -29,12 +15,12 @@
             "home": "Brighton and Hove Albion",
             "away": "Chelsea"
         },
-        "brighton-chelsea": {
-            "result": "1",
-            "score": "3-0",
-            "date": "2026-04-21T19:00:00Z",
-            "home": "Brighton and Hove Albion",
-            "away": "Chelsea"
+        "bournemouth-leedsunited": {
+            "result": "X",
+            "score": "2-2",
+            "date": "2026-04-22T19:00:00Z",
+            "home": "Bournemouth",
+            "away": "Leeds United"
         },
         "afcbournemouth-leeds": {
             "result": "X",
@@ -51,13 +37,6 @@
             "away": "Leeds United"
         },
         "afcbournemouth-leedsunited": {
-            "result": "X",
-            "score": "2-2",
-            "date": "2026-04-22T19:00:00Z",
-            "home": "Bournemouth",
-            "away": "Leeds United"
-        },
-        "bournemouth-leedsunited": {
             "result": "X",
             "score": "2-2",
             "date": "2026-04-22T19:00:00Z",
