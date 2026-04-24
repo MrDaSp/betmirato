@@ -1,5 +1,5 @@
 {
-    "ultimo_aggiornamento": "2026-04-24 09:24:35",
+    "ultimo_aggiornamento": "2026-04-24 16:00:17",
     "risultati": {
         "brighton-chelsea": {
             "result": "1",
@@ -15,13 +15,6 @@
             "home": "Brighton and Hove Albion",
             "away": "Chelsea"
         },
-        "afcbournemouth-leeds": {
-            "result": "X",
-            "score": "2-2",
-            "date": "2026-04-22T19:00:00Z",
-            "home": "Bournemouth",
-            "away": "Leeds United"
-        },
         "bournemouth-leedsunited": {
             "result": "X",
             "score": "2-2",
@@ -30,6 +23,13 @@
             "away": "Leeds United"
         },
         "afcbournemouth-leedsunited": {
+            "result": "X",
+            "score": "2-2",
+            "date": "2026-04-22T19:00:00Z",
+            "home": "Bournemouth",
+            "away": "Leeds United"
+        },
+        "afcbournemouth-leeds": {
             "result": "X",
             "score": "2-2",
             "date": "2026-04-22T19:00:00Z",
