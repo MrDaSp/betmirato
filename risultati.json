@@ -1,5 +1,5 @@
 {
-    "ultimo_aggiornamento": "2026-04-25 08:43:27",
+    "ultimo_aggiornamento": "2026-04-25 15:33:59",
     "risultati": {
         "sscnapoli-cremonese": {
             "result": "1",
@@ -15,6 +15,20 @@
             "home": "Napoli",
             "away": "Cremonese"
         },
+        "parma-pisa": {
+            "result": "1",
+            "score": "1-0",
+            "date": "2026-04-25T13:00:00Z",
+            "home": "Parma",
+            "away": "Pisa"
+        },
+        "afcbournemouth-leedsunited": {
+            "result": "X",
+            "score": "2-2",
+            "date": "2026-04-22T19:00:00Z",
+            "home": "Bournemouth",
+            "away": "Leeds United"
+        },
         "bournemouth-leedsunited": {
             "result": "X",
             "score": "2-2",
@@ -29,26 +43,12 @@
             "home": "Bournemouth",
             "away": "Leeds United"
         },
-        "afcbournemouth-leedsunited": {
-            "result": "X",
-            "score": "2-2",
-            "date": "2026-04-22T19:00:00Z",
-            "home": "Bournemouth",
-            "away": "Leeds United"
-        },
         "bournemouth-leeds": {
             "result": "X",
             "score": "2-2",
             "date": "2026-04-22T19:00:00Z",
             "home": "Bournemouth",
             "away": "Leeds United"
-        },
-        "burnley-manchestercity": {
-            "result": "2",
-            "score": "0-1",
-            "date": "2026-04-22T19:00:00Z",
-            "home": "Burnley",
-            "away": "Manchester City"
         },
         "burnley-mancity": {
             "result": "2",
@@ -57,12 +57,12 @@
             "home": "Burnley",
             "away": "Manchester City"
         },
-        "sunderland-nottinghamforest": {
+        "burnley-manchestercity": {
             "result": "2",
-            "score": "0-5",
-            "date": "2026-04-24T19:00:00Z",
-            "home": "Sunderland",
-            "away": "Nottingham Forest"
+            "score": "0-1",
+            "date": "2026-04-22T19:00:00Z",
+            "home": "Burnley",
+            "away": "Manchester City"
         },
         "sunderland-nott'hamforest": {
             "result": "2",
@@ -70,6 +70,20 @@
             "date": "2026-04-24T19:00:00Z",
             "home": "Sunderland",
             "away": "Nottingham Forest"
+        },
+        "sunderland-nottinghamforest": {
+            "result": "2",
+            "score": "0-5",
+            "date": "2026-04-24T19:00:00Z",
+            "home": "Sunderland",
+            "away": "Nottingham Forest"
+        },
+        "fulham-astonvilla": {
+            "result": "1",
+            "score": "1-0",
+            "date": "2026-04-25T11:30:00Z",
+            "home": "Fulham",
+            "away": "Aston Villa"
         }
     }
 }
