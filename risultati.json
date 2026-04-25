@@ -1,5 +1,5 @@
 {
-    "ultimo_aggiornamento": "2026-04-24 21:40:55",
+    "ultimo_aggiornamento": "2026-04-25 08:43:27",
     "risultati": {
         "sscnapoli-cremonese": {
             "result": "1",
@@ -15,6 +15,20 @@
             "home": "Napoli",
             "away": "Cremonese"
         },
+        "bournemouth-leedsunited": {
+            "result": "X",
+            "score": "2-2",
+            "date": "2026-04-22T19:00:00Z",
+            "home": "Bournemouth",
+            "away": "Leeds United"
+        },
+        "afcbournemouth-leeds": {
+            "result": "X",
+            "score": "2-2",
+            "date": "2026-04-22T19:00:00Z",
+            "home": "Bournemouth",
+            "away": "Leeds United"
+        },
         "afcbournemouth-leedsunited": {
             "result": "X",
             "score": "2-2",
@@ -29,19 +43,12 @@
             "home": "Bournemouth",
             "away": "Leeds United"
         },
-        "afcbournemouth-leeds": {
-            "result": "X",
-            "score": "2-2",
+        "burnley-manchestercity": {
+            "result": "2",
+            "score": "0-1",
             "date": "2026-04-22T19:00:00Z",
-            "home": "Bournemouth",
-            "away": "Leeds United"
-        },
-        "bournemouth-leedsunited": {
-            "result": "X",
-            "score": "2-2",
-            "date": "2026-04-22T19:00:00Z",
-            "home": "Bournemouth",
-            "away": "Leeds United"
+            "home": "Burnley",
+            "away": "Manchester City"
         },
         "burnley-mancity": {
             "result": "2",
@@ -50,21 +57,14 @@
             "home": "Burnley",
             "away": "Manchester City"
         },
-        "burnley-manchestercity": {
-            "result": "2",
-            "score": "0-1",
-            "date": "2026-04-22T19:00:00Z",
-            "home": "Burnley",
-            "away": "Manchester City"
-        },
-        "sunderland-nott'hamforest": {
+        "sunderland-nottinghamforest": {
             "result": "2",
             "score": "0-5",
             "date": "2026-04-24T19:00:00Z",
             "home": "Sunderland",
             "away": "Nottingham Forest"
         },
-        "sunderland-nottinghamforest": {
+        "sunderland-nott'hamforest": {
             "result": "2",
             "score": "0-5",
             "date": "2026-04-24T19:00:00Z",
