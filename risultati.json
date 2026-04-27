@@ -1,5 +1,5 @@
 {
-    "ultimo_aggiornamento": "2026-04-27 10:08:38",
+    "ultimo_aggiornamento": "2026-04-27 16:21:23",
     "risultati": {
         "napoli-cremonese": {
             "result": "1",
@@ -22,14 +22,14 @@
             "home": "Parma",
             "away": "Pisa"
         },
-        "bologna-asroma": {
+        "bologna-roma": {
             "result": "2",
             "score": "0-2",
             "date": "2026-04-25T16:00:00Z",
             "home": "Bologna",
             "away": "AS Roma"
         },
-        "bologna-roma": {
+        "bologna-asroma": {
             "result": "2",
             "score": "0-2",
             "date": "2026-04-25T16:00:00Z",
@@ -64,6 +64,13 @@
             "home": "Genoa",
             "away": "Como"
         },
+        "torino-intermilan": {
+            "result": "X",
+            "score": "2-2",
+            "date": "2026-04-26T16:01:00Z",
+            "home": "Torino",
+            "away": "Inter Milan"
+        },
         "torino-inter": {
             "result": "X",
             "score": "2-2",
@@ -78,21 +85,14 @@
             "home": "Torino",
             "away": "Inter Milan"
         },
-        "torino-intermilan": {
-            "result": "X",
-            "score": "2-2",
-            "date": "2026-04-26T16:01:00Z",
-            "home": "Torino",
-            "away": "Inter Milan"
-        },
-        "milan-juventus": {
+        "acmilan-juventus": {
             "result": "X",
             "score": "0-0",
             "date": "2026-04-26T18:47:00Z",
             "home": "AC Milan",
             "away": "Juventus"
         },
-        "acmilan-juventus": {
+        "milan-juventus": {
             "result": "X",
             "score": "0-0",
             "date": "2026-04-26T18:47:00Z",
@@ -127,28 +127,7 @@
             "home": "Liverpool",
             "away": "Crystal Palace"
         },
-        "wolves-tottenhamhotspur": {
-            "result": "2",
-            "score": "0-1",
-            "date": "2026-04-25T14:00:00Z",
-            "home": "Wolverhampton Wanderers",
-            "away": "Tottenham Hotspur"
-        },
         "wolverhamptonwanderers-tottenhamhotspur": {
-            "result": "2",
-            "score": "0-1",
-            "date": "2026-04-25T14:00:00Z",
-            "home": "Wolverhampton Wanderers",
-            "away": "Tottenham Hotspur"
-        },
-        "wolverhampton-tottenhamhotspur": {
-            "result": "2",
-            "score": "0-1",
-            "date": "2026-04-25T14:00:00Z",
-            "home": "Wolverhampton Wanderers",
-            "away": "Tottenham Hotspur"
-        },
-        "wolverhamptonwanderers-tottenham": {
             "result": "2",
             "score": "0-1",
             "date": "2026-04-25T14:00:00Z",
@@ -162,7 +141,28 @@
             "home": "Wolverhampton Wanderers",
             "away": "Tottenham Hotspur"
         },
+        "wolverhamptonwanderers-tottenham": {
+            "result": "2",
+            "score": "0-1",
+            "date": "2026-04-25T14:00:00Z",
+            "home": "Wolverhampton Wanderers",
+            "away": "Tottenham Hotspur"
+        },
         "wolverhampton-tottenham": {
+            "result": "2",
+            "score": "0-1",
+            "date": "2026-04-25T14:00:00Z",
+            "home": "Wolverhampton Wanderers",
+            "away": "Tottenham Hotspur"
+        },
+        "wolves-tottenhamhotspur": {
+            "result": "2",
+            "score": "0-1",
+            "date": "2026-04-25T14:00:00Z",
+            "home": "Wolverhampton Wanderers",
+            "away": "Tottenham Hotspur"
+        },
+        "wolverhampton-tottenhamhotspur": {
             "result": "2",
             "score": "0-1",
             "date": "2026-04-25T14:00:00Z",
